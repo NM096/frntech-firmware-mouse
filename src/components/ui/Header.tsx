@@ -36,6 +36,7 @@ const Header = () => {
         </div>
 
         <div className="actions">
+          {/*
           <HoverImage src={reset} hoverSrc={resetHover} alt="Reset" className="icon-7" />
           <div className="divider"></div>
 
@@ -45,7 +46,7 @@ const Header = () => {
           </div>
 
           <div className="divider"></div>
-
+          */}
           <HoverImage src={setting} hoverSrc={settingHover} alt="Setting" className="icon-7" onClick={open} />
         </div>
       </div>
