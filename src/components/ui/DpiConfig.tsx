@@ -4,16 +4,17 @@ import ColorPicker from '../common/ColorPicker';
 import CustomRadio from '../common/CustomRadio';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { setCurrentProfile, setDPI, getDeviceList, setConfigData } from '@/utils/driver';
-import assets from '@/config/assets.json';
 import { useProfileStore } from '@/store/useProfile';
 import { useModal } from '@/components/common/ModalContext';
 import type { Dpi } from '@/types/profile';
 import { cloneDeep } from 'lodash';
 import type { DeviceData } from '@/types/device-data';
 import type { Config } from '@/types/data-config';
+import { useTranslation } from 'react-i18next';
 const baseUrl = import.meta.env.BASE_URL;
 
 const DpiConfig = () => {
+  const { t } = useTranslation();
   const {
     currentDevice,
     currentModelID,
@@ -142,12 +143,12 @@ const DpiConfig = () => {
   return (
     <div className="dpi-config">
       <img
-        src={baseUrl + assets[currentDevice?.Model?.ModelID as keyof typeof assets]?.productImg}
+        src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse.png`}
         alt={currentDevice?.Model?.Name}
         className="mouse-bg"
       />
       <div className="dpi-container">
-        <div>DPI调节</div>
+        <div>{t('dpi_adjustment')}</div>
         {DPIs.map((dpi, index) => {
           return (
             <div className="dpi-container-item" key={index}>

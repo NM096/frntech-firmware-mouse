@@ -9,9 +9,14 @@ import { useState } from 'react';
 import { useModal } from '@/components/common/ModalContext';
 import { setReportRate } from '@/utils/driver';
 import type { AdvanceSetting } from '@/types/device-data';
-import { setAdvanceSetting as sendAdvanceSetting } from '@/utils/driver';
+import { setAdvanceSetting as sendAdvanceSetting, openMouseProperties } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
 const PerformanceConfig = () => {
+  const sleepTime = ['10', '30', '60', '120', '180', '300', '600'];
+  const deepSleepTime = ['5', '10', '15', '20', '30', '60'];
+  const silentAltitudes = ['1 MM', '2 MM', '3 MM', '4 MM'];
+  const rateList = ['125Hz', '250Hz', '500Hz', '1000Hz'];
+
   const { openConfigLoading, close } = useModal();
   const { currentDevice, path, mode, setCurrentDevice } = useBaseInfoStore();
 
@@ -54,10 +59,11 @@ const PerformanceConfig = () => {
       close(_loadingId);
     });
   };
-  const sleepTime = ['10', '30', '60', '120', '180', '300', '600'];
-  const deepSleepTime = ['5', '10', '15', '20', '30', '60'];
-  const silentAltitudes = ['1 MM', '2 MM', '3 MM', '4 MM'];
-  const rateList = ['125Hz', '250Hz', '500Hz', '1000Hz'];
+
+  const handleOpenMouseProperty = () => {
+    openMouseProperties();
+  };
+
   return (
     <div className="performance-config">
       <div className="performance-section">
@@ -154,7 +160,7 @@ const PerformanceConfig = () => {
         <div className="performance-item">
           <div className="performance-item-title">鼠标属性</div>
           <div className="performance-item-description">Windows系统鼠标属性设置 </div>
-          <div className="performance-item-open">
+          <div className="performance-item-open" onClick={() => handleOpenMouseProperty()}>
             <HoverImage src={ic_window} hoverSrc={ic_window2} alt="Reset" className="icon-7" />
             打开鼠标属性
           </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import assets from '@/config/assets.json';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { KeyDefine } from '@/types/profile';
 import { useTranslation } from 'react-i18next';
@@ -64,7 +63,7 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect 
   return (
     <div style={{ position: 'relative', width: '100%', fontSize: '0.9rem' }}>
       <img
-        src={baseUrl + assets[currentDevice?.Model?.ModelID as keyof typeof assets]?.keysImg}
+        src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse_keys.png`}
         alt={currentDevice?.Model?.Name}
         style={{ width: '100%' }}
       />

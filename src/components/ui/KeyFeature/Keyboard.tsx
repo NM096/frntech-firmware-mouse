@@ -11,7 +11,14 @@ const Keyboard = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '10px' }}>
       <input
         type="text"
-        style={{ backgroundColor: 'white', border: 'none', outline: 'none', color: 'black', width: '80%' }}
+        style={{
+          backgroundColor: 'white',
+          border: 'none',
+          outline: 'none',
+          color: 'black',
+          width: '80%',
+          textAlign: 'center',
+        }}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', marginLeft: '20px' }}>
         {keys.map((key) => (

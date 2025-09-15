@@ -92,7 +92,12 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                     <div className="confirm-title">{title}</div>
                     <div className="confirm-content">
                       <div>{content}</div>
-                      <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+                      <input
+                        style={{ textAlign: 'center' }}
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                      />
                     </div>
 
                     <div className="confirm-btn-group">
@@ -159,9 +164,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             if (m.type === 'custom') {
               return (
                 <div key={m.id} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                  <div className="p-6 bg-white shadow-xl rounded-2xl">
+                  <div className="rounded-2xl bg-white p-6 shadow-xl">
                     {m.content}
-                    <button className="px-4 py-2 mt-4 bg-gray-200 rounded" onClick={() => close(m.id)}>
+                    <button className="mt-4 rounded bg-gray-200 px-4 py-2" onClick={() => close(m.id)}>
                       关闭
                     </button>
                   </div>

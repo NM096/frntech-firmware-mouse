@@ -355,6 +355,17 @@ export function apply(device, profile, callback?: (payload: any) => void) {
   );
 }
 
+export function openMouseProperties(callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'OpenMouseProperties',
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
 export function reset(device, callback?: (payload: any) => void) {
   astilectron.sendMessage(
     {

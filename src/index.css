@@ -17,6 +17,8 @@
   --sticky-bar-height: 60px;
 
   --icon-size-sm: 16px;
+  --icon-size-md: 24px;
+  --icon-size-lg: 32px;
 }
 
 .dark-mode {
@@ -87,6 +89,7 @@ input:focus {
   justify-content: space-between;
   width: 100%;
   -webkit-app-region: drag;
+  z-index: 999;
 }
 
 .header-left {
@@ -103,8 +106,8 @@ input:focus {
 .header-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
   gap: 16px; /* Tailwind gap-4 */
 }
 
@@ -118,10 +121,13 @@ input:focus {
 }
 
 .actions {
+  width: 100%;
+  margin: 10px 0;
   display: flex;
   align-items: center;
   gap: 16px; /* Tailwind gap-4 */
   margin-right: 20px; /* Tailwind mr-5 */
+  justify-content: flex-end;
 }
 .actions > img {
   -webkit-app-region: no-drag;
@@ -427,6 +433,7 @@ input:focus {
     opacity 0.35s ease,
     visibility 0.35s ease;
   z-index: 1000;
+  -webkit-app-region: no-drag;
 }
 .drawer-overlay.show {
   opacity: 1;
@@ -469,8 +476,9 @@ input:focus {
   margin-bottom: 30px;
 }
 .section-title {
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 12px;
+  margin-top: 5px;
   /* font-weight: bold; */
 }
 .text {
@@ -677,6 +685,17 @@ input:focus {
   padding: 20px 20px;
   margin: 20px 0;
   width: 200px;
+}
+.sidebar-item-status {
+  background-color: rgba(255, 255, 255, 0.008);
+  width: fit-content;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 20px 0;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .sidebar-icon-power {
   transform: rotate(-90deg);
@@ -949,7 +968,8 @@ input:focus {
   color: #fff;
 }
 
-.macro-item:hover {
+.macro-item:hover,
+.macro-item.active {
   background-color: rgba(150, 60, 20, 0.2);
 }
 /* Custom Dropdown End */

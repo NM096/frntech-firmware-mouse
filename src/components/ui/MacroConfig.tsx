@@ -418,8 +418,8 @@ const MacroConfig = () => {
             alt="Logo"
             className="back-btn-icon"
           />
-          <HoverImage src={btn_up_1} hoverSrc={btn_up_2} alt="Logo" className="back-btn-icon" />
-          <HoverImage src={btn_down_1} hoverSrc={btn_down_2} alt="Logo" className="back-btn-icon" />
+          {/* <HoverImage src={btn_up_1} hoverSrc={btn_up_2} alt="Logo" className="back-btn-icon" />
+          <HoverImage src={btn_down_1} hoverSrc={btn_down_2} alt="Logo" className="back-btn-icon" /> */}
           <HoverImage
             src={ic_clear}
             hoverSrc={ic_clear}
@@ -427,7 +427,7 @@ const MacroConfig = () => {
             className="back-btn-icon"
             onClick={() => handleClearRecords()}
           />
-          <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />
+          {/* <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />
           <div>
             X:
             <input
@@ -441,7 +441,7 @@ const MacroConfig = () => {
               type="text"
               style={{ width: '50px', border: '0px', backgroundColor: 'white', color: 'black', textAlign: 'center' }}
             />
-          </div>
+          </div> */}
         </div>
         <ul className="macro-content-body">
           <MacroActionList events={recordedActions} delayMode={delayMode} showDelay={false} />

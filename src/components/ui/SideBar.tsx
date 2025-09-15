@@ -2,6 +2,7 @@ import HoverImage from '@/components/common/HoverImage';
 import wireless_4k from '@/assets/wireless_4k.png';
 import back2 from '@/assets/back_device_2.png';
 import back1 from '@/assets/back_device_1.png';
+import ic_charge from '@/assets/charging.png';
 import PowerIcon from '@/components/common/PowerIcon';
 import type { sidebarKey } from './Feature';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
@@ -29,10 +30,10 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
 
         <div className="sidebar-content">
           {/* connection info */}
-          <div className="sidebar-item">
+          <div className="sidebar-item-status">
             <div className="sidebar-item-power">
-              <PowerIcon className="sidebar-icon-power" />
-              100%
+              <HoverImage src={ic_charge} hoverSrc={ic_charge} alt="Logo" className="sidebar-icon-connection" />
+              充电中
             </div>
             <div className="sidebar-item-connection">
               <HoverImage src={wireless_4k} hoverSrc={wireless_4k} alt="Logo" className="sidebar-icon-connection" />

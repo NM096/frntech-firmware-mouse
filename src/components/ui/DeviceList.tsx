@@ -2,7 +2,6 @@ import React from 'react';
 
 import Power from '@/components/common/PowerIcon';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-import assets from '@/config/assets.json';
 import type { DeviceInfo } from '@/types/device-data';
 import { useProfileStore } from '@/store/useProfile';
 import { getCurrentProfile, getModelProfile, setCurrentProfile, getConfigData, getModelConfig } from '@/utils/driver';
@@ -62,7 +61,7 @@ const DeviceList = () => {
                 <span className="battery-text">100%</span>
               </div>
               <img
-                src={baseUrl + assets[device.Model.ModelID].productImg}
+                src={`${baseUrl}device/${device?.Model?.ModelID}/img/mouse.png`}
                 alt={device.Model.Name}
                 className="device-img"
               />

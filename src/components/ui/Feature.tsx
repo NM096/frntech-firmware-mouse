@@ -11,10 +11,19 @@ import ic_light from '@/assets/light.png';
 import ic_performance from '@/assets/performance.png';
 import ic_macro from '@/assets/macro.png';
 
+import setting from '@/assets/setting_1.png';
+import settingHover from '@/assets/setting_2.png';
+import reset from '@/assets/reset_1.png';
+import ic_max from '@/assets/max.png';
+import resetHover from '@/assets/reset_2.png';
+import profile from '@/assets/profile_icon.png';
+import HoverImage from '@/components/common/HoverImage';
+import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
 import { useState } from 'react';
 export type sidebarKey = 'DpiConfig' | 'KeyConfig' | 'LightConfig' | 'PerformanceConfig' | 'MacroConfig';
 
 const Feature = () => {
+  const { open } = useSettingsDrawer();
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('DpiConfig');
   const sideList: { key: sidebarKey; title: string; icon: string }[] = [
     { key: 'DpiConfig', title: 'DPI设置', icon: ic_dpi },
@@ -33,13 +42,28 @@ const Feature = () => {
   };
 
   return (
-    <div className="feature-container">
-      <SideBar
-        sideList={sideList}
-        activeSidebar={activeSidebar}
-        onSidebarChange={(key: sidebarKey) => setActiveSidebar(key)}
-      />
-      <div className="feature-content">{sidebarComponents[activeSidebar]() || null}</div>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="actions">
+        {/*   <HoverImage src={reset} hoverSrc={resetHover} alt="Reset" className="icon-7" onClick={resetMouse} />
+          <div className="divider"></div>
+        
+          <div className="profile hover-bg">
+            <HoverImage src={profile} hoverSrc={profile} alt="Profile" className="icon-7" />
+            <div className="profile-text">配置设置</div>
+          </div>
+
+          <div className="divider"></div>
+          */}
+        <HoverImage src={setting} hoverSrc={settingHover} alt="Setting" className="icon-7" onClick={open} />
+      </div>
+      <div className="feature-container">
+        <SideBar
+          sideList={sideList}
+          activeSidebar={activeSidebar}
+          onSidebarChange={(key: sidebarKey) => setActiveSidebar(key)}
+        />
+        <div className="feature-content">{sidebarComponents[activeSidebar]() || null}</div>
+      </div>
     </div>
   );
 };
