@@ -1,0 +1,47 @@
+{
+	"LETable": [
+		{
+			"Name": "空闲模式",
+			"Lang": "mouse_le_0",
+			"Value": 0
+		},
+		{
+			"Name": "关闭灯光",
+			"Lang": "mouse_le_1",
+			"Value": 1
+		},
+		{
+			"Name": "常亮模式",
+			"Lang": "mouse_le_2",
+			"Value": 2
+		},
+		{
+			"Name": "闪烁模式",
+			"Lang": "mouse_le_3",
+			"Value": 3
+		},
+		{
+			"Name": "呼吸模式",
+			"Lang": "mouse_le_4",
+			"Value": 4
+		},
+		{
+			"Name": "霓虹模式",
+			"Lang": "mouse_le_5",
+			"Value": 5
+		}
+	],
+	"SensorInfo": {
+		"Name": "S205",
+		"DPIs": [
+			{ "Level": 1, "DPI": 800, "Value": 16 },
+			{ "Level": 2, "DPI": 1200, "Value": 24 },
+			{ "Level": 3, "DPI": 1600, "Value": 32 },
+			{ "Level": 4, "DPI": 2400, "Value": 48 },
+			{ "Level": 5, "DPI": 3200, "Value": 64 },
+			{ "Level": 6, "DPI": 4000, "Value": 80 },
+			{ "Level": 7, "DPI": 5000, "Value": 100 },
+			{ "Level": 8, "DPI": 6400, "Value": 128 }
+		]
+	}
+}
