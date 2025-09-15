@@ -51,12 +51,14 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
               <label>
                 <CustomRadio onChange={() => {}} checked={false} /> English
               </label>
+              {/*
               <label>
                 <CustomRadio onChange={() => {}} checked={false} /> Français
               </label>
               <label>
                 <CustomRadio onChange={() => {}} checked={false} /> Español
               </label>
+              */}
             </div>
           </div>
 
