@@ -86,6 +86,7 @@ input:focus {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  -webkit-app-region: drag;
 }
 
 .header-left {
@@ -96,6 +97,7 @@ input:focus {
   width: 60px;
   height: 44px;
   cursor: pointer;
+  -webkit-app-region: no-drag;
 }
 
 .header-right {
@@ -111,12 +113,18 @@ input:focus {
   align-items: center;
   gap: 8px; /* Tailwind gap-2 */
 }
+.window-controls > img {
+  -webkit-app-region: no-drag;
+}
 
 .actions {
   display: flex;
   align-items: center;
   gap: 16px; /* Tailwind gap-4 */
   margin-right: 20px; /* Tailwind mr-5 */
+}
+.actions > img {
+  -webkit-app-region: no-drag;
 }
 
 .divider {
@@ -404,6 +412,7 @@ input:focus {
 .drawer.open {
   transform: translateX(0);
   opacity: 1;
+  -webkit-app-region: no-drag;
 }
 
 /* 遮罩层 */
