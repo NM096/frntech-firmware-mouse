@@ -84,7 +84,7 @@ const MacroConfig = () => {
   };
   const handleCreateCategory = () => {
     openConfirm({
-      title: '创建宏组',
+      title: '增加宏组',
       content: '宏组名称',
       onOk: (value) => {
         addMacroCategory(value, (payload) => {
@@ -159,7 +159,7 @@ const MacroConfig = () => {
   };
   const handleCreateMacroFile = () => {
     openConfirm({
-      title: '创建宏文件',
+      title: '增加宏文件',
       content: '宏文件名称',
       onOk: (value) => {
         addMacro(currentCategory, value, (payload) => {

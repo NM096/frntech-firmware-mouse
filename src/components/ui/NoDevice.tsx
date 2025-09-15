@@ -3,7 +3,7 @@ const NoDevice = () => {
   return (
     <div className="no-device-container">
       <p className="no-device-text">
-        请选择您的 <span className="highlight">Inphic</span> 设备！
+        请连接您的 <span className="highlight">inphic</span> 设备！
       </p>
       <img src={noDevice} className="no-device-img" alt="" />
     </div>
