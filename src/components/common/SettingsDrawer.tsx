@@ -38,7 +38,7 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
           <div className="settings-section">
             <h3 className="section-title">软件版本</h3>
             <p className="text">
-              版本号 <span className="version">1.0.1.16</span>
+              版本号 <span className="version">0.1.0</span>
             </p>
           </div>
 
