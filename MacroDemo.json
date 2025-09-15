@@ -1,0 +1,17 @@
+{
+  "Version": 1,
+  "Name": "TETS",
+  "Content": [
+    { "Type": "MouseDown", "Name": "LeftDown", "Code": "0" },
+    { "Type": "Delay", "Name": "131", "Code": "131" },
+    { "Type": "MouseUp", "Name": "LeftUp", "Code": "0" },
+    { "Type": "Delay", "Name": "2169", "Code": "2169" },
+    { "Type": "KeyDown", "Name": "Left Ctrl", "Code": "ControlLeft" },
+    { "Type": "Delay", "Name": "118", "Code": "118" },
+    { "Type": "KeyUp", "Name": "Left Ctrl", "Code": "ControlLeft" },
+    { "Type": "Delay", "Name": "2563", "Code": "2563" },
+    { "Type": "KeyDown", "Name": "q", "Code": "KeyQ" },
+    { "Type": "Delay", "Name": "189", "Code": "189" },
+    { "Type": "KeyUp", "Name": "q", "Code": "KeyQ" }
+  ]
+}

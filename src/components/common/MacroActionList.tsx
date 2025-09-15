@@ -1,0 +1,67 @@
+import type { MacroEvent } from '@/types/macro';
+import { useTranslation } from 'react-i18next';
+import HoverImage from './HoverImage';
+import keyboard_key_action from '@/assets/keyboard_key_action.png';
+import macro_key_down from '@/assets/macro_key_down.png';
+import macro_key_up from '@/assets/macro_key_up.png';
+import ic_mouse from '@/assets/mouse.png';
+import ic_time from '@/assets/time.png';
+interface MacroActionListProps {
+  events: MacroEvent[];
+  showDelay: boolean;
+  delayMode: 'record' | 'default' | 'min';
+}
+
+export default function MacroActionList({ events, delayMode }: MacroActionListProps) {
+  const { t } = useTranslation();
+
+  const getIcon = (type: MacroEvent['type']) => {
+    switch (type) {
+      case 'MouseDown':
+      case 'MouseUp':
+        return <HoverImage src={ic_mouse} hoverSrc={ic_mouse} alt="Logo" className="back-btn-icon" />;
+      case 'KeyDown':
+      case 'KeyUp':
+        return (
+          <HoverImage src={keyboard_key_action} hoverSrc={keyboard_key_action} alt="Logo" className="back-btn-icon" />
+        );
+      case 'Delay':
+        return <HoverImage src={ic_time} hoverSrc={ic_time} alt="Logo" className="back-btn-icon" />;
+      default:
+        return null;
+    }
+  };
+
+  const isDown = (event: MacroEvent) => {
+    return ['MouseDown', 'KeyDown'].includes(event.type) ? true : false;
+  };
+
+  return (
+    <>
+      {Array.isArray(events) &&
+        events
+          .filter((event) => event.type !== 'Delay')
+          .map((event, index) => (
+            <li className="macro-content-item" key={index}>
+              <span>{index + 1}</span>
+              {getIcon(event.type)}
+              <span>
+                {/* {event.code} */}
+                {delayMode == 'record' && events[index + 1]?.type === 'Delay'
+                  ? (Number(events[index + 1]?.code) / 1000).toFixed(4)
+                  : delayMode == 'default' && events[index + 1]?.type === 'Delay'
+                    ? event.code
+                    : 0.0001}
+                秒
+              </span>
+              {isDown(event) ? (
+                <HoverImage src={macro_key_down} hoverSrc={macro_key_down} alt="Logo" className="back-btn-icon" />
+              ) : (
+                <HoverImage src={macro_key_up} hoverSrc={macro_key_up} alt="Logo" className="back-btn-icon" />
+              )}
+              <span>{t(event.name)}</span>
+            </li>
+          ))}
+    </>
+  );
+}

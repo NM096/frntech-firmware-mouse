@@ -1,0 +1,603 @@
+import type { Config } from '@/types/data-config';
+let astilectron: any = {};
+document.addEventListener('astilectron-ready', function () {
+  // @ts-expect-error
+  astilectron = window.astilectron;
+});
+
+export function openDevTools() {
+  astilectron.sendMessage({ name: 'OpenDevTools' });
+}
+
+export function closeDevTools() {
+  astilectron.sendMessage({ name: 'CloseDevTools' });
+}
+
+export function closeApp() {
+  astilectron.sendMessage({ name: 'CloseApp' });
+}
+
+export function minimizeApp() {
+  astilectron.sendMessage({ name: 'MinimizeApp' });
+}
+
+export function showWindow() {
+  astilectron.sendMessage({ name: 'ShowWindow' });
+}
+
+export function hideWindow() {
+  astilectron.sendMessage({ name: 'HideWindow' });
+}
+
+// 获取机型列表：
+export function getModelList(callback?: (payload: any) => void) {
+  astilectron.sendMessage({ name: 'GetModelList' }, function (message: any) {
+    console.log(`-------${message.name}-------`, message.payload);
+    callback?.(message.payload);
+  });
+}
+
+// 获取机型配置：
+export function getModelConfig(modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetModelConfig',
+      payload: {
+        ModelID: modelID,
+      },
+    },
+    function (message: any) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+// 获取机型按键映射：
+export function getModelKeyMap(modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetModelKeyMap',
+      payload: {
+        ModelID: modelID,
+      },
+    },
+    function (message: any) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+// 获取机型默认配置文件：
+export function getModelProfile(modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetModelProfile',
+      payload: {
+        ModelID: modelID,
+      },
+    },
+    function (message: any) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function checkDriver(callback?: (payload: any) => void) {
+  astilectron.sendMessage({ name: 'CheckDriver' }, function (message: any) {
+    console.log(`-------${message.name}-------`, message.payload);
+    callback?.(message.payload);
+  });
+}
+
+export function getCurrentProfile(modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetProfile',
+      payload: {
+        ModelID: modelID,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setCurrentProfile(modelID, profile, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetProfile',
+      payload: {
+        ModelID: modelID,
+        Profile: profile,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getSoftwareVersion(callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetSoftwareVersion',
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getDeviceList(callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetDeviceList',
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function importProfile(modelID, path, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'ImportProfile',
+      payload: {
+        ModelID: modelID,
+        Path: path,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function exportProfile(modelID, profile, path, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'ExportProfile',
+      payload: {
+        ModelID: modelID,
+        Profile: profile,
+        Path: path,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setLE(device, le, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetLEDEffect',
+      payload: {
+        Device: device,
+        LEDEffect: le,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getCustomLE(device, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetCustomLE',
+      payload: {
+        Device: device,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setCustomLE(device, cle, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetCustomLE',
+      payload: {
+        Device: device,
+        CustomLE: cle,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setMode(device, mode, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetMode',
+      payload: {
+        Device: device,
+        Mode: mode,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getDPI(device, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetDPI',
+      payload: {
+        Device: device,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setDPI(device, mode, dpi, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetDPI',
+      payload: {
+        Device: device,
+        Mode: mode,
+        DPI: dpi,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setReportRate(device, rr, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetReportRate',
+      payload: {
+        Device: device,
+        ReportRate: rr,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setAdvanceSetting(device, advance, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetAdvanceSetting',
+      payload: {
+        Device: device,
+        AdvanceSetting: advance,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+//
+export function getConfigData(device, callback?: (payload: Config) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetConfigData',
+      payload: {
+        Device: device,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setConfigData(device, config: Config, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetConfigData',
+      payload: {
+        Device: device,
+        Config: config,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function apply(device, profile, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetKeyDefine',
+      payload: {
+        Device: device,
+        Profile: profile,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function reset(device, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'Reset',
+      payload: {
+        Device: device,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getMacroCategorys(callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetMacroCategorys',
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function addMacroCategory(category, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'AddMacroCategory',
+      payload: {
+        Category: category,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function delMacroCategory(category, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'DelMacroCategory',
+      payload: {
+        Category: category,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getMacros(category, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetMacros',
+      payload: {
+        Category: category,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function addMacro(category, name, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'AddMacro',
+      payload: {
+        Category: category,
+        Name: name,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function delMacro(category, name, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'DelMacro',
+      payload: {
+        Category: category,
+        Name: name,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function readMacro(category, name, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'ReadMacro',
+      payload: {
+        Category: category,
+        Name: name,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function saveMacro(category, name, macrofile, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SaveMacro',
+      payload: {
+        Category: category,
+        Name: name,
+        Macrofile: macrofile,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function importMacro(path, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'ImportMacro',
+      payload: {
+        Path: path,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function exportMacro(name, macrofile, path, callback?: (payload: any) => void) {
+  console.log({
+    name: 'ExportMacro',
+    payload: {
+      Name: name,
+      Macrofile: macrofile,
+      Path: path,
+    },
+  });
+  astilectron.sendMessage(
+    {
+      name: 'ExportMacro',
+      payload: {
+        Name: name,
+        Macrofile: macrofile,
+        Path: path,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function upgradeFireware(device, modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'UpgradeFireware',
+      payload: {
+        Device: device,
+        ModelID: modelID,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function loadAppConfig(callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'LoadAppConfig',
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function saveAppConfig(config, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SaveAppConfig',
+      payload: {
+        Config: config,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function getSystemConfig(callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetSystemConfig',
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}
+
+export function setSystemConfig(config, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetSystemConfig',
+      payload: {
+        Config: config,
+      },
+    },
+    function (message) {
+      console.log(`-------${message.name}-------`, message.payload);
+      callback?.(message.payload);
+    }
+  );
+}

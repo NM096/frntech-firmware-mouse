@@ -1,0 +1,7 @@
+{
+  "0x00710004": {
+    "baseUrl": "./device/ms_4/",
+    "productImg": "./device/ms_4/mouse.png",
+    "keysImg": "./device/ms_4/mouse_keys.png"
+  }
+}
