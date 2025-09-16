@@ -1,4 +1,3 @@
-import mouse from '@/assets/ms_4/mouse.png';
 import Dropdown from '@/components/common/Dropdown';
 import Slider2 from '../common/Slider2';
 import { SketchPicker, ColorResult } from 'react-color';
@@ -9,6 +8,8 @@ import { setLE } from '@/utils/driver';
 import { useModal } from '@/components/common/ModalContext';
 import CustomRadio from '../common/CustomRadio';
 import { debounce } from 'lodash';
+const baseUrl = import.meta.env.BASE_URL;
+
 const LightConfig = () => {
   const { t } = useTranslation();
   const { openConfigLoading, close } = useModal();
@@ -148,7 +149,11 @@ const LightConfig = () => {
   );
   return (
     <div className="light-config">
-      <img src={mouse} alt="Mouse" className="mouse-bg" />
+      <img
+        src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse.png`}
+        alt={currentDevice?.Model?.Name}
+        className="mouse-bg"
+      />
       <div className="light-container">
         <div className="light-container-select">
           模式:
