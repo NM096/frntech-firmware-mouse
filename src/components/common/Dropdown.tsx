@@ -28,6 +28,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
   useEffect(() => {
     if (!defaultValue) {
+      console.log(defaultValue, 'defaultValue changed');
       setSelectedOption('');
     }
   }, [defaultValue]);

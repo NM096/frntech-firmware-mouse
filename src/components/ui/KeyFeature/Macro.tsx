@@ -3,19 +3,46 @@ import CustomRadio from '@/components/common/CustomRadio';
 import Checkbox from '@/components/common/Checkbox';
 import React, { useEffect } from 'react';
 import { getMacroCategorys, getMacros, readMacro } from '@/utils/driver';
-const Macro = () => {
+import type { KeyDefine, KeyItem } from '@/types/profile';
+interface MacroProps {
+  onChange?: (keyDefine: KeyItem) => void;
+  initialMacro?: KeyDefine;
+}
+
+const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   const [categorys, setCategorys] = React.useState<string[]>([]);
   const [macros, setMacros] = React.useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = React.useState<string>('');
   const [selectedMacro, setSelectedMacro] = React.useState<string>('');
-  const [macroType, setMacroType] = React.useState<number>(0);
+  const [macroType, setMacroType] = React.useState<number>(1);
+  const [cycles, setCycles] = React.useState<number>(1);
   const macroTitleStyle: React.CSSProperties = {
     fontSize: '14px',
     // fontWeight: 'bold',
     margin: '10px 0 10px 0',
   };
-  const handleChange = (value: string) => {
-    console.log('Selected macro:', value);
+  useEffect(() => {
+    handleChangeMacro(selectedMacro);
+  }, [selectedMacro, macroType, cycles]);
+
+  const handleChangeMacro = (macroName: string) => {
+    readMacro(selectedCategory, macroName, (payload) => {
+      console.log('readMacro ', payload);
+      onChange?.({
+        Name: macroName,
+        Value: '0x8000',
+        Show: macroName,
+        Lang: macroName,
+        Macro: {
+          Category: selectedCategory,
+          Name: selectedMacro,
+          Type: macroType.toString(),
+          Cycles: cycles,
+          Content: payload.Content,
+        },
+      });
+    });
+    setSelectedMacro(macroName);
   };
   useEffect(() => {
     getMacroCategorys((payload) => {
@@ -39,7 +66,7 @@ const Macro = () => {
           borderColor="#ff7f0e"
           options={categorys}
           defaultValue={selectedCategory}
-          onChange={handleChange}
+          onChange={() => setSelectedCategory(selectedCategory)}
           size="small" // 选择 'small', 'medium' 或 'large'
         />
       </div>
@@ -80,7 +107,11 @@ const Macro = () => {
             }}
           />
           <input
-            type="text"
+            type="number"
+            max={1000}
+            min={1}
+            value={cycles}
+            onChange={(e) => setCycles(e.target.value)}
             style={{ width: '50px', marginLeft: '8px', background: 'white', color: '#000', textAlign: 'center' }}
           />
           循环次数播放

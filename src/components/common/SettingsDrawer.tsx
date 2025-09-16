@@ -7,7 +7,7 @@ import { Switch } from './Switch';
 import CustomRadio from './CustomRadio';
 import { useConfig } from '@/context/ConfigContext';
 import { useI18nToggle } from '@/hooks/useI18nToggle';
-import { getSoftwareVersion } from '@/utils/driver';
+import { getSoftwareVersion, loadAppConfig, saveAppConfig } from '@/utils/driver';
 type SettingsDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -33,16 +33,62 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
     getSoftwareVersion((version) => {
       setVersion(version);
     });
+    loadAppConfig((config) => {
+      if (config) {
+        setAutoStart(config.AutoRun ?? false);
+        setDpiDialogOpen(config.DPIWindow ?? false);
+        setLowPowerDialogOpen(config.LVDWindow ?? false);
+      }
+    });
   }, []);
+  useEffect(() => {
+    saveAppConfig({
+      Language: currentLang,
+    });
+  }, [currentLang]);
+
+  const handleChangeLanguage = (lang: string) => {
+    setLang(lang);
+    toggleLang();
+    saveAppConfig({
+      DPIWindow: dpiDialogOpen,
+      AutoRun: autoStart,
+      LVDWindow: lowPowerDialogOpen,
+      Language: lang,
+      ModelSelect: '',
+    });
+  };
   const handleAutoStartChange = (checked: boolean) => {
     setAutoStart(checked);
+    saveAppConfig({
+      DPIWindow: dpiDialogOpen,
+      AutoRun: checked,
+      LVDWindow: lowPowerDialogOpen,
+      Language: currentLang,
+      ModelSelect: '',
+    });
   };
   const handleDpiDialogChange = (checked: boolean) => {
     setDpiDialogOpen(checked);
+    saveAppConfig({
+      DPIWindow: checked,
+      AutoRun: autoStart,
+      LVDWindow: lowPowerDialogOpen,
+      Language: currentLang,
+      ModelSelect: '',
+    });
   };
   const handleLowPowerDialogChange = (checked: boolean) => {
     setLowPowerDialogOpen(checked);
+    saveAppConfig({
+      DPIWindow: dpiDialogOpen,
+      AutoRun: autoStart,
+      LVDWindow: checked,
+      Language: currentLang,
+      ModelSelect: '',
+    });
   };
+
   return (
     <SettingsDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
@@ -72,8 +118,7 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
                     <label
                       key={lang.code}
                       onChange={() => {
-                        setLang(lang.code);
-                        toggleLang();
+                        handleChangeLanguage(lang.code);
                       }}
                     >
                       <CustomRadio checked={lang.code === currentLang} />

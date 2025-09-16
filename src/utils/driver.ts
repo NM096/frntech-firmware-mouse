@@ -21,6 +21,10 @@ export function minimizeApp() {
   astilectron.sendMessage({ name: 'MinimizeApp' });
 }
 
+export function maximizeApp() {
+  astilectron.sendMessage({ name: 'MaximizeApp' });
+}
+
 export function showWindow() {
   astilectron.sendMessage({ name: 'ShowWindow' });
 }
@@ -108,6 +112,7 @@ export function getCurrentProfile(modelID, callback?: (payload: any) => void) {
 }
 
 export function setCurrentProfile(modelID, profile, callback?: (payload: any) => void) {
+  console.log('setCurrentProfile', modelID, profile);
   astilectron.sendMessage(
     {
       name: 'SetProfile',
@@ -366,6 +371,7 @@ export function openMouseProperties(callback?: (payload: any) => void) {
     }
   );
 }
+
 export function reset(device, callback?: (payload: any) => void) {
   astilectron.sendMessage(
     {
@@ -572,6 +578,7 @@ export function loadAppConfig(callback?: (payload: any) => void) {
 }
 
 export function saveAppConfig(config, callback?: (payload: any) => void) {
+  console.log('saveAppConfig', config);
   astilectron.sendMessage(
     {
       name: 'SaveAppConfig',

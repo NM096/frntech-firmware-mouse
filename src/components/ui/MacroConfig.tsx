@@ -88,13 +88,17 @@ const MacroConfig = () => {
       content: '宏组名称',
       onOk: (value) => {
         addMacroCategory(value, (payload) => {
-          if (macroList.includes(value || '新宏组')) {
+          if (macroList.includes(value || '')) {
             toast.error('宏组已存在');
             return;
           }
           if (payload) {
-            setMacroList([...macroList, value || '新宏组']);
-            setCurrentCategory(value || '新宏组');
+            getMacroCategorys((payload) => {
+              setMacroList(payload);
+              handleSwitchCategory(value || '');
+              console.log('macroList', macroList);
+              console.log('currentCategory', currentCategory);
+            });
           }
         });
       },

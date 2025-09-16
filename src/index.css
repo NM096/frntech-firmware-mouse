@@ -747,11 +747,13 @@ input:focus {
 /* Feature End */
 
 /* DPI Config Start */
+
 .light-config,
 .dpi-config {
   display: flex;
   align-items: center;
   gap: 20px;
+  /* min-height: 650px; */
 }
 .light-config .mouse-bg,
 .dpi-config .mouse-bg {
@@ -766,6 +768,7 @@ input:focus {
   border-radius: 10px;
   margin-top: 20px;
   height: 100%;
+  /* min-height: 650px; */
 }
 .dpi-config .dpi-container-item {
   display: flex;
@@ -1059,6 +1062,15 @@ input:focus {
 .light-container .light-container-slider {
   width: 50%;
   margin: 0 40px;
+}
+.light-container .direction-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.light-container .direction-btn-radio {
+  display: flex;
+  align-items: flex-end;
 }
 .light-container .light-stitle {
   font-size: 12px;

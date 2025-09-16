@@ -41,4 +41,5 @@ export interface KeyItem {
   Value: string;
   Lang: string;
   Show: string;
+  Macro?: MacroDefine;
 }

@@ -38,7 +38,14 @@ const KeyConfig = () => {
         keyDefine={currentKeyDefine}
       />
     ),
-    Keyboard: () => <Keyboard />,
+    Keyboard: () => (
+      <Keyboard
+        onChange={(define) => {
+          handleKeyChange(define);
+        }}
+        initialShortcut={currentKeyDefine}
+      />
+    ),
     Quit: () => (
       <Mouse
         list={quitKeys}
@@ -57,7 +64,15 @@ const KeyConfig = () => {
         keyDefine={currentKeyDefine}
       />
     ),
-    Macro: () => <Macro />,
+    Macro: () => (
+      <Macro
+        onChange={(value) => {
+          console.log(value, 'Macro onChange');
+          handleKeyChange(value);
+        }}
+        initialMacro={currentKeyDefine}
+      />
+    ),
   };
   const handleKeyChange = (key: KeyItem) => {
     setCurrentKeyDefine((prev) => (prev ? { ...prev, ...key } : undefined));
@@ -100,14 +115,13 @@ const KeyConfig = () => {
     }
   }, [activeKey]);
 
+  useEffect(() => {}, []);
   return (
     <div className="key-config-container">
       <div className="key-config-mouse">
         <KeyMouse
           activeKey={activeKey}
           onKeySelect={(keyIndex) => {
-            console.log('onKeySelect ', keyIndex, currentKeyDefine);
-
             setActiveKey(keyIndex);
           }}
           keyDefines={profile?.KeySet[currentDevice?.Info.Mode || 0]}

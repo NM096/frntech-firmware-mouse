@@ -100,6 +100,7 @@ export interface LightEffect {
   Name: string;
   Lang: string;
   Value: number;
+  Config?: number;
 }
 
 export interface SensorInfo {
