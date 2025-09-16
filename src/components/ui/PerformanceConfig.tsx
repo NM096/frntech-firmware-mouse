@@ -103,11 +103,6 @@ const PerformanceConfig = () => {
             onChange={(value) => handleChangeltitude('WLDeepSleep', value)}
           />
         </div>
-        <div className="performance-item">
-          <div className="performance-item-title">按键响应时间(单位:毫秒)</div>
-          <div className="performance-item-description">按键响应时间</div>
-          <Slider2 min={0} max={10} step={1} initialValue={5} data={[]} />
-        </div>
       </div>
       <div className="performance-section">
         <div className="performance-item">
