@@ -1,0 +1,96 @@
+[{
+	"KeyName": "mouse_key_0",
+	"Show": "Left Click",
+	"LogicCode": 0,
+	"LocationCode": 0,
+	"Position": {
+		"Left": 225,
+		"Top": 80,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_1",
+	"Show": "Right Click",
+	"LogicCode": 1,
+	"LocationCode": 1,
+	"Position": {
+		"Left": 320,
+		"Top": 80,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_2",
+	"Show": "Middle Click",
+	"LogicCode": 2,
+	"LocationCode": 2,
+	"Position": {
+		"Left": 274,
+		"Top": 125,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_3",
+	"Show": "Advance",
+	"LogicCode": 4,
+	"LocationCode": 4,
+	"Position": {
+		"Left": 180,
+		"Top": 195,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_4",
+	"Show": "Back",
+	"LogicCode": 3,
+	"LocationCode": 3,
+	"Position": {
+		"Left": 180,
+		"Top": 250,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_7",
+	"Show": "DPI Loop",
+	"LogicCode": 7,
+	"LocationCode": 7,
+	"Position": {
+		"Left": 274,
+		"Top": 180,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_8",
+	"Show": "Wheel Up",
+	"LogicCode": 8,
+	"LocationCode": 8,
+	"Position": {
+		"Left": 274,
+		"Top": 90,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_9",
+	"Show": "Wheel Down",
+	"LogicCode": 9,
+	"LocationCode": 9,
+	"Position": {
+		"Left": 274,
+		"Top": 160,
+		"Width": 30,
+		"Height": 30
+	}
+}]

@@ -5,5 +5,54 @@
 		"Type": "Mouse",
 		"FWID": "0x00710004",
 		"FWVersion": "0xE502"
+	},
+	{
+		"ModelID": "0x00710036",
+		"Name": "X6",
+		"Type": "Mouse",
+		"FWID": "0x00710036",
+		"FWVersion": "0xF602"
+	},
+	{
+		"ModelID": "0x00710106",
+		"Name": "X9",
+		"Type": "Mouse",
+		"FWID": "0x00710106",
+		"FWVersion": "0xE202"
+	},
+	{
+		"ModelID": "0x00710107",
+		"Name": "A9",
+		"Type": "Mouse",
+		"FWID": "0x00710107",
+		"FWVersion": "0xE102"
+	},
+	{
+		"ModelID": "0x00710101",
+		"Name": "F9",
+		"Type": "Mouse",
+		"FWID": "0x00710101",
+		"FWVersion": "0xE302"
+	},
+	{
+		"ModelID": "0x00710102",
+		"Name": "A1",
+		"Type": "Mouse",
+		"FWID": "0x00710102",
+		"FWVersion": "0xE302"
+	},
+	{
+		"ModelID": "0x01660003",
+		"Name": "BYKC 6239 Dongle",
+		"Type": "Dongle",
+		"FWID": "0x01660003",
+		"FWVersion": "0x0602"
+	},
+	{
+		"ModelID": "0x01660004",
+		"Name": "BYKC 6219 Dongle",
+		"Type": "Dongle",
+		"FWID": "0x01660004",
+		"FWVersion": "0x0402"
 	}
 ]
