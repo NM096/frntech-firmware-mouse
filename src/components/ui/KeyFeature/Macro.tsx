@@ -23,6 +23,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   };
   useEffect(() => {
     handleChangeMacro(selectedMacro);
+    console.log('selectedMacro', initialMacro);
   }, [selectedMacro, macroType, cycles]);
 
   const handleChangeMacro = (macroName: string) => {
@@ -37,7 +38,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
           Category: selectedCategory,
           Name: selectedMacro,
           Type: macroType.toString(),
-          Cycles: cycles,
+          Cycles: String(cycles),
           Content: payload.Content,
         },
       });
@@ -111,7 +112,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
             max={1000}
             min={1}
             value={cycles}
-            onChange={(e) => setCycles(e.target.value)}
+            onChange={(e) => setCycles(Number(e.target.value))}
             style={{ width: '50px', marginLeft: '8px', background: 'white', color: '#000', textAlign: 'center' }}
           />
           循环次数播放
