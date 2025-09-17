@@ -23,7 +23,7 @@ const GlobalLoading: React.FC<GlobalLoadingProps> = ({ id, onClose, progress, au
           }
           return 100;
         }
-        return prev + Math.floor(Math.random() * 8) + 5;
+        return prev + Math.floor(Math.random() * 8) + 30;
       });
     }, 400);
 

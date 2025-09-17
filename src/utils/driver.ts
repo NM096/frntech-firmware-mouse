@@ -33,6 +33,47 @@ export function hideWindow() {
   astilectron.sendMessage({ name: 'HideWindow' });
 }
 
+type DriverMessageHandler = (payload: any) => void;
+
+const driverMessageHandlers: Record<DriverMessageType, DriverMessageHandler[]> = {
+  onAppReady: [],
+  onAppConfig: [],
+  DeviceListChanged: [],
+  onDeviceChanged: [],
+  onUpgradeProgress: [],
+  onMusicLEUpdate: [],
+  onDPIWindow: [],
+};
+type DriverMessageType =
+  | 'onAppReady'
+  | 'onAppConfig'
+  | 'DeviceListChanged'
+  | 'onDeviceChanged'
+  | 'onUpgradeProgress'
+  | 'onMusicLEUpdate'
+  | 'onDPIWindow';
+export function onDriverMessage(type: DriverMessageType, handler: DriverMessageHandler) {
+  if (!driverMessageHandlers[type]) {
+    driverMessageHandlers[type] = [];
+  }
+  driverMessageHandlers[type].push(handler);
+}
+export function offDriverMessage(type: DriverMessageType, handler: DriverMessageHandler) {
+  if (!driverMessageHandlers[type]) return;
+  driverMessageHandlers[type] = driverMessageHandlers[type].filter((h) => h !== handler);
+}
+
+export function listenDriverMessage() {
+  astilectron.onMessage(function (message) {
+    console.log('driverMessageHandlers', driverMessageHandlers);
+    console.log(`-------${message.name}-------`, message.payload);
+    const handlers = driverMessageHandlers[message.name];
+    if (handlers && handlers.length) {
+      handlers.forEach((handler) => handler(message.payload));
+    }
+  });
+}
+
 // 获取机型列表：
 export function getModelList(callback?: (payload: any) => void) {
   astilectron.sendMessage({ name: 'GetModelList' }, function (message: any) {
@@ -264,6 +305,7 @@ export function getDPI(device, callback?: (payload: any) => void) {
 }
 
 export function setDPI(device, mode, dpi, callback?: (payload: any) => void) {
+  console.log('setDPI', device, mode, dpi);
   astilectron.sendMessage(
     {
       name: 'SetDPI',

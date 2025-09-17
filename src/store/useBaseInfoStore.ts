@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import type { DeviceData, DeviceInfo } from '@/types/device-data';
 import type { Config } from '@/types/data-config';
 import type { ModelConfig } from '@/types/device-data';
@@ -14,7 +14,6 @@ interface DeviceInfoState {
 
   modelConfig: ModelConfig | null;
   setModelConfig: (config: ModelConfig | null) => void;
-
   setDeviceMap: (map: DeviceData | null) => void;
   setCurrentDevice: (device: DeviceInfo | null) => void;
   clearCurrentDevice: () => void;
@@ -43,7 +42,8 @@ export const useBaseInfoStore = create<DeviceInfoState>()(
       clearCurrentDevice: () => set({ currentDevice: null, currentModelID: null, mode: 0, path: null }),
     }),
     {
-      name: 'base-info-store', // 存储到 localStorage 的 key
+      name: 'base-info-store',
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

@@ -1,6 +1,6 @@
 import type { MacroFile, Macro } from '@/types/macro';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export const genId = () => Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
 
@@ -207,6 +207,9 @@ export const useMacroStore = create<MacroState>()(
           };
         }),
     }),
-    { name: 'MacroStore' }
+    {
+      name: 'MacroStore',
+      // storage: createJSONStorage(() => sessionStorage),
+    }
   )
 );

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Profile } from '@/types/profile';
 import { cloneDeep } from 'lodash';
 import defaultProfile from '@/config/profile.json';
@@ -25,6 +25,7 @@ export const useProfileStore = create<ProfileState>()(
     }),
     {
       name: 'use-profile-store',
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

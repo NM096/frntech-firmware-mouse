@@ -28,7 +28,7 @@ const DpiConfig = () => {
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
   const { DPILevels } = currentDevice?.Info || {};
-  const { openConfigLoading, close } = useModal();
+  const { openConfigLoading, close, closeAll } = useModal();
   const handleSwitchOpenDpi = (index: number, isChecked: boolean) => {
     if (DPIs.filter((dpi) => dpi.Open).length === 1 && !isChecked) {
       return;
@@ -38,8 +38,10 @@ const DpiConfig = () => {
       if (idx === index) {
         dpi.Open = isChecked;
       }
+
       return dpi;
     });
+    console.log('_loadingId', _loadingId);
     setDPI(
       path,
       mode,
@@ -52,14 +54,14 @@ const DpiConfig = () => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }
-          close(_loadingId);
+          closeAll();
         });
       }
     );
   };
 
   const handleChangeDpi = (index: number, value: Dpi) => {
-    const _loadingId = openConfigLoading({ proccess: 0 });
+    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.map((dpi, i) => {
       if (i === index) {
         dpi = {
@@ -82,13 +84,16 @@ const DpiConfig = () => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }
-          close(_loadingId);
+          closeAll();
         });
       }
     );
   };
 
   const handleChangeCurrentDpiIdx = (idx: number) => {
+    if (DPIs[idx].Open === false) {
+      return;
+    }
     const _loadingId = openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.filter((dpi) => dpi.Open);
     // 查找idx 在所有开启的DPI中的位置
@@ -96,6 +101,7 @@ const DpiConfig = () => {
     const currentDpiIndex = newDPIs.findIndex((dpi) => dpi.Level === currentDpi.Level);
     const newDPILevels = cloneDeep(DPILevels) || [];
     newDPILevels[mode] = currentDpiIndex;
+    console.log('_loadingId', _loadingId);
     setDPI(
       path,
       mode,
@@ -103,13 +109,14 @@ const DpiConfig = () => {
         DPILevels: newDPILevels,
         DPIs: newDPIs,
       },
-      () => {
-        getDeviceList((payload) => {
-          console.log('getDeviceList', payload);
-          setDeviceMap(payload as DeviceData);
-          setCurrentDevice(payload[path as keyof typeof payload] || null);
-          close(_loadingId);
-        });
+      (result) => {
+        if (result) {
+          getDeviceList((payload) => {
+            setDeviceMap(payload as DeviceData);
+            setCurrentDevice(payload[path as keyof typeof payload] || null);
+          });
+        }
+        closeAll();
       }
     );
   };
@@ -122,9 +129,10 @@ const DpiConfig = () => {
       }
       return led;
     });
+    console.log('_loadingId', _loadingId);
     setConfigData(path, { ...(configData as Config), DPILEDs: newDPILEDs || [] }, () => {
       setConfigDataOnStore({ ...(configData as Config), DPILEDs: newDPILEDs || [] });
-      close(_loadingId);
+      closeAll();
     });
   };
   const findOpenDpiIndex = (num: number) => {
@@ -133,6 +141,7 @@ const DpiConfig = () => {
       if (DPIs[i].Open) {
         count++;
         if (count === num) {
+          console.log('i', i);
           return i;
         }
       }

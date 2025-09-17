@@ -66,7 +66,18 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     return id;
   };
 
-  const close = (id: string) => setModals((prev) => prev.filter((m) => m.id !== id));
+  const close = (id: string) => {
+    setModals((prev) => {
+      const modal = prev.find((m) => m.id === id);
+      if (modal?.type === 'loading') {
+        setTimeout(() => {
+          setModals((current) => current.filter((m) => m.id !== id));
+        }, 1000);
+        return prev;
+      }
+      return prev.filter((m) => m.id !== id);
+    });
+  };
 
   const closeAll = () => setModals([]);
 
@@ -164,9 +175,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             if (m.type === 'custom') {
               return (
                 <div key={m.id} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                  <div className="rounded-2xl bg-white p-6 shadow-xl">
+                  <div className="p-6 bg-white shadow-xl rounded-2xl">
                     {m.content}
-                    <button className="mt-4 rounded bg-gray-200 px-4 py-2" onClick={() => close(m.id)}>
+                    <button className="px-4 py-2 mt-4 bg-gray-200 rounded" onClick={() => close(m.id)}>
                       关闭
                     </button>
                   </div>

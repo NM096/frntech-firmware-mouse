@@ -3,11 +3,11 @@ import Header from '../../components/ui/Header';
 import NoDevice from '@/components/ui/NoDevice';
 import DeviceList from '@/components/ui/DeviceList';
 import Feature from '@/components/ui/Feature';
-import { getDeviceList } from '@/utils/driver';
+import { getDeviceList, listenDriverMessage, onDriverMessage } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
 const Home: React.FC = () => {
-  const { deviceMap, setDeviceMap, currentDevice } = useBaseInfoStore();
+  const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice } = useBaseInfoStore();
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
@@ -23,8 +23,26 @@ const Home: React.FC = () => {
       });
     }, 1000);
 
+    handleChangeDeviceList();
     return () => clearTimeout(timer);
   }, []);
+  const handleChangeDeviceList = () => {
+    console.log('Start listening device list change');
+    onDriverMessage('DeviceListChanged', (payload) => {
+      console.log('Device list changed:', payload);
+      if (Object.keys(payload).length === 0) {
+        setConnected(false);
+      } else {
+        setConnected(true);
+      }
+      if (!payload[path!]) {
+        clearCurrentDevice();
+      }
+      setDeviceMap(payload as DeviceData);
+    });
+
+    listenDriverMessage();
+  };
   return (
     <div className="home-container">
       <Header />
