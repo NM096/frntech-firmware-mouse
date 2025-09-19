@@ -12,21 +12,25 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      getDeviceList((payload: any) => {
-        if (Object.keys(payload).length === 0) {
+      getDeviceList((deviceList: any) => {
+        if (Object.keys(deviceList).length === 0) {
           setConnected(false);
         } else {
-          setDeviceMap(payload as DeviceData);
+          const filteredList = Object.keys(deviceList)
+            .filter((key) => deviceList[key].Info.Mouse.Type !== 'Dongle')
+            .map((key) => ({ [key]: deviceList[key] }))
+            .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+          setDeviceMap(filteredList as DeviceData);
           setConnected(true);
           clearInterval(timer);
         }
       });
     }, 1000);
-
-    handleChangeDeviceList();
+    listenChangeDeviceList();
+    listenChangeDeviceInfo();
     return () => clearTimeout(timer);
   }, []);
-  const handleChangeDeviceList = () => {
+  const listenChangeDeviceList = () => {
     console.log('Start listening device list change');
     onDriverMessage('DeviceListChanged', (payload) => {
       console.log('Device list changed:', payload);
@@ -42,6 +46,20 @@ const Home: React.FC = () => {
     });
 
     listenDriverMessage();
+  };
+  const listenChangeDeviceInfo = () => {
+    onDriverMessage('onDeviceChanged', (deviceInfo) => {
+      const hasStoreDevice = Object.keys(deviceInfo).includes(deviceInfo.Device);
+      if (hasStoreDevice) {
+        setDeviceMap({
+          ...deviceMap,
+          [deviceInfo.Device]: {
+            ...deviceMap?.[deviceInfo.Device],
+            Info: deviceInfo.Info,
+          },
+        });
+      }
+    });
   };
   return (
     <div className="home-container">

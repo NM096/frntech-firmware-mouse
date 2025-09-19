@@ -125,7 +125,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
               setMacroType(2);
             }}
           />
-          任意键按下停止播放
+          按住执行，释放停止
         </div>
         <div className="macro-trigger-item">
           <CustomRadio
@@ -135,9 +135,9 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
               setMacroType(3);
             }}
           />
-          按住播放，松开停止
+          再次按下停止宏
         </div>
-        <div className="macro-trigger-item">
+        {/* <div className="macro-trigger-item">
           <CustomRadio
             customSize="small"
             checked={macroType === 4}
@@ -146,11 +146,11 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
             }}
           />
           当前宏键按下停止播放
-        </div>
-        <div className="macro-trigger-item">
+        </div> */}
+        {/* <div className="macro-trigger-item">
           <Checkbox size={15} onChange={() => {}} />
           左键宏
-        </div>
+        </div> */}
       </div>
     </div>
   );

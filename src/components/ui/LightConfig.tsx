@@ -160,7 +160,7 @@ const LightConfig = () => {
           <label>
             <Dropdown
               borderColor="#ff7f0e"
-              options={LETable.map((item) => item.Lang)}
+              options={LETable.map((item) => item.Lang || '')}
               onChange={(lang) => handleChangeLe(lang)}
               defaultValue={currentLeInfo.Lang}
               size="small"
@@ -199,7 +199,7 @@ const LightConfig = () => {
             </div>
           </div>
         ) : null}
-        {!((currentLeInfo?.Config ?? 0) & 0x04) ? (
+        {(currentLeInfo?.Config ?? 0) & 0x04 ? (
           <div className="light-container-item">
             <div>方向:</div>
             <div className="light-stitle">调节鼠标灯光的方向</div>
@@ -234,7 +234,7 @@ const LightConfig = () => {
               styles={{
                 default: {
                   picker: {
-                    width: '400px',
+                    width: '250px',
                     background: '#2c2c2c', // 修改整体背景色
                     borderRadius: '6px',
                     boxShadow: '0',

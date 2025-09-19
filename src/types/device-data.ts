@@ -85,6 +85,7 @@ export interface DeviceInfo {
   Device?: object;
   RFDevice?: boolean;
   Dongle?: string;
+  Mouse?: object;
 }
 
 export interface DeviceData {

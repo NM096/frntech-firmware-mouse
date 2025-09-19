@@ -15,15 +15,16 @@ import resetHover from '@/assets/reset_2.png';
 import profile from '@/assets/profile_icon.png';
 import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
 import { useModal } from '@/components/common/ModalContext';
-import { reset as resetConfig } from '@/utils/driver';
+import { reset as resetConfig, unmaximizeApp } from '@/utils/driver';
 
 import { checkDriver, minimizeApp, maximizeApp, closeApp } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
+const shell = require('electron').shell;
 
 const Header = () => {
   const { openAlert, openConfigLoading, close: modalClose } = useModal();
 
-  const { path } = useBaseInfoStore();
+  const { path, isMaxWindow, setIsMaxWindow } = useBaseInfoStore();
   const handleCheckDriver = () => {
     checkDriver((payload: any) => {
       console.log(payload);
@@ -41,16 +42,32 @@ const Header = () => {
       },
     });
   };
+  const handleMaximize = () => {
+    if (isMaxWindow) {
+      unmaximizeApp();
+      setIsMaxWindow(false);
+    } else {
+      maximizeApp();
+      setIsMaxWindow(true);
+    }
+  };
+
   return (
     <div className="header">
       <div className="header-left" onClick={handleCheckDriver}>
-        <HoverImage src={logo} hoverSrc={logo} alt="Logo" className="logo" />
+        <HoverImage
+          src={logo}
+          hoverSrc={logo}
+          alt="Logo"
+          className="logo"
+          onClick={() => shell.openPath('http://www.inphic.cn/')}
+        />
       </div>
 
       <div className="header-right">
         <div className="window-controls">
           <HoverImage src={min} hoverSrc={minHover} alt="Minimize" className="icon-5" onClick={minimizeApp} />
-          <HoverImage src={ic_max} hoverSrc={ic_max} alt="max" className="icon-5" onClick={maximizeApp} />
+          <HoverImage src={ic_max} hoverSrc={ic_max} alt="max" className="icon-5" onClick={() => handleMaximize()} />
           <HoverImage src={ic_close} hoverSrc={closeHover} alt="Close" className="icon-5" onClick={closeApp} />
         </div>
       </div>

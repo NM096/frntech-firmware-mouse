@@ -24,6 +24,9 @@ export function minimizeApp() {
 export function maximizeApp() {
   astilectron.sendMessage({ name: 'MaximizeApp' });
 }
+export function unmaximizeApp() {
+  astilectron.sendMessage({ name: 'UnmaximizeApp' });
+}
 
 export function showWindow() {
   astilectron.sendMessage({ name: 'ShowWindow' });
@@ -387,6 +390,7 @@ export function setConfigData(device, config: Config, callback?: (payload: any) 
 }
 
 export function apply(device, profile, callback?: (payload: any) => void) {
+  console.log('SetKeyDefine', device, profile);
   astilectron.sendMessage(
     {
       name: 'SetKeyDefine',

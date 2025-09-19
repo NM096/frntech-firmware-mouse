@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash';
 import type { Config } from '@/types/data-config';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { throttle } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
 
 const DpiConfig = () => {
@@ -29,13 +30,15 @@ const DpiConfig = () => {
   const { DPIs = [] } = profile;
   const { DPILevels } = currentDevice?.Info || {};
   const { openConfigLoading, closeAll } = useModal();
-  const handleSwitchOpenDpi = (index: number, isChecked: boolean) => {
+  const [localDPIs, setLocalDPIs] = useState<Dpi[]>(DPIs);
+  const handleSwitchOpenDpi = throttle((index: number, isChecked: boolean) => {
     if (index === findOpenDpiIndex(DPILevels?.[mode] || 0)) {
       return;
     }
     if (DPIs.filter((dpi) => dpi.Open).length === 1 && !isChecked) {
       return;
     }
+    const newDPILevels: number[] = cloneDeep(DPILevels) || [];
     const _loadingId = openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.map((dpi, idx) => {
       if (idx === index) {
@@ -44,15 +47,38 @@ const DpiConfig = () => {
 
       return dpi;
     });
+    if (findOpenDpiIndex(index) || 0 < (DPILevels?.[mode] || 0)) {
+      newDPILevels[mode] = Math.max(0, (newDPILevels[mode] || 1) + (isChecked ? +1 : -1));
+      console.log('change dpi level', newDPILevels[mode]);
+    }
+    console.log(
+      'index',
+      index,
+      'open index',
+      findOpenDpiIndex(index),
+      'DPILevels',
+      DPILevels,
+      'currentDPILevel',
+      DPILevels?.[mode] || 0
+    );
+
     console.log('_loadingId', _loadingId);
+    console.log('newDPILevels', newDPILevels);
     setDPI(
       path,
       mode,
       {
-        DPILevels: currentDevice?.Info?.DPILevels,
+        DPILevels: newDPILevels,
         DPIs: newDPIs.filter((dpi) => dpi.Open),
       },
       () => {
+        storeSetCurrentDevice({
+          ...currentDevice,
+          Info: {
+            ...currentDevice?.Info,
+            DPILevels: newDPILevels,
+          },
+        });
         setCurrentProfile(currentModelID, { ...profile, DPIs: newDPIs }, (payload) => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
@@ -61,7 +87,7 @@ const DpiConfig = () => {
         });
       }
     );
-  };
+  }, 1000);
 
   const handleChangeDpi = (index: number, value: Dpi) => {
     openConfigLoading({ proccess: 0 });
@@ -128,14 +154,13 @@ const DpiConfig = () => {
   };
 
   const handleChangeDpiLed = (index: number, hex: string) => {
-    const _loadingId = openConfigLoading({ proccess: 0 });
+    openConfigLoading({ proccess: 0 });
     const newDPILEDs = configData?.DPILEDs.map((led, i) => {
       if (i === index) {
         return { ...led, Value: hex };
       }
       return led;
     });
-    console.log('_loadingId', _loadingId);
     setConfigData(path, { ...(configData as Config), DPILEDs: newDPILEDs || [] }, () => {
       setConfigDataOnStore({ ...(configData as Config), DPILEDs: newDPILEDs || [] });
       closeAll();
@@ -144,7 +169,7 @@ const DpiConfig = () => {
   const findOpenDpiIndex = (num: number) => {
     let count = 0;
     for (let i = 0; i <= DPIs.length; i++) {
-      if (DPIs[i].Open) {
+      if (DPIs[i]?.Open || false) {
         if (count === num) {
           count++;
           return i;
@@ -158,6 +183,9 @@ const DpiConfig = () => {
   useEffect(() => {
     setCurrentDevice(storeCurrentDevice);
   }, [storeCurrentDevice]);
+  useEffect(() => {
+    setLocalDPIs(DPIs);
+  }, [profile]);
   return (
     <div className="dpi-config">
       <img
@@ -167,11 +195,11 @@ const DpiConfig = () => {
       />
       <div className="dpi-container">
         <div>{t('dpi_adjustment')}</div>
-        {DPIs.map((dpi, index) => {
+        {localDPIs.map((dpi, index) => {
           return (
             <div className="dpi-container-item" key={index}>
               <Checkbox
-                checked={dpi.Open}
+                checked={dpi.Open || false}
                 size={16}
                 onChange={(e) => {
                   handleSwitchOpenDpi(index, e.target.checked);

@@ -4,15 +4,17 @@ import type { DeviceData, DeviceInfo } from '@/types/device-data';
 import type { Config } from '@/types/data-config';
 import type { ModelConfig } from '@/types/device-data';
 interface DeviceInfoState {
+  isMaxWindow: boolean;
   deviceMap: DeviceData | null;
   currentModelID: string | null;
   path: string | null;
   currentDevice: DeviceInfo | null;
   mode: number;
   configData: Config | null;
+  modelConfig: ModelConfig | null;
+  setIsMaxWindow: (isMax: boolean) => void;
   setConfigData: (config: Config | null) => void;
 
-  modelConfig: ModelConfig | null;
   setModelConfig: (config: ModelConfig | null) => void;
   setDeviceMap: (map: DeviceData | null) => void;
   setCurrentDevice: (device: DeviceInfo | null) => void;
@@ -22,6 +24,7 @@ interface DeviceInfoState {
 export const useBaseInfoStore = create<DeviceInfoState>()(
   persist(
     (set) => ({
+      isMaxWindow: false,
       deviceMap: null,
       currentDevice: null,
       currentModelID: null,
@@ -29,15 +32,16 @@ export const useBaseInfoStore = create<DeviceInfoState>()(
       path: null,
       configData: null,
       modelConfig: null,
+      setIsMaxWindow: (isMax) => set({ isMaxWindow: isMax }),
       setModelConfig: (config) => set({ modelConfig: config }),
       setConfigData: (config) => set({ configData: config }),
       setDeviceMap: (map) => set({ deviceMap: map }),
       setCurrentDevice: (device) =>
         set({
           currentDevice: device,
-          currentModelID: device?.Model.ModelID,
-          mode: device?.Info.Mode || 0,
-          path: device?.HID.Path || null,
+          currentModelID: device?.Model?.ModelID,
+          mode: device?.Info?.Mode || 0,
+          path: device?.HID?.Path || null,
         }),
       clearCurrentDevice: () => set({ currentDevice: null, currentModelID: null, mode: 0, path: null }),
     }),

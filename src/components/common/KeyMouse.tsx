@@ -20,18 +20,19 @@ interface KeyMouseProps {
 }
 const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect }) => {
   const { t } = useTranslation();
-  const { currentDevice } = useBaseInfoStore();
+  const { currentDevice, currentModelID } = useBaseInfoStore();
+
   const baseKeys: Key[] = [
-    { index: 0, label: '左键', Lang: 'mouse_kf_left', style: { position: 'absolute', left: '9%', top: '27%' } },
-    { index: 1, label: '右键', Lang: 'mouse_kf_right', style: { position: 'absolute', right: '10%', top: '27%' } },
-    { index: 2, label: '中键', Lang: 'mouse_kf_middle', style: { position: 'absolute', right: '10%', top: '4%' } },
-    { index: 3, label: '后退', Lang: 'mouse_kf_back', style: { position: 'absolute', left: '9%', top: '69%' } },
-    { index: 4, label: '前进', Lang: 'mouse_kf_forward', style: { position: 'absolute', left: '9%', top: '43%' } },
+    // { index: 0, label: '左键', Lang: 'mouse_kf_left', style: { position: 'absolute', left: '9%', top: '27%' } },
+    // { index: 1, label: '右键', Lang: 'mouse_kf_right', style: { position: 'absolute', left: '90%', top: '27%' } },
+    // { index: 2, label: '中键', Lang: 'mouse_kf_middle', style: { position: 'absolute', left: '90%', top: '4%' } },
+    // { index: 3, label: '后退', Lang: 'mouse_kf_back', style: { position: 'absolute', left: '9%', top: '69%' } },
+    // { index: 4, label: '前进', Lang: 'mouse_kf_forward', style: { position: 'absolute', left: '9%', top: '43%' } },
   ];
 
   const [keys, setKeys] = useState<(Key & Partial<KeyDefine>)[]>(cloneDeep(baseKeys));
   useEffect(() => {
-    if (!keyDefines) return;
+    if (!keyDefines || keys.length > 0) return;
     setKeys((prevKeys) => {
       console.log('Updating keys with prevKeys:', prevKeys);
       const newKeys = cloneDeep(baseKeys).map((item) => {
@@ -43,7 +44,40 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect 
       });
       return newKeys;
     });
-  }, [keyDefines]);
+  }, [keyDefines, keys]);
+
+  useEffect(() => {
+    if (!currentModelID) return;
+    fetch(`/device/${currentModelID}/data/keymap.json`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(
+          data.map((item) => ({
+            index: item.LogicCode,
+            label: item.Show,
+            style: {
+              position: 'absolute',
+              left: `${item.Position.Left}%`,
+              top: `${item.Position.Top}%`,
+            },
+            Lang: item.KeyName,
+          }))
+        );
+        setKeys(
+          data.map((item) => ({
+            index: item.LogicCode,
+            label: item.Show,
+            style: {
+              position: 'absolute',
+              left: `${item.Position.Left}%`,
+              top: `${item.Position.Top}%`,
+            },
+            Lang: item.KeyName,
+          }))
+        );
+      })
+      .catch((err) => console.error('Failed to load JSON:', err));
+  }, [currentModelID]);
 
   return (
     <div style={{ position: 'relative', width: '100%', fontSize: '0.9rem' }}>
