@@ -4,7 +4,7 @@ import Macro from './KeyFeature/Macro';
 import KeyMouse from '@/components/common/KeyMouse';
 import { useEffect, useState } from 'react';
 import Keys from '@/config/keys.json';
-import { setCurrentProfile } from '@/utils/driver';
+import { setCurrentProfile, apply } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { KeyDefine, KeyItem } from '@/types/profile';
 import { cloneDeep } from 'lodash';
@@ -15,12 +15,14 @@ type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 
 const KeyConfig = () => {
   const { Mouse: mouseKeys, Quit: quitKeys, Media: mediaKeys } = Keys;
-  const { currentModelID, currentDevice } = useBaseInfoStore();
+  const { currentModelID, currentDevice: storeCurrentDevice, path } = useBaseInfoStore();
+  const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
   const [activeKey, setActiveKey] = useState<number | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('Mouse');
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
-  const { profile, setProfile } = useProfileStore();
-  const { openConfigLoading, close } = useModal();
+  const { profile: storeProfile, setProfile: storeSetProfile } = useProfileStore();
+  const [profile, setProfile] = useState(storeProfile);
+  const { openConfigLoading, closeAll } = useModal();
   const sideList: { key: sidebarKey; title: string }[] = [
     { key: 'Mouse', title: '鼠标功能' },
     { key: 'Keyboard', title: '键盘功能' },
@@ -79,9 +81,9 @@ const KeyConfig = () => {
   };
 
   const handleSettingKey = () => {
-    const _loadingId = openConfigLoading({ proccess: 0 });
+    openConfigLoading({ proccess: 0 });
     const _profile = cloneDeep(profile);
-    const currentKeySet = _profile?.KeySet[currentDevice?.Info.Mode || 0];
+    const currentKeySet = _profile?.KeySet[currentDevice?.Info?.Mode || 0];
     const newKeySet = currentKeySet.map((keyDefines) => {
       if (keyDefines.Index == activeKey) {
         return {
@@ -91,18 +93,20 @@ const KeyConfig = () => {
       }
       return keyDefines;
     });
-    _profile.KeySet[currentDevice?.Info.Mode || 0] = newKeySet;
-    setCurrentProfile(currentModelID, _profile, (payload) => {
-      if (payload) {
-        setProfile(_profile);
-      }
-      close(_loadingId);
+    _profile.KeySet[currentDevice?.Info?.Mode || 0] = newKeySet;
+    apply(path, _profile, () => {
+      setCurrentProfile(currentModelID, _profile, (payload) => {
+        if (payload) {
+          storeSetProfile(_profile);
+        }
+        closeAll();
+      });
     });
   };
   // 同步Key 按键默认值
   useEffect(() => {
     if (activeKey == null) return;
-    const keySet = profile.KeySet[currentDevice?.Info.Mode || 0];
+    const keySet = profile.KeySet[currentDevice?.Info?.Mode || 0];
     const keyDefine = keySet.find((key) => key.Index == activeKey);
     setCurrentKeyDefine(cloneDeep(keyDefine));
     // 选择菜单
@@ -115,7 +119,12 @@ const KeyConfig = () => {
     }
   }, [activeKey]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setCurrentDevice(storeCurrentDevice);
+  }, [storeCurrentDevice]);
+  useEffect(() => {
+    setProfile(storeProfile);
+  }, [storeProfile]);
   return (
     <div className="key-config-container">
       <div className="key-config-mouse">
@@ -124,7 +133,7 @@ const KeyConfig = () => {
           onKeySelect={(keyIndex) => {
             setActiveKey(keyIndex);
           }}
-          keyDefines={profile?.KeySet[currentDevice?.Info.Mode || 0]}
+          keyDefines={profile?.KeySet?.[currentDevice?.Info?.Mode || 0] || []}
         />
       </div>
       {activeKey !== null && (

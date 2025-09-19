@@ -3,33 +3,36 @@ import Checkbox from '../common/Checkbox';
 import ColorPicker from '../common/ColorPicker';
 import CustomRadio from '../common/CustomRadio';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-import { setCurrentProfile, setDPI, getDeviceList, setConfigData } from '@/utils/driver';
+import { setCurrentProfile, setDPI, setConfigData } from '@/utils/driver';
 import { useProfileStore } from '@/store/useProfile';
 import { useModal } from '@/components/common/ModalContext';
 import type { Dpi } from '@/types/profile';
 import { cloneDeep } from 'lodash';
-import type { DeviceData } from '@/types/device-data';
 import type { Config } from '@/types/data-config';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 const baseUrl = import.meta.env.BASE_URL;
 
 const DpiConfig = () => {
   const { t } = useTranslation();
   const {
-    currentDevice,
+    currentDevice: storeCurrentDevice,
     currentModelID,
     mode,
     path,
-    setCurrentDevice,
-    setDeviceMap,
+    setCurrentDevice: storeSetCurrentDevice,
     configData,
     setConfigData: setConfigDataOnStore,
   } = useBaseInfoStore();
+  const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
   const { DPILevels } = currentDevice?.Info || {};
-  const { openConfigLoading, close, closeAll } = useModal();
+  const { openConfigLoading, closeAll } = useModal();
   const handleSwitchOpenDpi = (index: number, isChecked: boolean) => {
+    if (index === findOpenDpiIndex(DPILevels?.[mode] || 0)) {
+      return;
+    }
     if (DPIs.filter((dpi) => dpi.Open).length === 1 && !isChecked) {
       return;
     }
@@ -46,7 +49,7 @@ const DpiConfig = () => {
       path,
       mode,
       {
-        DPILevels: currentDevice?.Info.DPILevels,
+        DPILevels: currentDevice?.Info?.DPILevels,
         DPIs: newDPIs.filter((dpi) => dpi.Open),
       },
       () => {
@@ -76,7 +79,7 @@ const DpiConfig = () => {
       path,
       mode,
       {
-        DPILevels: currentDevice?.Info.DPILevels,
+        DPILevels: currentDevice?.Info?.DPILevels,
         DPIs: newDPIs.filter((dpi) => dpi.Open),
       },
       () => {
@@ -99,7 +102,7 @@ const DpiConfig = () => {
     // 查找idx 在所有开启的DPI中的位置
     const currentDpi = DPIs[idx];
     const currentDpiIndex = newDPIs.findIndex((dpi) => dpi.Level === currentDpi.Level);
-    const newDPILevels = cloneDeep(DPILevels) || [];
+    const newDPILevels: number[] = cloneDeep(DPILevels) || [];
     newDPILevels[mode] = currentDpiIndex;
     console.log('_loadingId', _loadingId);
     setDPI(
@@ -111,9 +114,12 @@ const DpiConfig = () => {
       },
       (result) => {
         if (result) {
-          getDeviceList((payload) => {
-            setDeviceMap(payload as DeviceData);
-            setCurrentDevice(payload[path as keyof typeof payload] || null);
+          storeSetCurrentDevice({
+            ...currentDevice,
+            Info: {
+              ...currentDevice?.Info,
+              DPILevels: newDPILevels,
+            },
           });
         }
         closeAll();
@@ -137,18 +143,21 @@ const DpiConfig = () => {
   };
   const findOpenDpiIndex = (num: number) => {
     let count = 0;
-    for (let i = 0; i < DPIs.length; i++) {
+    for (let i = 0; i <= DPIs.length; i++) {
       if (DPIs[i].Open) {
-        count++;
         if (count === num) {
-          console.log('i', i);
+          count++;
           return i;
         }
+        count++;
       }
     }
     return null;
   };
 
+  useEffect(() => {
+    setCurrentDevice(storeCurrentDevice);
+  }, [storeCurrentDevice]);
   return (
     <div className="dpi-config">
       <img

@@ -39,7 +39,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
           Name: selectedMacro,
           Type: macroType.toString(),
           Cycles: String(cycles),
-          Content: payload.Content,
+          Content: payload?.Content || null,
         },
       });
     });

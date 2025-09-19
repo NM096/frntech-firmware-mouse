@@ -41,19 +41,19 @@ export interface KB {
 }
 
 export interface Info {
-  FWID: number;
-  RealFWID: number;
-  FWVersion: number;
-  Mode: number;
-  SensorID: number;
-  SensorInfo: null | any; // You may want to provide more info if SensorInfo has a structure.
-  DPILevels: number[];
-  USBReports: number[];
-  WLReports: number[];
-  LEDEffect: LEDEffect;
-  AdvanceSetting: AdvanceSetting;
-  Mouse: Mouse;
-  KB: KB;
+  FWID?: number;
+  RealFWID?: number;
+  FWVersion?: number;
+  Mode?: number;
+  SensorID?: number;
+  SensorInfo?: null | any; // You may want to provide more info if SensorInfo has a structure.
+  DPILevels?: number[];
+  USBReports?: number[];
+  WLReports?: number[];
+  LEDEffect?: LEDEffect;
+  AdvanceSetting?: AdvanceSetting;
+  Mouse?: Mouse;
+  KB?: KB;
 }
 
 export interface HID {
@@ -70,21 +70,21 @@ export interface HID {
 }
 
 export interface Model {
-  ModelID: string;
-  Name: string;
-  Type: string;
-  FWID: number;
-  FWVersion: number;
+  ModelID?: string;
+  Name?: string;
+  Type?: string;
+  FWID?: number;
+  FWVersion?: number;
 }
 
 export interface DeviceInfo {
-  Driver: object;
-  Model: Model;
-  HID: HID;
-  Info: Info;
-  Device: object;
-  RFDevice: boolean;
-  Dongle: string;
+  Driver?: object;
+  Model?: Model;
+  HID?: HID;
+  Info?: Info;
+  Device?: object;
+  RFDevice?: boolean;
+  Dongle?: string;
 }
 
 export interface DeviceData {
@@ -92,25 +92,25 @@ export interface DeviceData {
 }
 
 export interface ModelConfig {
-  LETable: LightEffect[];
-  SensorInfo: SensorInfo;
+  LETable?: LightEffect[];
+  SensorInfo?: SensorInfo;
 }
 
 export interface LightEffect {
-  Name: string;
-  Lang: string;
-  Value: number;
+  Name?: string;
+  Lang?: string;
+  Value?: number;
   Config?: number;
 }
 
 export interface SensorInfo {
-  Name: string;
-  DPIs: DPISetting[];
+  Name?: string;
+  DPIs?: DPISetting[];
 }
 
 export interface DPISetting {
-  Level: number;
-  DPI: number;
-  Value: number;
-  Config: number;
+  Level?: number;
+  DPI?: number;
+  Value?: number;
+  Config?: number;
 }

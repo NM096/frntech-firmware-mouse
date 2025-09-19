@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { KeyDefine } from '@/types/profile';
 import { useTranslation } from 'react-i18next';
+import { cloneDeep } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
 
 interface Key {
   index: number;
   label: string;
   style: React.CSSProperties;
+  Lang?: string;
 }
 
 interface KeyMouseProps {
@@ -19,45 +21,28 @@ interface KeyMouseProps {
 const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect }) => {
   const { t } = useTranslation();
   const { currentDevice } = useBaseInfoStore();
-  const [keys, setKeys] = useState<(Key & Partial<KeyDefine>)[]>([
-    {
-      index: 0,
-      label: '左键',
-      style: { position: 'absolute', left: '9%', top: '27%' },
-    },
-    {
-      index: 1,
-      label: '右键',
-      style: { position: 'absolute', right: '10%', top: '27%' },
-    },
-    {
-      index: 2,
-      label: '中键',
-      style: { position: 'absolute', right: '10%', top: '4%' },
-    },
-    {
-      index: 3,
-      label: '后退',
-      style: { position: 'absolute', left: '9%', top: '69%' },
-    },
-    {
-      index: 4,
-      label: '前进',
-      style: { position: 'absolute', left: '9%', top: '43%' },
-    },
-  ]);
+  const baseKeys: Key[] = [
+    { index: 0, label: '左键', Lang: 'mouse_kf_left', style: { position: 'absolute', left: '9%', top: '27%' } },
+    { index: 1, label: '右键', Lang: 'mouse_kf_right', style: { position: 'absolute', right: '10%', top: '27%' } },
+    { index: 2, label: '中键', Lang: 'mouse_kf_middle', style: { position: 'absolute', right: '10%', top: '4%' } },
+    { index: 3, label: '后退', Lang: 'mouse_kf_back', style: { position: 'absolute', left: '9%', top: '69%' } },
+    { index: 4, label: '前进', Lang: 'mouse_kf_forward', style: { position: 'absolute', left: '9%', top: '43%' } },
+  ];
+
+  const [keys, setKeys] = useState<(Key & Partial<KeyDefine>)[]>(cloneDeep(baseKeys));
   useEffect(() => {
     if (!keyDefines) return;
-    console.log(keyDefines);
-    const newKeys = keys.map((item) => {
-      const keyDefine = keyDefines.find((keyDefine) => Number(keyDefine.Index) == item.index);
-      return {
-        ...item,
-        ...keyDefine,
-      };
+    setKeys((prevKeys) => {
+      console.log('Updating keys with prevKeys:', prevKeys);
+      const newKeys = cloneDeep(baseKeys).map((item) => {
+        const keyDefine = keyDefines.find((keyDefine) => Number(keyDefine.Index) == item.index);
+        return {
+          ...item,
+          ...keyDefine,
+        };
+      });
+      return newKeys;
     });
-    setKeys(newKeys);
-    console.log(newKeys);
   }, [keyDefines]);
 
   return (
@@ -70,7 +55,7 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect 
       <div>
         {keys.map((key, index) => (
           <div
-            key={index}
+            key={index + (key?.Lang ?? '')}
             style={key.style}
             className={`key-mouse-label ${activeKey === key.index ? 'active' : ''}`}
             onClick={() => {
