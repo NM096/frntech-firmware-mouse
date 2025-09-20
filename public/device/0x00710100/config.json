@@ -1,0 +1,20 @@
+{
+	"LETable": [
+		{
+			"Name": "关闭灯光",
+			"Lang": "mouse_le_1",
+			"Value": 1
+		}
+	],
+	"SensorInfo": {
+		"Name": "S205",
+		"DPIs": [
+			{ "Level": 1, "DPI": 800, "Value": 8 },
+			{ "Level": 2, "DPI": 1200, "Value": 12 },
+			{ "Level": 3, "DPI": 1600, "Value": 16 },
+			{ "Level": 4, "DPI": 3200, "Value": 32 },
+			{ "Level": 5, "DPI": 4800, "Value": 48 },
+			{ "Level": 6, "DPI": 12800, "Value": 128 }
+		]
+	}
+}
