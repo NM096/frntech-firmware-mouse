@@ -13,51 +13,70 @@ const Home: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       getDeviceList((deviceList: any) => {
-        if (Object.keys(deviceList).length === 0) {
-          setConnected(false);
-        } else {
+        if (hasCanSelectedDevice(deviceList)) {
           const filteredList = Object.keys(deviceList)
-            .filter((key) => deviceList[key].Info.Mouse.Type !== 'Dongle')
+            .filter((key) => deviceList[key].Model.Type !== 'Dongle')
             .map((key) => ({ [key]: deviceList[key] }))
             .reduce((acc, curr) => ({ ...acc, ...curr }), {});
           setDeviceMap(filteredList as DeviceData);
           setConnected(true);
           clearInterval(timer);
+        } else {
+          setConnected(false);
         }
       });
     }, 1000);
     listenChangeDeviceList();
     listenChangeDeviceInfo();
+    listenDriverMessage();
     return () => clearTimeout(timer);
   }, []);
+  const hasCanSelectedDevice = (deviceList: any): boolean => {
+    if (Object.keys(deviceList).length !== 0) {
+      const usbDeviceLength = Object.keys(deviceList).filter((key) => !deviceList[key].RFDevice).length;
+      if (usbDeviceLength > 0) {
+        return true;
+      }
+      const g24DeviceKeys = Object.keys(deviceList).filter((key) => deviceList[key].RFDevice);
+      const hasG24DeviceOnline = g24DeviceKeys.map((key) => deviceList[key].Info?.Mouse?.Online).includes(true);
+      console.log('G24 online status:', hasG24DeviceOnline);
+      return hasG24DeviceOnline;
+    }
+    return false;
+  };
   const listenChangeDeviceList = () => {
     console.log('Start listening device list change');
-    onDriverMessage('DeviceListChanged', (payload) => {
-      console.log('Device list changed:', payload);
-      if (Object.keys(payload).length === 0) {
-        setConnected(false);
-      } else {
-        setConnected(true);
-      }
-      if (!payload[path!]) {
+    onDriverMessage('DeviceListChanged', (deviceList) => {
+      const filteredList = Object.keys(deviceList)
+        .filter((key) => deviceList[key].Model.Type !== 'Dongle')
+        .map((key) => ({ [key]: deviceList[key] }))
+        .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      setDeviceMap(filteredList as DeviceData);
+      setConnected(hasCanSelectedDevice(deviceList));
+      if (!deviceList[path!]) {
         clearCurrentDevice();
       }
-      setDeviceMap(payload as DeviceData);
     });
-
-    listenDriverMessage();
   };
   const listenChangeDeviceInfo = () => {
-    onDriverMessage('onDeviceChanged', (deviceInfo) => {
-      const hasStoreDevice = Object.keys(deviceInfo).includes(deviceInfo.Device);
+    onDriverMessage('DeviceChanged', (deviceInfo) => {
+      const hasStoreDevice = Object.keys(deviceMap || {}).includes(deviceInfo.Device);
+      console.log(hasStoreDevice, deviceInfo.Device, deviceMap);
       if (hasStoreDevice) {
-        setDeviceMap({
+        const _newDeviceMap = {
           ...deviceMap,
           [deviceInfo.Device]: {
             ...deviceMap?.[deviceInfo.Device],
             Info: deviceInfo.Info,
           },
-        });
+        };
+        setConnected(hasCanSelectedDevice(_newDeviceMap));
+        setDeviceMap(_newDeviceMap);
+        console.log('change connect status', path, deviceInfo.Device);
+        if (path === deviceInfo.Device) {
+          console.log('Current device info updated:', deviceInfo, _newDeviceMap, hasCanSelectedDevice(_newDeviceMap));
+          setConnected(hasCanSelectedDevice(_newDeviceMap));
+        }
       }
     });
   };

@@ -14,9 +14,11 @@ const DeviceList = () => {
   const { setProfile } = useProfileStore();
 
   // 点击设备，设置当前设备和配置文件
-  const handleSetProfile = (device: DeviceInfo) => {
+  const handleSetProfile = (key: string, device: DeviceInfo) => {
     const currentModelID = device.Model?.ModelID;
-    const path = device.HID?.Path;
+    if (device.HID) {
+      device.HID.Path = key;
+    }
     const ModelID = device.Model?.ModelID;
     setCurrentDevice(device);
     getCurrentProfile(ModelID, (payload) => {
@@ -34,10 +36,9 @@ const DeviceList = () => {
       setDefaultProfile(payload);
     });
     // 获取設備数据
-    getConfigData(path, (payload) => {
+    getConfigData(key, (payload) => {
       setConfigData(payload);
     });
-
     getModelConfig(currentModelID, (payload) => {
       setModelConfig(payload);
     });
@@ -47,11 +48,11 @@ const DeviceList = () => {
       {deviceMap &&
         Object.keys(deviceMap)
           .filter((key) => {
-            if (deviceMap[key].Info != null) {
+            if (deviceMap[key].Info !== null) {
               if (deviceMap[key].RFDevice) {
-                if ((deviceMap[key].Mouse as { Online?: boolean })?.Online) return key;
+                return deviceMap[key].Info?.Mouse?.Online;
               } else {
-                return key;
+                return true;
               }
             }
           })
@@ -62,7 +63,7 @@ const DeviceList = () => {
                 className="device-card"
                 key={key}
                 onClick={() => {
-                  handleSetProfile(device);
+                  handleSetProfile(key, device);
                 }}
               >
                 <div className="device-overlay"></div>

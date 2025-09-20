@@ -85,7 +85,16 @@ export interface DeviceInfo {
   Device?: object;
   RFDevice?: boolean;
   Dongle?: string;
-  Mouse?: object;
+  Mouse?: Mouse;
+}
+export interface Mouse {
+  Battery: number;
+  Charge: boolean;
+  DeviceID: number;
+  FWID: number;
+  FWVersion: number;
+  Online: boolean;
+  RealFWID: number;
 }
 
 export interface DeviceData {

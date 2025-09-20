@@ -42,7 +42,7 @@ const driverMessageHandlers: Record<DriverMessageType, DriverMessageHandler[]> =
   onAppReady: [],
   onAppConfig: [],
   DeviceListChanged: [],
-  onDeviceChanged: [],
+  DeviceChanged: [],
   onUpgradeProgress: [],
   onMusicLEUpdate: [],
   onDPIWindow: [],
@@ -51,7 +51,7 @@ type DriverMessageType =
   | 'onAppReady'
   | 'onAppConfig'
   | 'DeviceListChanged'
-  | 'onDeviceChanged'
+  | 'DeviceChanged'
   | 'onUpgradeProgress'
   | 'onMusicLEUpdate'
   | 'onDPIWindow';
@@ -70,6 +70,7 @@ export function listenDriverMessage() {
   astilectron.onMessage(function (message) {
     console.log('driverMessageHandlers', driverMessageHandlers);
     console.log(`-------${message.name}-------`, message.payload);
+    console.log('Current handlers:', driverMessageHandlers[message.name]);
     const handlers = driverMessageHandlers[message.name];
     if (handlers && handlers.length) {
       handlers.forEach((handler) => handler(message.payload));
