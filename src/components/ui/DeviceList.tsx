@@ -6,7 +6,6 @@ import type { DeviceInfo } from '@/types/device-data';
 import { useProfileStore } from '@/store/useProfile';
 import { getCurrentProfile, getModelProfile, setCurrentProfile, getConfigData, getModelConfig } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
-import { KeySquare } from 'lucide-react';
 const baseUrl = import.meta.env.BASE_URL;
 
 const DeviceList = () => {
@@ -16,9 +15,9 @@ const DeviceList = () => {
 
   // 点击设备，设置当前设备和配置文件
   const handleSetProfile = (device: DeviceInfo) => {
-    const { ModelID: currentModelID } = device.Model;
-    const { Path: path } = device.HID;
-    const { ModelID } = device.Model;
+    const currentModelID = device.Model?.ModelID;
+    const path = device.HID?.Path;
+    const ModelID = device.Model?.ModelID;
     setCurrentDevice(device);
     getCurrentProfile(ModelID, (payload) => {
       if (!payload) {
@@ -50,7 +49,7 @@ const DeviceList = () => {
           .filter((key) => {
             if (deviceMap[key].Info != null) {
               if (deviceMap[key].RFDevice) {
-                if (deviceMap[key].Mouse?.Online) return key;
+                if ((deviceMap[key].Mouse as { Online?: boolean })?.Online) return key;
               } else {
                 return key;
               }

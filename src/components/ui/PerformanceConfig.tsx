@@ -20,19 +20,19 @@ const PerformanceConfig = () => {
   const { openConfigLoading, close } = useModal();
   const { currentDevice, path, mode, setCurrentDevice } = useBaseInfoStore();
 
-  const [advanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(currentDevice?.Info.AdvanceSetting);
-  const [usbReport, setUsbReport] = useState(currentDevice?.Info.USBReports?.[0] || 0);
+  const [advanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(currentDevice?.Info?.AdvanceSetting);
+  const [usbReport, setUsbReport] = useState(currentDevice?.Info?.USBReports?.[0] || 0);
   //
   const handleChangeUsbReport = (index: number) => {
     setUsbReport(index);
     const _loadingId = openConfigLoading({ proccess: 0 });
-    const newUsbReport = currentDevice?.Info.USBReports || [0, 0, 0, 0];
+    const newUsbReport = currentDevice?.Info?.USBReports || [0, 0, 0, 0];
     newUsbReport[mode] = index;
     setReportRate(
       path,
       {
         USBReports: newUsbReport,
-        WLReports: currentDevice?.Info.WLReports || [0, 0, 0, 0],
+        WLReports: currentDevice?.Info?.WLReports || [0, 0, 0, 0],
       },
       (payload) => {
         if (payload) {
