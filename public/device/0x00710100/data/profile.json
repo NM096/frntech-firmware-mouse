@@ -1,0 +1,244 @@
+{
+	"KeySet": [
+		[
+			{
+				"Index": 0,
+				"Name": "Left Click",
+				"Lang": "mouse_kf_mouse_left",
+				"Show": "Left Click",
+				"Value": "0x4181"
+			},
+			{
+				"Index": 1,
+				"Name": "Right Click",
+				"Lang": "mouse_kf_mouse_right",
+				"Show": "Right Click",
+				"Value": "0x4182"
+			},
+			{
+				"Index": 2,
+				"Name": "Middle Click",
+				"Lang": "mouse_kf_mouse_middle",
+				"Show": "Middle Click",
+				"Value": "0x4184"
+			},
+			{
+				"Index": 3,
+				"Name": "Back",
+				"Lang": "mouse_kf_mouse_back",
+				"Show": "Back",
+				"Value": "0x4188"
+			},
+			{
+				"Index": 4,
+				"Name": "Advance",
+				"Lang": "mouse_kf_mouse_advance",
+				"Show": "Advance",
+				"Value": "0x4190"
+			},
+			{
+				"Index": 7,
+				"Name": "DPI Loop",
+				"Lang": "mouse_kf_dpi_loop",
+				"Show": "DPI Loop",
+				"Value": "0x4802"
+			},
+			{
+				"Index": 8,
+				"Name": "Wheel Up",
+				"Lang": "mouse_kf_mouse_wheel_up",
+				"Show": "Wheel Up",
+				"Value": "0x4201"
+			},
+			{
+				"Index": 9,
+				"Name": "Wheel Down",
+				"Lang": "mouse_kf_mouse_wheel_down",
+				"Show": "Wheel Down",
+				"Value": "0x42FF"
+			}
+		],
+		[
+			{
+				"Index": 0,
+				"Name": "Left Click",
+				"Lang": "mouse_kf_mouse_left",
+				"Show": "Left Click",
+				"Value": "0x4181"
+			},
+			{
+				"Index": 1,
+				"Name": "Right Click",
+				"Lang": "mouse_kf_mouse_right",
+				"Show": "Right Click",
+				"Value": "0x4182"
+			},
+			{
+				"Index": 2,
+				"Name": "Middle Click",
+				"Lang": "mouse_kf_mouse_middle",
+				"Show": "Middle Click",
+				"Value": "0x4184"
+			},
+			{
+				"Index": 3,
+				"Name": "Back",
+				"Lang": "mouse_kf_mouse_back",
+				"Show": "Back",
+				"Value": "0x4188"
+			},
+			{
+				"Index": 4,
+				"Name": "Advance",
+				"Lang": "mouse_kf_mouse_advance",
+				"Show": "Advance",
+				"Value": "0x4190"
+			},
+			{
+				"Index": 7,
+				"Name": "DPI Loop",
+				"Lang": "mouse_kf_dpi_loop",
+				"Show": "DPI Loop",
+				"Value": "0x4802"
+			},
+			{
+				"Index": 8,
+				"Name": "Wheel Up",
+				"Lang": "mouse_kf_mouse_wheel_up",
+				"Show": "Wheel Up",
+				"Value": "0x4201"
+			},
+			{
+				"Index": 9,
+				"Name": "Wheel Down",
+				"Lang": "mouse_kf_mouse_wheel_down",
+				"Show": "Wheel Down",
+				"Value": "0x42FF"
+			}
+		],
+		[
+			{
+				"Index": 0,
+				"Name": "Left Click",
+				"Lang": "mouse_kf_mouse_left",
+				"Show": "Left Click",
+				"Value": "0x4181"
+			},
+			{
+				"Index": 1,
+				"Name": "Right Click",
+				"Lang": "mouse_kf_mouse_right",
+				"Show": "Right Click",
+				"Value": "0x4182"
+			},
+			{
+				"Index": 2,
+				"Name": "Middle Click",
+				"Lang": "mouse_kf_mouse_middle",
+				"Show": "Middle Click",
+				"Value": "0x4184"
+			},
+			{
+				"Index": 3,
+				"Name": "Back",
+				"Lang": "mouse_kf_mouse_back",
+				"Show": "Back",
+				"Value": "0x4188"
+			},
+			{
+				"Index": 4,
+				"Name": "Advance",
+				"Lang": "mouse_kf_mouse_advance",
+				"Show": "Advance",
+				"Value": "0x4190"
+			},
+			{
+				"Index": 7,
+				"Name": "DPI Loop",
+				"Lang": "mouse_kf_dpi_loop",
+				"Show": "DPI Loop",
+				"Value": "0x4802"
+			},
+			{
+				"Index": 8,
+				"Name": "Wheel Up",
+				"Lang": "mouse_kf_mouse_wheel_up",
+				"Show": "Wheel Up",
+				"Value": "0x4201"
+			},
+			{
+				"Index": 9,
+				"Name": "Wheel Down",
+				"Lang": "mouse_kf_mouse_wheel_down",
+				"Show": "Wheel Down",
+				"Value": "0x42FF"
+			}
+		],
+		[
+			{
+				"Index": 0,
+				"Name": "Left Click",
+				"Lang": "mouse_kf_mouse_left",
+				"Show": "Left Click",
+				"Value": "0x4181"
+			},
+			{
+				"Index": 1,
+				"Name": "Right Click",
+				"Lang": "mouse_kf_mouse_right",
+				"Show": "Right Click",
+				"Value": "0x4182"
+			},
+			{
+				"Index": 2,
+				"Name": "Middle Click",
+				"Lang": "mouse_kf_mouse_middle",
+				"Show": "Middle Click",
+				"Value": "0x4184"
+			},
+			{
+				"Index": 3,
+				"Name": "Back",
+				"Lang": "mouse_kf_mouse_back",
+				"Show": "Back",
+				"Value": "0x4188"
+			},
+			{
+				"Index": 4,
+				"Name": "Advance",
+				"Lang": "mouse_kf_mouse_advance",
+				"Show": "Advance",
+				"Value": "0x4190"
+			},
+			{
+				"Index": 7,
+				"Name": "DPI Loop",
+				"Lang": "mouse_kf_dpi_loop",
+				"Show": "DPI Loop",
+				"Value": "0x4802"
+			},
+			{
+				"Index": 8,
+				"Name": "Wheel Up",
+				"Lang": "mouse_kf_mouse_wheel_up",
+				"Show": "Wheel Up",
+				"Value": "0x4201"
+			},
+			{
+				"Index": 9,
+				"Name": "Wheel Down",
+				"Lang": "mouse_kf_mouse_wheel_down",
+				"Show": "Wheel Down",
+				"Value": "0x42FF"
+			}
+		]
+	],
+	"DPIs": [
+		{ "Open": true, "Level": 1, "DPI": 800, "Value": 8 },
+		{ "Open": true, "Level": 2, "DPI": 1600, "Value": 16 },
+		{ "Open": true, "Level": 3, "DPI": 2400, "Value": 24 },
+		{ "Open": true, "Level": 4, "DPI": 3200, "Value": 32 },
+		{ "Open": true, "Level": 5, "DPI": 4800, "Value": 48 },
+		{ "Open": true, "Level": 6, "DPI": 12800, "Value": 128 }
+	]
+}

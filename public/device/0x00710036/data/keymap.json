@@ -1,59 +1,59 @@
 [{
-	"KeyName": "mouse_key_0",
+	"KeyName": "mouse_key_1",
 	"Show": "Left Click",
 	"LogicCode": 0,
 	"LocationCode": 0,
 	"Position": {
-		"Left": 200,
-		"Top": 60,
-		"Width": 30,
-		"Height": 30
-	}
-},
-{
-	"KeyName": "mouse_key_1",
-	"Show": "Right Click",
-	"LogicCode": 1,
-	"LocationCode": 1,
-	"Position": {
-		"Left": 310,
-		"Top": 60,
+		"Left": 9,
+		"Top": 27,
 		"Width": 30,
 		"Height": 30
 	}
 },
 {
 	"KeyName": "mouse_key_2",
-	"Show": "Middle Click",
-	"LogicCode": 2,
-	"LocationCode": 2,
+	"Show": "Right Click",
+	"LogicCode": 1,
+	"LocationCode": 1,
 	"Position": {
-		"Left": 255,
-		"Top": 105,
+		"Left": 75,
+		"Top": 27,
 		"Width": 30,
 		"Height": 30
 	}
 },
 {
-	"KeyName": "mouse_key_8",
-	"Show": "Wheel Up",
-	"LogicCode": 8,
-	"LocationCode": 8,
+	"KeyName": "mouse_key_3",
+	"Show": "Middle Click",
+	"LogicCode": 2,
+	"LocationCode": 2,
 	"Position": {
-		"Left": 255,
-		"Top": 70,
+		"Left": 75,
+		"Top": 4,
 		"Width": 30,
 		"Height": 30
 	}
 },
 {
 	"KeyName": "mouse_key_9",
+	"Show": "Wheel Up",
+	"LogicCode": 8,
+	"LocationCode": 8,
+	"Position": {
+		"Left": 0,
+		"Top": 10,
+		"Width": 30,
+		"Height": 30
+	}
+},
+{
+	"KeyName": "mouse_key_10",
 	"Show": "Wheel Down",
 	"LogicCode": 9,
 	"LocationCode": 9,
 	"Position": {
-		"Left": 255,
-		"Top": 150,
+		"Left": 0,
+		"Top": 20,
 		"Width": 30,
 		"Height": 30
 	}

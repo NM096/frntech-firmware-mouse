@@ -14,18 +14,11 @@
 		"FWVersion": "0xF602"
 	},
 	{
-		"ModelID": "0x00710106",
-		"Name": "X9",
+		"ModelID": "0x00710100",
+		"Name": "IN6",
 		"Type": "Mouse",
-		"FWID": "0x00710106",
-		"FWVersion": "0xE202"
-	},
-	{
-		"ModelID": "0x00710107",
-		"Name": "A9",
-		"Type": "Mouse",
-		"FWID": "0x00710107",
-		"FWVersion": "0xE102"
+		"FWID": "0x00710100",
+		"FWVersion": "0xE302"
 	},
 	{
 		"ModelID": "0x00710101",
@@ -40,6 +33,20 @@
 		"Type": "Mouse",
 		"FWID": "0x00710102",
 		"FWVersion": "0xE302"
+	},
+	{
+		"ModelID": "0x00710106",
+		"Name": "X9",
+		"Type": "Mouse",
+		"FWID": "0x00710106",
+		"FWVersion": "0xE202"
+	},
+	{
+		"ModelID": "0x00710107",
+		"Name": "A9",
+		"Type": "Mouse",
+		"FWID": "0x00710107",
+		"FWVersion": "0xE102"
 	},
 	{
 		"ModelID": "0x01660003",
