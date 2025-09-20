@@ -4,6 +4,7 @@ import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { KeyDefine } from '@/types/profile';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
+import { getModelKeyMap } from '@/utils/driver';
 const baseUrl = import.meta.env.BASE_URL;
 
 interface Key {
@@ -48,35 +49,20 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect 
 
   useEffect(() => {
     if (!currentModelID) return;
-    fetch(`/device/${currentModelID}/data/keymap.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(
-          data.map((item) => ({
-            index: item.LogicCode,
-            label: item.Show,
-            style: {
-              position: 'absolute',
-              left: `${item.Position.Left}%`,
-              top: `${item.Position.Top}%`,
-            },
-            Lang: item.KeyName,
-          }))
-        );
-        setKeys(
-          data.map((item) => ({
-            index: item.LogicCode,
-            label: item.Show,
-            style: {
-              position: 'absolute',
-              left: `${item.Position.Left}%`,
-              top: `${item.Position.Top}%`,
-            },
-            Lang: item.KeyName,
-          }))
-        );
-      })
-      .catch((err) => console.error('Failed to load JSON:', err));
+    getModelKeyMap(currentModelID, (keymap) => {
+      setKeys(
+        keymap.map((item) => ({
+          index: item.LogicCode,
+          label: item.Show,
+          style: {
+            position: 'absolute',
+            left: `${item.Position.Left}%`,
+            top: `${item.Position.Top}%`,
+          },
+          Lang: item.KeyName,
+        }))
+      );
+    });
   }, [currentModelID]);
 
   return (

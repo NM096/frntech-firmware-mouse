@@ -403,8 +403,10 @@ const MacroConfig = () => {
             <div
               className="macro-record-btn"
               onClick={() => {
-                setRecording(true);
-                setOpenRecords(true);
+                if (currentMacroFile) {
+                  setRecording(true);
+                  setOpenRecords(true);
+                }
               }}
             >
               <HoverImage src={ic_play} hoverSrc={ic_play} alt="Logo" className="back-btn-icon" />
