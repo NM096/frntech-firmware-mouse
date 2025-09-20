@@ -45,7 +45,7 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect 
       });
       return newKeys;
     });
-  }, [keyDefines, keys]);
+  }, [keyDefines]);
 
   useEffect(() => {
     if (!currentModelID) return;
