@@ -266,7 +266,7 @@ input:focus {
   font-size: 12px; /* Tailwind text-xs */
 }
 
-.device-container { 
+.device-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -762,7 +762,6 @@ input:focus {
 }
 .light-config .mouse-container,
 .dpi-config .mouse-container {
-
 }
 .light-config .mouse-bg,
 .dpi-config .mouse-bg {
@@ -1202,6 +1201,8 @@ input:focus {
   margin: 10px 0;
 }
 .macro-item-right .macro-action-btn {
+  border: 1px solid transparent;
+
   padding: 5px 20px;
   border-radius: 5px;
   width: fit-content;
@@ -1227,6 +1228,7 @@ input:focus {
   align-items: center;
   gap: 6px;
   margin-right: 20px;
+  cursor: pointer;
 }
 .macro-content-body {
   background-color: #14191a;

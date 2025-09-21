@@ -17,23 +17,22 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string>(defaultValue);
+  // const [selectedOption, setSelectedOption] = useState<string>('');
 
   const toggleDropdown = () => setIsOpen(!isOpen);
-
   const handleSelect = (option: string) => {
-    setSelectedOption(option);
+    // setSelectedOption(option);
     setIsOpen(false);
     onChange(option);
   };
-  useEffect(() => {
-    if (!defaultValue) {
-      console.log(defaultValue, 'defaultValue changed');
-      setSelectedOption('');
-    } else {
-      setSelectedOption(defaultValue);
-    }
-  }, [defaultValue]);
+  // useEffect(() => {
+  //   if (defaultValue) {
+  //     setSelectedOption(defaultValue);
+  //   } else {
+  //     console.log(defaultValue, 'defaultValue changed');
+  //     setSelectedOption('');
+  //   }
+  // }, [defaultValue]);
 
   const buttonStyle: React.CSSProperties = {
     width: `calc(100% - ${(size === 'small' ? 5 : size === 'medium' ? 10 : 15) * 2}px)`,
@@ -80,7 +79,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div style={{ width: '100%', position: 'relative' }}>
       <div style={buttonStyle} onClick={toggleDropdown}>
-        {t(selectedOption) || '请选择'}
+        {t(defaultValue) || '请选择'}
         <span style={triangleStyle}></span>
       </div>
       {isOpen && (

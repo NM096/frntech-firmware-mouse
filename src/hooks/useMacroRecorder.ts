@@ -62,7 +62,7 @@ export function useMacroRecorder(
       lastEventTime.current = now;
       addRecord(event);
     },
-    [addRecord]
+    [addRecord, delayMode, minDelay]
   );
 
   useEffect(() => {

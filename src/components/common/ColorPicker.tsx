@@ -67,36 +67,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
             borderRadius: '6px',
           }}
         >
-          {/* 顶部按钮 */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              marginBottom: '4px',
-            }}
-          >
-            <button
-              onClick={handleConfirm}
-              style={{
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-                marginRight: '6px',
-              }}
-            >
-              <Check size={16} color="green" />
-            </button>
-            <button
-              onClick={handleCancel}
-              style={{
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-              }}
-            >
-              <X size={16} color="red" />
-            </button>
-          </div>
           {/* react-color 选择器 */}
           <SketchPicker
             color={tempColor}
@@ -117,6 +87,47 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
               },
             }}
           />
+          {/* 按钮 */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginBottom: '4px',
+            }}
+          >
+            <button
+              onClick={handleCancel}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                marginRight: '6px',
+                borderRadius: '4px',
+                padding: '4px 6px',
+                cursor: 'pointer',
+                boxShadow: '1px 1px 5px rgba(0,0,0,0.2)',
+              }}
+            >
+              <X size={16} color="red" />
+            </button>
+            <button
+              onClick={handleConfirm}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                marginRight: '6px',
+                borderRadius: '4px',
+                padding: '4px 6px',
+                cursor: 'pointer',
+                boxShadow: '1px 1px 5px rgba(0,0,0,0.2)',
+              }}
+            >
+              <Check size={16} color="green" />
+            </button>
+          </div>
         </div>
       )}
     </div>

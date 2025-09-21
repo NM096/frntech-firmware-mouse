@@ -47,28 +47,25 @@ export default function MacroActionList({ events, delayMode }: MacroActionListPr
         events
           .filter((event) => event.type !== 'Delay')
           .map((event, index) => (
-            <>
-              <li className="macro-content-item" key={index + event.code}>
-                <span>{index + 1}</span>
-                {getIcon(event.type)}
-
-                <span>
-                  {/* {event.code} */}
-                  {delayMode == 'record' && events[index * 2 + 1]?.type === 'Delay'
-                    ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(4)
-                    : delayMode == 'default' && events[index * 2 + 1]?.type === 'Delay'
-                      ? event.code
-                      : 0.0001}
-                  秒
-                </span>
-                {isDown(event) ? (
-                  <HoverImage src={macro_key_down} hoverSrc={macro_key_down} alt="Logo" className="back-btn-icon" />
-                ) : (
-                  <HoverImage src={macro_key_up} hoverSrc={macro_key_up} alt="Logo" className="back-btn-icon" />
-                )}
-                <span>{t(event.name)}</span>
-              </li>
-            </>
+            <li className="macro-content-item" key={index + event.code + event.type + event.name}>
+              <span>{index + 1}</span>
+              {getIcon(event.type)}
+              <span>
+                {/* {event.code} */}
+                {delayMode == 'record' && events[index * 2 + 1]?.type === 'Delay'
+                  ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3)
+                  : delayMode == 'default' && events[index * 2 + 1]?.type === 'Delay'
+                    ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3)
+                    : 0.01}
+                秒
+              </span>
+              {isDown(event) ? (
+                <HoverImage src={macro_key_down} hoverSrc={macro_key_down} alt="Logo" className="back-btn-icon" />
+              ) : (
+                <HoverImage src={macro_key_up} hoverSrc={macro_key_up} alt="Logo" className="back-btn-icon" />
+              )}
+              <span>{t(event.name)}</span>
+            </li>
           ))}
     </>
   );

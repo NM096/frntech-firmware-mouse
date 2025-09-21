@@ -7,7 +7,7 @@ import { getDeviceList, listenDriverMessage, onDriverMessage } from '@/utils/dri
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
 const Home: React.FC = () => {
-  const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice } = useBaseInfoStore();
+  const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice, setCurrentDevice } = useBaseInfoStore();
   const [connected, setConnected] = useState(false);
   useEffect(() => {
     getDeviceList((deviceList: any) => {
@@ -55,9 +55,8 @@ const Home: React.FC = () => {
   };
   const listenChangeDeviceInfo = () => {
     onDriverMessage('DeviceChanged', (deviceInfo) => {
-      const deviceMap = useBaseInfoStore.getState().deviceMap;
+      const { deviceMap, currentDevice, path } = useBaseInfoStore.getState();
       const hasStoreDevice = Object.keys(deviceMap || {}).includes(deviceInfo.Device);
-      console.log(hasStoreDevice, deviceInfo.Device, deviceMap);
       if (hasStoreDevice) {
         const _newDeviceMap = {
           ...deviceMap,
@@ -66,6 +65,12 @@ const Home: React.FC = () => {
             Info: deviceInfo.Info,
           },
         };
+        if (path == deviceInfo.Device) {
+          setCurrentDevice({
+            ...currentDevice,
+            Info: deviceInfo.Info,
+          });
+        }
         setConnected(hasCanSelectedDevice(_newDeviceMap));
         setDeviceMap(_newDeviceMap);
         console.log('change connect status', path, deviceInfo.Device);

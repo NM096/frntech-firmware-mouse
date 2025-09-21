@@ -13,6 +13,19 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { throttle } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
+const findOpenDpiIndex = (num: number, DPIs: Dpi[]) => {
+  let count = 0;
+  for (let i = 0; i <= DPIs.length; i++) {
+    if (DPIs[i]?.Open || false) {
+      if (count === num) {
+        count++;
+        return i;
+      }
+      count++;
+    }
+  }
+  return null;
+};
 
 const DpiConfig = () => {
   const { t } = useTranslation();
@@ -21,7 +34,7 @@ const DpiConfig = () => {
     currentModelID,
     mode,
     path,
-    setCurrentDevice: storeSetCurrentDevice,
+    setCurrentDevice: setStoreCurrentDevice,
     configData,
     setConfigData: setConfigDataOnStore,
   } = useBaseInfoStore();
@@ -31,39 +44,26 @@ const DpiConfig = () => {
   const { DPILevels } = currentDevice?.Info || {};
   const { openConfigLoading, closeAll } = useModal();
   const [localDPIs, setLocalDPIs] = useState<Dpi[]>(DPIs);
+  const [currentDpiIdx, setCurrentDpiIdx] = useState<number>(findOpenDpiIndex(DPILevels?.[mode] || 0, DPIs) || 0);
   const handleSwitchOpenDpi = throttle((index: number, isChecked: boolean) => {
-    if (index === findOpenDpiIndex(DPILevels?.[mode] || 0)) {
+    if (index === currentDpiIdx) {
       return;
     }
     if (DPIs.filter((dpi) => dpi.Open).length === 1 && !isChecked) {
       return;
     }
     const newDPILevels: number[] = cloneDeep(DPILevels) || [];
-    const _loadingId = openConfigLoading({ proccess: 0 });
+    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.map((dpi, idx) => {
       if (idx === index) {
         dpi.Open = isChecked;
       }
-
       return dpi;
     });
-    if (findOpenDpiIndex(index) || 0 < (DPILevels?.[mode] || 0)) {
-      newDPILevels[mode] = Math.max(0, (newDPILevels[mode] || 1) + (isChecked ? +1 : -1));
-      console.log('change dpi level', newDPILevels[mode]);
+    // 如果关闭的DPI在当前DPI索引之前，动态更改鼠标DPI等级
+    if (index < currentDpiIdx) {
+      newDPILevels[mode] = isChecked ? newDPILevels[mode] + 1 : newDPILevels[mode] - 1;
     }
-    console.log(
-      'index',
-      index,
-      'open index',
-      findOpenDpiIndex(index),
-      'DPILevels',
-      DPILevels,
-      'currentDPILevel',
-      DPILevels?.[mode] || 0
-    );
-
-    console.log('_loadingId', _loadingId);
-    console.log('newDPILevels', newDPILevels);
     setDPI(
       path,
       mode,
@@ -72,7 +72,7 @@ const DpiConfig = () => {
         DPIs: newDPIs.filter((dpi) => dpi.Open),
       },
       () => {
-        storeSetCurrentDevice({
+        setStoreCurrentDevice({
           ...currentDevice,
           Info: {
             ...currentDevice?.Info,
@@ -123,14 +123,14 @@ const DpiConfig = () => {
     if (DPIs[idx].Open === false) {
       return;
     }
-    const _loadingId = openConfigLoading({ proccess: 0 });
+    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.filter((dpi) => dpi.Open);
     // 查找idx 在所有开启的DPI中的位置
     const currentDpi = DPIs[idx];
     const currentDpiIndex = newDPIs.findIndex((dpi) => dpi.Level === currentDpi.Level);
     const newDPILevels: number[] = cloneDeep(DPILevels) || [];
     newDPILevels[mode] = currentDpiIndex;
-    console.log('_loadingId', _loadingId);
+    setCurrentDpiIdx(idx);
     setDPI(
       path,
       mode,
@@ -140,7 +140,7 @@ const DpiConfig = () => {
       },
       (result) => {
         if (result) {
-          storeSetCurrentDevice({
+          setStoreCurrentDevice({
             ...currentDevice,
             Info: {
               ...currentDevice?.Info,
@@ -166,26 +166,13 @@ const DpiConfig = () => {
       closeAll();
     });
   };
-  const findOpenDpiIndex = (num: number) => {
-    let count = 0;
-    for (let i = 0; i <= DPIs.length; i++) {
-      if (DPIs[i]?.Open || false) {
-        if (count === num) {
-          count++;
-          return i;
-        }
-        count++;
-      }
-    }
-    return null;
-  };
 
   useEffect(() => {
     setCurrentDevice(storeCurrentDevice);
-  }, [storeCurrentDevice]);
-  useEffect(() => {
     setLocalDPIs(DPIs);
-  }, [profile]);
+    setCurrentDpiIdx(findOpenDpiIndex(storeCurrentDevice?.Info?.DPILevels?.[mode] || 0, DPIs) || 0);
+  }, [storeCurrentDevice, profile]);
+
   return (
     <div className="dpi-config">
       <div className="mouse-container">
@@ -208,7 +195,7 @@ const DpiConfig = () => {
                 }}
               />
               <CustomRadio
-                checked={findOpenDpiIndex(DPILevels?.[mode] || 0) === index}
+                checked={currentDpiIdx === index}
                 onChange={() => {
                   handleChangeCurrentDpiIdx(index);
                 }}

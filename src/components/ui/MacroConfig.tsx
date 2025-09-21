@@ -49,7 +49,7 @@ export interface MacroEvent {
 const MacroConfig = () => {
   const { openConfirm, openAlert } = useModal();
   const { path } = useBaseInfoStore();
-  const [macroList, setMacroList] = useState<string[]>([]);
+  const [category, setCategory] = useState<string[]>([]);
   const [currentCategory, setCurrentCategory] = useState<string>('');
   const [currentMacroFile, setCurrentMacroFile] = useState<string>('');
   const [macroFiles, setMacroFiles] = useState<string[]>([]);
@@ -59,21 +59,8 @@ const MacroConfig = () => {
 
   const [recording, setRecording] = useState(false);
   const [openRecords, setOpenRecords] = useState(false);
-  const { records, stop, clearRecords, setRecords } = useMacroRecorder(recording, openRecords, delayMode, minDelay);
+  const { records, clearRecords, setRecords } = useMacroRecorder(recording, openRecords, delayMode, minDelay);
   const [recordedActions, setRecordedActions] = useState<MacroEvent[]>([]);
-
-  useEffect(() => {
-    setRecordedActions(records);
-  }, [records]);
-
-  const handleClearRecords = () => {
-    clearRecords();
-    setRecordedActions(stop());
-  };
-  const handleStopRecords = () => {
-    setRecording(false);
-    setRecordedActions(stop());
-  };
 
   const handleSwitchCategory = (category: string) => {
     setCurrentCategory(category);
@@ -88,15 +75,15 @@ const MacroConfig = () => {
       content: '宏组名称',
       onOk: (value) => {
         addMacroCategory(value, (payload) => {
-          if (macroList.includes(value || '')) {
+          if (category.includes(value || '')) {
             toast.error('宏组已存在');
             return;
           }
           if (payload) {
             getMacroCategorys((payload) => {
-              setMacroList(payload);
+              setCategory(payload);
               handleSwitchCategory(value || '');
-              console.log('macroList', macroList);
+              console.log('category', category);
               console.log('currentCategory', currentCategory);
             });
           }
@@ -113,7 +100,7 @@ const MacroConfig = () => {
         delMacro(currentCategory, currentMacroFile, (payload) => {
           if (payload) {
             getMacroCategorys((payload) => {
-              setMacroList(payload);
+              setCategory(payload);
               setCurrentCategory('');
               setCurrentMacroFile('');
               setMacroFiles([]);
@@ -131,7 +118,7 @@ const MacroConfig = () => {
         addMacroCategory(value, (payload) => {
           if (payload) {
             getMacroCategorys((payload) => {
-              setMacroList(payload);
+              setCategory(payload);
             });
           }
         });
@@ -198,6 +185,8 @@ const MacroConfig = () => {
   };
 
   const handleSave = () => {
+    setRecording(false);
+    setOpenRecords(false);
     saveMacro(
       currentCategory,
       currentMacroFile,
@@ -214,7 +203,18 @@ const MacroConfig = () => {
       }
     );
   };
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    setRecording(false);
+    setOpenRecords(false);
+    readMacro(currentCategory, currentMacroFile, (data) => {
+      if (data && Array.isArray(data.Content) && data.Content.length > 0) {
+        setRecords(KeyFormatter.lowercaseKeys(data.Content) || []);
+      } else {
+        setRecordedActions([]);
+      }
+      console.log('recordedActions', recordedActions);
+    });
+  };
   const handleExportMacroFile = () => {
     if (!currentCategory && !currentMacroFile) return;
 
@@ -250,8 +250,9 @@ const MacroConfig = () => {
       });
   };
   useEffect(() => {
-    getMacroCategorys((payload) => {
-      setMacroList(payload);
+    getMacroCategorys((CategoryList) => {
+      setCategory(CategoryList);
+      setCurrentCategory(CategoryList[0] || '');
     });
   }, []);
 
@@ -264,19 +265,21 @@ const MacroConfig = () => {
 
   useEffect(() => {
     if (currentMacroFile) {
-      readMacro(currentCategory, currentMacroFile, () => {
-        readMacro(currentCategory, currentMacroFile, (data) => {
-          if (data && Array.isArray(data.Content) && data.Content.length > 0) {
-            setRecordedActions(KeyFormatter.lowercaseKeys(data.Content) || []);
-          } else {
-            setRecordedActions([]);
-          }
-
-          console.log('recordedActions', recordedActions);
-        });
+      readMacro(currentCategory, currentMacroFile, (data) => {
+        if (data && Array.isArray(data.Content) && data.Content.length > 0) {
+          console.log('data.Content', KeyFormatter.lowercaseKeys(data.Content));
+          // setRecordedActions(KeyFormatter.lowercaseKeys(data.Content) || []);
+          setRecords(KeyFormatter.lowercaseKeys(data.Content) || []);
+        } else {
+          setRecordedActions([]);
+        }
+        console.log('recordedActions', recordedActions);
       });
     }
   }, [currentMacroFile]);
+  useEffect(() => {
+    setRecordedActions(records);
+  }, [records]);
 
   const categoryMenu = [
     // {
@@ -345,7 +348,7 @@ const MacroConfig = () => {
         </div>
         <Dropdown
           borderColor="#ff7b00"
-          options={macroList}
+          options={category}
           onChange={(e) => {
             handleSwitchCategory(e);
           }}
@@ -399,11 +402,26 @@ const MacroConfig = () => {
       </div>
       <div className="macro-item-content">
         <div className="macro-content-header">
-          {!recording ? (
+          {recording ? (
+            <div
+              className="macro-record-btn"
+              onClick={() => setRecording(false)}
+              onMouseEnter={() => {
+                setOpenRecords(false);
+              }}
+              onMouseLeave={() => {
+                setOpenRecords(true);
+              }}
+            >
+              <HoverImage src={ic_stop} hoverSrc={ic_stop} alt="Logo" className="back-btn-icon" />
+              停止录制
+            </div>
+          ) : (
             <div
               className="macro-record-btn"
               onClick={() => {
                 if (currentMacroFile) {
+                  // setRecords(currentMacroFile || [])
                   setRecording(true);
                   setOpenRecords(true);
                 }
@@ -412,27 +430,31 @@ const MacroConfig = () => {
               <HoverImage src={ic_play} hoverSrc={ic_play} alt="Logo" className="back-btn-icon" />
               开始录制
             </div>
-          ) : (
-            <div className="macro-record-btn" onClick={() => handleStopRecords()}>
-              <HoverImage src={ic_stop} hoverSrc={ic_stop} alt="Logo" className="back-btn-icon" />
-              停止录制
-            </div>
           )}
-          <HoverImage
+          {/* <HoverImage
             src={delete_macro_action_1}
             hoverSrc={delete_macro_action_2}
             alt="Logo"
             className="back-btn-icon"
-          />
+          /> */}
           {/* <HoverImage src={btn_up_1} hoverSrc={btn_up_2} alt="Logo" className="back-btn-icon" />
           <HoverImage src={btn_down_1} hoverSrc={btn_down_2} alt="Logo" className="back-btn-icon" /> */}
-          <HoverImage
-            src={ic_clear}
-            hoverSrc={ic_clear}
-            alt="Logo"
-            className="back-btn-icon"
-            onClick={() => handleClearRecords()}
-          />
+          <div
+            onMouseEnter={() => {
+              setOpenRecords(false);
+            }}
+            onMouseLeave={() => {
+              setOpenRecords(true);
+            }}
+          >
+            <HoverImage
+              src={ic_clear}
+              hoverSrc={ic_clear}
+              alt="Logo"
+              className="back-btn-icon"
+              onClick={() => clearRecords()}
+            />
+          </div>
           {/* <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />
           <div>
             X:
@@ -455,7 +477,15 @@ const MacroConfig = () => {
       </div>
       <div className="macro-item-right">
         <div>录制延迟方式:</div>
-        <ul className="macro-delay-mode">
+        <ul
+          className="macro-delay-mode"
+          onMouseEnter={() => {
+            setOpenRecords(false);
+          }}
+          onMouseLeave={() => {
+            setOpenRecords(true);
+          }}
+        >
           <li>
             <CustomRadio customSize="small" checked={delayMode === 'record'} onChange={() => setDelayMode('record')} />
             录制延迟
@@ -481,19 +511,39 @@ const MacroConfig = () => {
             最小延迟
           </li>
         </ul>
-        <div>按键</div>
-        <div style={{ width: '95%' }}>
-          <Dropdown borderColor="#ff7b00" options={Mouse.map((i) => i.Lang)} onChange={() => {}} size="small" />
-        </div>
-        <div> 延迟(ms) </div>
-        <input
-          type="text"
-          style={{ width: '100%', backgroundColor: 'white', color: 'black', textAlign: 'center', border: '0px' }}
-        />
-        <div className="macro-action-btn" onClick={() => handleSave()}>
+        {/* <div>
+          <div>按键</div>
+          <div style={{ width: '95%' }}>
+            <Dropdown borderColor="#ff7b00" options={Mouse.map((i) => i.Lang)} onChange={() => {}} size="small" />
+          </div>
+          <div> 延迟(ms) </div>
+          <input
+            type="text"
+            style={{ width: '100%', backgroundColor: 'white', color: 'black', textAlign: 'center', border: '0px' }}
+          />
+        </div> */}
+        <div
+          className="macro-action-btn"
+          onClick={() => handleSave()}
+          onMouseEnter={() => {
+            setOpenRecords(false);
+          }}
+          onMouseLeave={() => {
+            setOpenRecords(true);
+          }}
+        >
           保存
         </div>
-        <div className="macro-action-btn" onClick={() => handleCancel()}>
+        <div
+          className="macro-action-btn"
+          onClick={() => handleCancel()}
+          onMouseEnter={() => {
+            setOpenRecords(false);
+          }}
+          onMouseLeave={() => {
+            setOpenRecords(true);
+          }}
+        >
           取消
         </div>
       </div>
