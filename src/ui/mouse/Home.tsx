@@ -9,31 +9,26 @@ import type { DeviceData } from '@/types/device-data';
 const Home: React.FC = () => {
   const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice } = useBaseInfoStore();
   const [connected, setConnected] = useState(false);
-
   useEffect(() => {
-    const timer = setInterval(() => {
-      getDeviceList((deviceList: any) => {
-        if (hasCanSelectedDevice(deviceList)) {
-          const filteredList = Object.keys(deviceList)
-            .filter((key) => deviceList[key].Model.Type !== 'Dongle')
-            .map((key) => ({ [key]: deviceList[key] }))
-            .reduce((acc, curr) => ({ ...acc, ...curr }), {});
-          setDeviceMap(filteredList as DeviceData);
-          setConnected(true);
-          clearInterval(timer);
-        } else {
-          setConnected(false);
-        }
-      });
-    }, 1000);
+    getDeviceList((deviceList: any) => {
+      if (hasCanSelectedDevice(deviceList)) {
+        const filteredList = Object.keys(deviceList)
+          .filter((key) => deviceList[key].Model.Type !== 'Dongle')
+          .map((key) => ({ [key]: deviceList[key] }))
+          .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+        setDeviceMap(filteredList as DeviceData);
+      }
+      setConnected(hasCanSelectedDevice(deviceList));
+    });
     listenChangeDeviceList();
     listenChangeDeviceInfo();
     listenDriverMessage();
-    return () => clearTimeout(timer);
   }, []);
   const hasCanSelectedDevice = (deviceList: any): boolean => {
     if (Object.keys(deviceList).length !== 0) {
-      const usbDeviceLength = Object.keys(deviceList).filter((key) => !deviceList[key].RFDevice).length;
+      const usbDeviceLength = Object.keys(deviceList).filter(
+        (key) => !deviceList[key].RFDevice && deviceList[key].Model.Type !== 'Dongle'
+      ).length;
       if (usbDeviceLength > 0) {
         return true;
       }
@@ -60,6 +55,7 @@ const Home: React.FC = () => {
   };
   const listenChangeDeviceInfo = () => {
     onDriverMessage('DeviceChanged', (deviceInfo) => {
+      const deviceMap = useBaseInfoStore.getState().deviceMap;
       const hasStoreDevice = Object.keys(deviceMap || {}).includes(deviceInfo.Device);
       console.log(hasStoreDevice, deviceInfo.Device, deviceMap);
       if (hasStoreDevice) {
