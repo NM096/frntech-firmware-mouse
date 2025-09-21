@@ -749,10 +749,15 @@ input:focus {
 
 .light-config,
 .dpi-config {
+  height: 96%;
   display: flex;
   align-items: center;
   gap: 20px;
   /* min-height: 650px; */
+}
+.light-config .mouse-container,
+.dpi-config .mouse-container {
+
 }
 .light-config .mouse-bg,
 .dpi-config .mouse-bg {

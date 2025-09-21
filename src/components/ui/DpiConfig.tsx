@@ -188,11 +188,13 @@ const DpiConfig = () => {
   }, [profile]);
   return (
     <div className="dpi-config">
-      <img
-        src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse.png`}
-        alt={currentDevice?.Model?.Name}
-        className="mouse-bg"
-      />
+      <div className="mouse-container">
+        <img
+          src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse.png`}
+          alt={currentDevice?.Model?.Name}
+          className="mouse-bg"
+        />
+      </div>
       <div className="dpi-container">
         <div>{t('dpi_adjustment')}</div>
         {localDPIs.map((dpi, index) => {

@@ -149,11 +149,13 @@ const LightConfig = () => {
   );
   return (
     <div className="light-config">
-      <img
-        src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse.png`}
-        alt={currentDevice?.Model?.Name}
-        className="mouse-bg"
-      />
+      <div className="mouse-container">
+        <img
+          src={`${baseUrl}device/${currentDevice?.Model?.ModelID}/img/mouse.png`}
+          alt={currentDevice?.Model?.Name}
+          className="mouse-bg"
+        />
+      </div>
       <div className="light-container">
         <div className="light-container-select">
           模式:
