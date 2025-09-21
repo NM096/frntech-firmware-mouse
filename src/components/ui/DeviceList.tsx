@@ -72,11 +72,13 @@ const DeviceList = () => {
                   <Power className="power-small" />
                   <span className="battery-text">100%</span>
                 </div>
-                <img
-                  src={`${baseUrl}device/${device?.Model?.ModelID}/img/mouse.png`}
-                  alt={device?.Model?.Name}
-                  className="device-img"
-                />
+                <div className="device-container">
+                  <img
+                    src={`${baseUrl}device/${device?.Model?.ModelID}/img/mouse.png`}
+                    alt={device?.Model?.Name}
+                    className="device-img"
+                  />
+                </div>
               </div>
             );
           })}
