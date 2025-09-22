@@ -234,11 +234,11 @@
 		]
 	],
 	"DPIs": [
-		{ "Open": true, "Level": 1, "DPI": 800, "Value": 8 },
-		{ "Open": true, "Level": 2, "DPI": 1600, "Value": 16 },
-		{ "Open": true, "Level": 3, "DPI": 2400, "Value": 24 },
-		{ "Open": true, "Level": 4, "DPI": 3200, "Value": 32 },
-		{ "Open": true, "Level": 5, "DPI": 4800, "Value": 48 },
-		{ "Open": true, "Level": 6, "DPI": 12800, "Value": 128 }
+		{ "Open": true, "Level": 1, "DPI": 800, "Value": 8, "Color": "#aa0000" },
+		{ "Open": true, "Level": 2, "DPI": 1600, "Value": 16, "Color": "#00ff00" },
+		{ "Open": true, "Level": 3, "DPI": 2400, "Value": 24, "Color": "#0055ff" },
+		{ "Open": true, "Level": 4, "DPI": 3200, "Value": 32, "Color": "#ff55ff" },
+		{ "Open": true, "Level": 5, "DPI": 4800, "Value": 48, "Color": "#ffff00" },
+		{ "Open": true, "Level": 6, "DPI": 12800, "Value": 128, "Color": "#00ffff" }
 	]
 }

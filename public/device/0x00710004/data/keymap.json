@@ -4,7 +4,7 @@
 	"LogicCode": 0,
 	"LocationCode": 0,
 	"Position": {
-		"Left": 9,
+		"Left": 8,
 		"Top": 27,
 		"Width": 30,
 		"Height": 30
@@ -16,7 +16,7 @@
 	"LogicCode": 1,
 	"LocationCode": 1,
 	"Position": {
-		"Left": 75,
+		"Left": 86,
 		"Top": 27,
 		"Width": 30,
 		"Height": 30
@@ -28,8 +28,8 @@
 	"LogicCode": 2,
 	"LocationCode": 2,
 	"Position": {
-		"Left": 75,
-		"Top": 4,
+		"Left": 86,
+		"Top": 16,
 		"Width": 30,
 		"Height": 30
 	}
@@ -40,7 +40,7 @@
 	"LogicCode": 3,
 	"LocationCode": 3,
 	"Position": {
-		"Left": 9,
+		"Left": 8,
 		"Top": 43,
 		"Width": 30,
 		"Height": 30
@@ -52,8 +52,8 @@
 	"LogicCode": 4,
 	"LocationCode": 4,
 	"Position": {
-		"Left": 9,
-		"Top": 69,
+		"Left": 8,
+		"Top": 68,
 		"Width": 30,
 		"Height": 30
 	}
@@ -64,8 +64,8 @@
 	"LogicCode": 7,
 	"LocationCode": 7,
 	"Position": {
-		"Left": 0,
-		"Top": 0,
+		"Left": 8,
+		"Top": 55,
 		"Width": 30,
 		"Height": 30
 	}
@@ -76,8 +76,8 @@
 	"LogicCode": 8,
 	"LocationCode": 8,
 	"Position": {
-		"Left": 0,
-		"Top": 10,
+		"Left": 86,
+		"Top": 4,
 		"Width": 30,
 		"Height": 30
 	}
@@ -88,8 +88,8 @@
 	"LogicCode": 9,
 	"LocationCode": 9,
 	"Position": {
-		"Left": 0,
-		"Top": 20,
+		"Left": 86,
+		"Top": 43,
 		"Width": 30,
 		"Height": 30
 	}
