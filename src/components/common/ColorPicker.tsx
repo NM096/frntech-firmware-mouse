@@ -5,9 +5,10 @@ import { Check, X } from 'lucide-react';
 interface ColorPickerProps {
   initialValue?: string;
   onChange?: (color: string) => void;
+  top?: number;
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onChange }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onChange, top = 0 }) => {
   const [color, setColor] = useState(initialValue);
   const [tempColor, setTempColor] = useState(initialValue);
   const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
             marginTop: '8px',
             zIndex: 1000,
             right: '40px',
-            top: '-150px',
+            top: top + 'px',
             background: '#2c2c2c',
             boxShadow: '0 0 10px rgba(0,0,0,0.5)',
             padding: '4px',
@@ -74,6 +75,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
             styles={{
               default: {
                 picker: {
+                  width: '200px',
                   background: '#2c2c2c', // 修改整体背景色
                   borderRadius: '6px',
                   boxShadow: '0',

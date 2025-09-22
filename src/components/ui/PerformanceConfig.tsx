@@ -11,7 +11,9 @@ import { setReportRate } from '@/utils/driver';
 import type { AdvanceSetting } from '@/types/device-data';
 import { setAdvanceSetting as sendAdvanceSetting, openMouseProperties } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
+import { useTranslation } from 'react-i18next';
 const PerformanceConfig = () => {
+  const { t } = useTranslation();
   const sleepTime = ['10', '30', '60', '120', '180', '300', '600'];
   const deepSleepTime = ['5', '10', '15', '20', '30', '60'];
   const silentAltitudes = ['1 MM', '2 MM', '3 MM', '4 MM'];
@@ -68,8 +70,8 @@ const PerformanceConfig = () => {
     <div className="performance-config">
       <div className="performance-section">
         <div className="performance-item">
-          <div className="performance-item-title">回报率设置</div>
-          <div className="performance-item-description">有线和无线模式时鼠标轮询速率(蓝牙状态下设置无效)</div>
+          <div className="performance-item-title">{t('report_rate_settings')}</div>
+          <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
           <div className="performance-radio-group">
             {rateList.map((rate, index) => (
               <div className="performance-radio-item" key={index}>
@@ -80,8 +82,10 @@ const PerformanceConfig = () => {
           </div>
         </div>
         <div className="performance-item">
-          <div className="performance-item-title">体眠时间设置(单位:秒)</div>
-          <div className="performance-item-description">鼠标静止大于设置时间后进入休眠状态</div>
+          <div className="performance-item-title">{t('primary_sleep_time_settings')}</div>
+          <div className="performance-item-description">
+            {t('mouse_static_greater_than_set_time_enter_sleep_state')}
+          </div>
           <Slider2
             min={0}
             max={sleepTime.length - 1}
@@ -92,8 +96,8 @@ const PerformanceConfig = () => {
           />
         </div>
         <div className="performance-item">
-          <div className="performance-item-title">睡眠时间设置(单位:分钟)</div>
-          <div className="performance-item-description">鼠标停止后大于设置时间进入睡眠状态</div>
+          <div className="performance-item-title">{t('deep_sleep_time_settings')}</div>
+          <div className="performance-item-description">{t('mouse_stop_enter_sleep_state')}</div>
           <Slider2
             min={0}
             max={deepSleepTime.length - 1}
@@ -106,9 +110,9 @@ const PerformanceConfig = () => {
       </div>
       <div className="performance-section">
         <div className="performance-item">
-          <div className="performance-item-title">波纹控制</div>
+          <div className="performance-item-title">{t('ripple_control')}</div>
           <div className="performance-item-description">
-            开启波纹控制之后鼠标会在高速情况下进行算法修正消除波浪形的抖动
+            {t('enable_ripple_control_algorithm')}
             <Switch
               checked={advanceSetting?.MoveWakeUp}
               onChange={() => handleChangeltitude('MoveWakeUp', !advanceSetting?.MoveWakeUp)}
@@ -116,9 +120,9 @@ const PerformanceConfig = () => {
           </div>
         </div>
         <div className="performance-item">
-          <div className="performance-item-title">直线修正</div>
+          <div className="performance-item-title">{t('line_correction')}</div>
           <div className="performance-item-description">
-            开启直线修正之后鼠标更容易画出直线
+            {t('enable_line_correction')}
             <Switch
               checked={advanceSetting?.RippleControl}
               onChange={() => handleChangeltitude('RippleControl', !advanceSetting?.RippleControl)}
@@ -126,9 +130,9 @@ const PerformanceConfig = () => {
           </div>
         </div>
         <div className="performance-item">
-          <div className="performance-item-title">移动同步</div>
+          <div className="performance-item-title">{t('mouse_synchronization')}</div>
           <div className="performance-item-description">
-            开启移动同步之后鼠标的离散率会被算法修
+            {t('enable_mouse_synchronization')}
             <Switch
               checked={advanceSetting?.UltraLowDelay}
               onChange={() => handleChangeltitude('UltraLowDelay', !advanceSetting?.UltraLowDelay)}
@@ -136,8 +140,8 @@ const PerformanceConfig = () => {
           </div>
         </div>
         <div className="performance-item">
-          <div className="performance-item-title">鼠标抬起高度</div>
-          <div className="performance-item-description">鼠标抬起高度</div>
+          <div className="performance-item-title">{t('mouse_lift_height')}</div>
+          <div className="performance-item-description">{t('mouse_lift_height_description')}</div>
           <div className="performance-radio-group">
             {silentAltitudes.map((i, idx) => {
               return (
@@ -153,11 +157,11 @@ const PerformanceConfig = () => {
           </div>
         </div>
         <div className="performance-item">
-          <div className="performance-item-title">鼠标属性</div>
-          <div className="performance-item-description">Windows系统鼠标属性设置 </div>
+          <div className="performance-item-title">{t('mouse_property')}</div>
+          <div className="performance-item-description">{t('mouse_property_description')}</div>
           <div className="performance-item-open" onClick={() => handleOpenMouseProperty()}>
             <HoverImage src={ic_window} hoverSrc={ic_window2} alt="Reset" className="icon-7" />
-            打开鼠标属性
+            {t('open_mouse_property')}
           </div>
         </div>
       </div>

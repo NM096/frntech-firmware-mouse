@@ -1,15 +1,16 @@
 import Dropdown from '@/components/common/Dropdown';
 import CustomRadio from '@/components/common/CustomRadio';
-import Checkbox from '@/components/common/Checkbox';
 import React, { useEffect } from 'react';
 import { getMacroCategorys, getMacros, readMacro } from '@/utils/driver';
 import type { KeyDefine, KeyItem } from '@/types/profile';
+import { useTranslation } from 'react-i18next';
 interface MacroProps {
   onChange?: (keyDefine: KeyItem) => void;
   initialMacro?: KeyDefine;
 }
 
 const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
+  const { t } = useTranslation();
   const [categorys, setCategorys] = React.useState<string[]>([]);
   const [macros, setMacros] = React.useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = React.useState<string>('');
@@ -61,7 +62,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
 
   return (
     <div className="macro-container">
-      <div style={macroTitleStyle}>宏组</div>
+      <div style={macroTitleStyle}>{t('macro_group')}</div>
       <div style={{ width: '90%' }}>
         <Dropdown
           borderColor="#ff7f0e"
@@ -71,7 +72,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
           size="small" // 选择 'small', 'medium' 或 'large'
         />
       </div>
-      <div style={macroTitleStyle}>宏列表</div>
+      <div style={macroTitleStyle}>{t('macro_list')}</div>
       <ul
         style={{
           height: '150px',
@@ -97,7 +98,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
           </li>
         ))}
       </ul>
-      <div style={macroTitleStyle}>宏触发方式</div>
+      <div style={macroTitleStyle}>{t('macro_trigger_method')}</div>
       <div className="macro-trigger-options">
         <div className="macro-trigger-item">
           <CustomRadio
@@ -115,7 +116,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
             onChange={(e) => setCycles(Number(e.target.value))}
             style={{ width: '50px', marginLeft: '8px', background: 'white', color: '#000', textAlign: 'center' }}
           />
-          循环次数播放
+          {t('macro_play_times')}
         </div>
         <div className="macro-trigger-item">
           <CustomRadio
@@ -125,7 +126,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
               setMacroType(2);
             }}
           />
-          按住执行，释放停止
+          {t('macro_play_once')}
         </div>
         <div className="macro-trigger-item">
           <CustomRadio
@@ -135,7 +136,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
               setMacroType(3);
             }}
           />
-          再次按下停止宏
+          {t('macro_play_until_stop')}
         </div>
         {/* <div className="macro-trigger-item">
           <CustomRadio

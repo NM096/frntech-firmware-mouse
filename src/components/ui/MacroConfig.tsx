@@ -37,7 +37,7 @@ import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useMacroRecorder } from '@/hooks/useMacroRecorder';
 import MacroActionList from '../common/MacroActionList';
 import { KeyFormatter } from '@/utils/common';
-
+import { useTranslation } from 'react-i18next';
 const { dialog } = require('electron').remote;
 
 export interface MacroEvent {
@@ -47,6 +47,7 @@ export interface MacroEvent {
 }
 
 const MacroConfig = () => {
+  const { t } = useTranslation();
   const { openConfirm, openAlert } = useModal();
   const { path } = useBaseInfoStore();
   const [category, setCategory] = useState<string[]>([]);
@@ -71,12 +72,12 @@ const MacroConfig = () => {
   };
   const handleCreateCategory = () => {
     openConfirm({
-      title: '增加宏组',
-      content: '宏组名称',
+      title: t('create_macro_group'),
+      content: t('macro_group_name'),
       onOk: (value) => {
         addMacroCategory(value, (payload) => {
           if (category.includes(value || '')) {
-            toast.error('宏组已存在');
+            toast.error(t('macro_group_exists'));
             return;
           }
           if (payload) {
@@ -94,8 +95,8 @@ const MacroConfig = () => {
   const handleDeleteCategory = () => {
     if (!currentCategory) return;
     openAlert({
-      title: '警告',
-      content: '确认删除该宏组吗？',
+      title: t('warning'),
+      content: t('confirm_delete_macro_group'),
       onOk: () => {
         delMacro(currentCategory, currentMacroFile, (payload) => {
           if (payload) {
@@ -112,8 +113,8 @@ const MacroConfig = () => {
   };
   const handleRenameCategory = () => {
     openConfirm({
-      title: '重命名宏组',
-      content: '宏组名称',
+      title: t('rename_macro_group'),
+      content: t('macro_group_name'),
       onOk: (value) => {
         addMacroCategory(value, (payload) => {
           if (payload) {
@@ -135,8 +136,8 @@ const MacroConfig = () => {
 
   const handleRenameMacroFile = () => {
     openConfirm({
-      title: '重命名宏文件',
-      content: '宏文件名称',
+      title: t('rename_macro_file'),
+      content: t('macro_file_name'),
       onOk: (value) => {
         addMacroCategory(value, (payload) => {
           if (payload) {
@@ -150,12 +151,12 @@ const MacroConfig = () => {
   };
   const handleCreateMacroFile = () => {
     openConfirm({
-      title: '增加宏文件',
-      content: '宏文件名称',
+      title: t('create_macro_file'),
+      content: t('macro_file_name'),
       onOk: (value) => {
         addMacro(currentCategory, value, (payload) => {
           if (macroFiles.includes(value || '新宏文件')) {
-            toast.error('宏文件已存在');
+            toast.error(t('macro_file_exists'));
             return;
           }
           if (payload) {
@@ -170,8 +171,8 @@ const MacroConfig = () => {
   const handleDeleteMacroFile = () => {
     if (!currentMacroFile && !currentCategory) return;
     openAlert({
-      title: '警告',
-      content: '确认删除该宏文件吗？',
+      title: t('warning'),
+      content: t('confirm_delete_macro_file'),
       onOk: () => {
         delMacro(currentCategory, currentMacroFile, (payload) => {
           if (payload) {
@@ -193,12 +194,12 @@ const MacroConfig = () => {
       { Content: KeyFormatter.capitalizeKeys(recordedActions) },
       (payload) => {
         if (payload) {
-          toast.success('保存成功');
+          toast.success(t('save_success'));
           getMacros(currentCategory, (payload) => {
             setMacroFiles(payload);
           });
         } else {
-          toast.error('保存失败');
+          toast.error(t('save_failed'));
         }
       }
     );
@@ -230,7 +231,7 @@ const MacroConfig = () => {
           result.filePath,
           (payload) => {
             if (macroFiles.includes(currentMacroFile)) {
-              toast.success('导出成功');
+              toast.success(t('export_success'));
               console.log(payload);
               setCurrentCategory(currentCategory);
               setCurrentMacroFile(currentMacroFile);
@@ -305,17 +306,17 @@ const MacroConfig = () => {
     //   onClick: handleRenameMacroFile,
     // },
     {
-      label: '删除宏文件',
+      label: t('delete_macro_file'),
       value: 'delete',
       onClick: handleDeleteMacroFile,
     },
     {
-      label: '导入宏文件',
+      label: t('import_macro_file'),
       value: 'import',
       onClick: handleImportMacroFile,
     },
     {
-      label: '导出宏文件',
+      label: t('export_macro_file'),
       value: 'export',
       onClick: handleExportMacroFile,
     },
@@ -324,7 +325,7 @@ const MacroConfig = () => {
     <div className="macro-config">
       <div className="macro-item-left">
         <div className="macro-btn-group">
-          <span>宏组</span>
+          <span>{t('macro_group')}</span>
           <div className="macro-btn-group">
             <IconMenu
               icon={<HoverImage src={ic_save} hoverSrc={ic_save} alt="ic_save" className="back-btn-icon" />}
@@ -356,7 +357,7 @@ const MacroConfig = () => {
           size="small"
         />
         <div className="macro-btn-group">
-          <span>宏名称</span>
+          <span>{t('macro_name')}</span>
           <div className="macro-btn-group">
             <HoverImage
               src={ic_save}
@@ -414,7 +415,7 @@ const MacroConfig = () => {
               }}
             >
               <HoverImage src={ic_stop} hoverSrc={ic_stop} alt="Logo" className="back-btn-icon" />
-              停止录制
+              {t('stop_recording')}
             </div>
           ) : (
             <div
@@ -428,7 +429,7 @@ const MacroConfig = () => {
               }}
             >
               <HoverImage src={ic_play} hoverSrc={ic_play} alt="Logo" className="back-btn-icon" />
-              开始录制
+              {t('start_recording')}
             </div>
           )}
           {/* <HoverImage
@@ -476,7 +477,7 @@ const MacroConfig = () => {
         </ul>
       </div>
       <div className="macro-item-right">
-        <div>录制延迟方式:</div>
+        <div>{t('recording_delay_mode')}:</div>
         <ul
           className="macro-delay-mode"
           onMouseEnter={() => {
@@ -488,7 +489,7 @@ const MacroConfig = () => {
         >
           <li>
             <CustomRadio customSize="small" checked={delayMode === 'record'} onChange={() => setDelayMode('record')} />
-            录制延迟
+            {t('recording_delay')}
           </li>
           <li>
             <CustomRadio
@@ -504,11 +505,11 @@ const MacroConfig = () => {
               value={minDelay}
               style={{ width: '50px', backgroundColor: 'white', color: 'black', textAlign: 'center', border: '0px' }}
             />
-            ms默认
+            ms{t('default')}
           </li>
           <li>
             <CustomRadio customSize="small" checked={delayMode === 'min'} onChange={() => setDelayMode('min')} />
-            最小延迟
+            {t('min_delay')}
           </li>
         </ul>
         {/* <div>
@@ -532,7 +533,7 @@ const MacroConfig = () => {
             setOpenRecords(true);
           }}
         >
-          保存
+          {t('confirm')}
         </div>
         <div
           className="macro-action-btn"
@@ -544,7 +545,7 @@ const MacroConfig = () => {
             setOpenRecords(true);
           }}
         >
-          取消
+          {t('cancel')}
         </div>
       </div>
     </div>

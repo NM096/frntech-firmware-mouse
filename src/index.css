@@ -686,16 +686,16 @@ input:focus {
   width: fit-content;
   border-radius: 5px;
   padding: 20px 20px;
-  margin: 20px 0;
-  width: 200px;
+  margin: 0;
+  width: 170px;
 }
 .sidebar-item-status {
   background-color: rgba(255, 255, 255, 0.008);
   width: fit-content;
   border-radius: 5px;
   padding: 10px 20px;
-  margin: 20px 0;
-  width: 200px;
+  margin: 10px 0;
+  width: 170px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -718,7 +718,7 @@ input:focus {
 .sidebar-list-item {
   display: flex;
   align-items: center;
-  margin: 30px 0;
+  margin: 15px 0;
   cursor: pointer;
   padding: 5px 0;
 }
@@ -771,12 +771,14 @@ input:focus {
 .light-config .light-container,
 .dpi-config .dpi-container {
   flex-grow: 1;
-  padding: 20px;
+  padding: 10px;
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
-  margin-top: 20px;
-  height: 100%;
-  /* min-height: 650px; */
+  margin-top: 0px;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .dpi-config .dpi-container-item {
   display: flex;
@@ -784,7 +786,7 @@ input:focus {
   gap: 10px;
 }
 .dpi-config .dpi-title {
-  width: 50px;
+  width: 70px;
   font-size: 14px;
 }
 .dpi-config .dpi-color {
@@ -802,7 +804,7 @@ input:focus {
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  padding: 40px 0 0;
+  padding: 32px 0 0;
 }
 
 .slider-wrapper .slider-labels {

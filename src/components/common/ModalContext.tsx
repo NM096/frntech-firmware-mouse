@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import GlobalLoading from './GlobalLoading';
-
+import { useTranslation } from 'react-i18next';
 type LoadingOptions = {
   proccess?: number;
   onOk?: () => void;
@@ -41,6 +41,7 @@ const ModalContext = createContext<ModalContextType | null>(null);
 export function ModalProvider({ children }: { children: ReactNode }) {
   const [modals, setModals] = useState<ModalItem[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const { t } = useTranslation();
   const genId = () => Math.random().toString(36).slice(2);
 
   const openConfigLoading = (options: LoadingOptions) => {
@@ -120,7 +121,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                           close(m.id);
                         }}
                       >
-                        取消
+                        {t('cancel')}
                       </div>
                       <div
                         className="confirm-btn"
@@ -130,7 +131,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                           close(m.id);
                         }}
                       >
-                        确认
+                        {t('confirm')}
                       </div>
                     </div>
                   </div>
@@ -155,7 +156,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                           close(m.id);
                         }}
                       >
-                        取消
+                        {t('cancel')}
                       </div>
                       <div
                         className="confirm-btn"
@@ -165,7 +166,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                           close(m.id);
                         }}
                       >
-                        确认
+                        {t('confirm')}
                       </div>
                     </div>
                   </div>
@@ -178,7 +179,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                   <div className="p-6 bg-white shadow-xl rounded-2xl">
                     {m.content}
                     <button className="px-4 py-2 mt-4 bg-gray-200 rounded" onClick={() => close(m.id)}>
-                      关闭
+                      {t('close')}
                     </button>
                   </div>
                 </div>

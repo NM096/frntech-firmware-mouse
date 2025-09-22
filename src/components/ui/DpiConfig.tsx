@@ -200,7 +200,9 @@ const DpiConfig = () => {
                   handleChangeCurrentDpiIdx(index);
                 }}
               />
-              <div className="dpi-title">级别{index + 1}</div>
+              <div className="dpi-title">
+                {t('dpi_level')} {index + 1}
+              </div>
               <Slider
                 initialValue={dpi.Value}
                 onChange={(value) => {
@@ -208,6 +210,7 @@ const DpiConfig = () => {
                 }}
               />
               <ColorPicker
+                top={index == 0 ? -50 : index == localDPIs.length - 1 ? -300 : -200}
                 initialValue={configData?.DPILEDs[index].Value || ''}
                 onChange={(hex) => handleChangeDpiLed(index, hex)}
               />

@@ -57,7 +57,7 @@ export default function MacroActionList({ events, delayMode }: MacroActionListPr
                   : delayMode == 'default' && events[index * 2 + 1]?.type === 'Delay'
                     ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3)
                     : 0.01}
-                秒
+                {t('second')}
               </span>
               {isDown(event) ? (
                 <HoverImage src={macro_key_down} hoverSrc={macro_key_down} alt="Logo" className="back-btn-icon" />

@@ -21,16 +21,17 @@ import HoverImage from '@/components/common/HoverImage';
 import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
 import { useState } from 'react';
 export type sidebarKey = 'DpiConfig' | 'KeyConfig' | 'LightConfig' | 'PerformanceConfig' | 'MacroConfig';
-
+import { useTranslation } from 'react-i18next';
 const Feature = () => {
+  const { t } = useTranslation();
   const { open } = useSettingsDrawer();
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('DpiConfig');
   const sideList: { key: sidebarKey; title: string; icon: string }[] = [
-    { key: 'DpiConfig', title: 'DPI设置', icon: ic_dpi },
-    { key: 'KeyConfig', title: '自定义键', icon: ic_key },
-    { key: 'LightConfig', title: '灯光设置', icon: ic_light },
-    { key: 'PerformanceConfig', title: '性能设置', icon: ic_performance },
-    { key: 'MacroConfig', title: '宏功能', icon: ic_macro },
+    { key: 'DpiConfig', title: t('DpiConfig'), icon: ic_dpi },
+    { key: 'KeyConfig', title: t('KeyConfig'), icon: ic_key },
+    { key: 'LightConfig', title: t('LightConfig'), icon: ic_light },
+    { key: 'PerformanceConfig', title: t('PerformanceConfig'), icon: ic_performance },
+    { key: 'MacroConfig', title: t('MacroConfig'), icon: ic_macro },
   ];
 
   const sidebarComponents = {

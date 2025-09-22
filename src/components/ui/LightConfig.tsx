@@ -158,7 +158,7 @@ const LightConfig = () => {
       </div>
       <div className="light-container">
         <div className="light-container-select">
-          模式:
+          {t('light_effect')}
           <label>
             <Dropdown
               borderColor="#ff7f0e"
@@ -171,8 +171,8 @@ const LightConfig = () => {
         </div>
         {(currentLeInfo?.Config ?? 0) & 0x01 ? (
           <div className="light-container-item">
-            <div>亮度:</div>
-            <div className="light-stitle">调节鼠标灯光的亮度</div>
+            <div>{t('brightness')}</div>
+            <div className="light-stitle">{t('adjust_mouse_light_brightness')}</div>
             <div className="light-container-slider">
               <Slider2
                 min={1}
@@ -187,8 +187,8 @@ const LightConfig = () => {
         ) : null}
         {(currentLeInfo?.Config ?? 0) & 0x02 ? (
           <div className="light-container-item">
-            <div>速度:</div>
-            <div className="light-stitle">调节鼠标灯光的速度</div>
+            <div>{t('speed')}:</div>
+            <div className="light-stitle">{t('adjust_mouse_light_speed')}</div>
             <div className="light-container-slider">
               <Slider2
                 min={1}
@@ -203,24 +203,24 @@ const LightConfig = () => {
         ) : null}
         {(currentLeInfo?.Config ?? 0) & 0x04 ? (
           <div className="light-container-item">
-            <div>方向:</div>
-            <div className="light-stitle">调节鼠标灯光的方向</div>
+            <div>{t('direction')}:</div>
+            <div className="light-stitle">{t('adjust_mouse_light_direction')}</div>
             <div className="light-container-slider direction-btn-group">
               <label className="direction-btn-radio">
                 <CustomRadio checked={direction === 0} onChange={() => handleDirectionChange(0)} />
-                反向
+                {t('reverse')}
               </label>
               <label className="direction-btn-radio">
                 <CustomRadio checked={direction === 1} onChange={() => handleDirectionChange(1)} />
-                正向
+                {t('forward')}
               </label>
             </div>
           </div>
         ) : null}
         {(currentLeInfo?.Config ?? 0) & 0x08 ? (
           <div className="light-container-item">
-            <div>颜色:</div>
-            <div className="light-stitle">调节鼠标的灯光颜色</div>
+            <div>{t('color')}:</div>
+            <div className="light-stitle">{t('adjust_mouse_light_color')}</div>
             <div
               style={{
                 width: '400px',

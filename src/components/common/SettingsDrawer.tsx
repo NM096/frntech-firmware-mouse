@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ReactNode } from 'react';
 import HoverImage from './HoverImage';
 import back1 from '@/assets/back_device_1.png';
@@ -17,6 +18,7 @@ type SettingsDrawerContextType = {
 const SettingsDrawerContext = createContext<SettingsDrawerContextType | null>(null);
 
 export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) => {
+  const { t } = useTranslation();
   const config = useConfig();
   const { lang: currentLang, toggleLang, setLang } = useI18nToggle();
   const [visible, setVisible] = useState(false);
@@ -97,20 +99,20 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
         <div className="settings-header">
           <button className="back-btn" onClick={close}>
             <HoverImage src={back1} hoverSrc={back2} alt="Logo" className="back-btn-icon" />
-            返回主页
+            {t('back_to_home')}
           </button>
         </div>
 
         <div>
           <div className="settings-section">
-            <h3 className="section-title">软件版本</h3>
+            <h3 className="section-title">{t('software_version')}</h3>
             <p className="text">
-              版本号 <span className="version">{version.split('+')[0]}</span>
+              {t('version_number')} <span className="version">{version.split('+')[0]}</span>
             </p>
           </div>
 
           <div className="settings-section">
-            <h3 className="section-title">语言选择</h3>
+            <h3 className="section-title">{t('language_select')}</h3>
             <div className="lang-options">
               {config &&
                 config.supportedLangs.map((lang) => {
@@ -130,9 +132,9 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
           </div>
 
           <div className="settings-section">
-            <h3 className="section-title">常规设置</h3>
+            <h3 className="section-title">{t('general_settings')}</h3>
             <div className="toggle-item">
-              <span>开机自启动</span>
+              <span>{t('auto_start')}</span>
               <Switch
                 size="small"
                 checked={autoStart}
@@ -142,7 +144,7 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
               />
             </div>
             <div className="toggle-item">
-              <span>DPI弹窗开关</span>
+              <span>{t('dpi_dialog_switch')}</span>
               <Switch
                 size="small"
                 checked={dpiDialogOpen}
@@ -152,7 +154,7 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
               />
             </div>
             <div className="toggle-item">
-              <span>电池低电量弹窗</span>
+              <span>{t('low_battery_dialog')}</span>
               <Switch
                 size="small"
                 checked={lowPowerDialogOpen}

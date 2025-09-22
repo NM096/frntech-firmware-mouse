@@ -10,10 +10,11 @@ import type { KeyDefine, KeyItem } from '@/types/profile';
 import { cloneDeep } from 'lodash';
 import { useModal } from '@/components/common/ModalContext';
 import { useProfileStore } from '@/store/useProfile';
-
+import { useTranslation } from 'react-i18next';
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 
 const KeyConfig = () => {
+  const { t } = useTranslation();
   const { Mouse: mouseKeys, Quit: quitKeys, Media: mediaKeys } = Keys;
   const { currentModelID, currentDevice: storeCurrentDevice, path } = useBaseInfoStore();
   const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
@@ -24,11 +25,11 @@ const KeyConfig = () => {
   const [profile, setProfile] = useState(storeProfile);
   const { openConfigLoading, closeAll } = useModal();
   const sideList: { key: sidebarKey; title: string }[] = [
-    { key: 'Mouse', title: '鼠标功能' },
-    { key: 'Keyboard', title: '键盘功能' },
-    { key: 'Quit', title: '快捷键' },
-    { key: 'Media', title: '多媒体控制' },
-    { key: 'Macro', title: '宏命令' },
+    { key: 'Mouse', title: t('mouse_function') },
+    { key: 'Keyboard', title: t('keyboard_function') },
+    { key: 'Quit', title: t('shortcut_keys') },
+    { key: 'Media', title: t('multimedia_control') },
+    { key: 'Macro', title: t('macro_command') },
   ];
   const sidebarComponents = {
     Mouse: () => (
@@ -155,8 +156,8 @@ const KeyConfig = () => {
               })}
             </div>
             <div className="key-config-section-actions">
-              <div onClick={() => handleSettingKey()}>应用</div>
-              <div onClick={() => setActiveKey(null)}>取消</div>
+              <div onClick={() => handleSettingKey()}>{t('apply')}</div>
+              <div onClick={() => setActiveKey(null)}>{t('cancel')}</div>
             </div>
           </div>
           <div className="key-config-feature-list">{sidebarComponents[activeSidebar]() || null}</div>

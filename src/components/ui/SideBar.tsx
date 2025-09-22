@@ -6,6 +6,7 @@ import ic_charge from '@/assets/charging.png';
 import PowerIcon from '@/components/common/PowerIcon';
 import type { sidebarKey } from './Feature';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
+import { useTranslation } from 'react-i18next';
 interface SideBarProps {
   sideList?: {
     key: sidebarKey;
@@ -17,6 +18,7 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSidebarChange }) => {
+  const { t } = useTranslation();
   const { clearCurrentDevice } = useBaseInfoStore();
   return (
     <>
@@ -24,7 +26,7 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
         <div className="sidebar-back">
           <div className="back-btn" onClick={clearCurrentDevice}>
             <HoverImage src={back1} hoverSrc={back2} alt="Logo" className="back-btn-icon" />
-            返回设备选择
+            {t('back_to_device_selection')}
           </div>
         </div>
 
@@ -33,11 +35,11 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
           <div className="sidebar-item-status">
             <div className="sidebar-item-power">
               <HoverImage src={ic_charge} hoverSrc={ic_charge} alt="Logo" className="sidebar-icon-connection" />
-              充电中
+              {t('charging')}
             </div>
             <div className="sidebar-item-connection">
               <HoverImage src={wireless_4k} hoverSrc={wireless_4k} alt="Logo" className="sidebar-icon-connection" />
-              有线连接
+              {t('wired_connection')}
             </div>
           </div>
           {/* sidebar list */}

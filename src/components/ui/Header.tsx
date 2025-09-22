@@ -16,12 +16,14 @@ import profile from '@/assets/profile_icon.png';
 import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
 import { useModal } from '@/components/common/ModalContext';
 import { reset as resetConfig, unmaximizeApp } from '@/utils/driver';
+import { useTranslation } from 'react-i18next';
 
 import { checkDriver, minimizeApp, maximizeApp, closeApp } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 const shell = require('electron').shell;
 
 const Header = () => {
+  const { t } = useTranslation();
   const { openAlert, openConfigLoading, close: modalClose } = useModal();
 
   const { path, isMaxWindow, setIsMaxWindow } = useBaseInfoStore();
@@ -32,8 +34,8 @@ const Header = () => {
   };
   const resetMouse = () => {
     openAlert({
-      title: '提示',
-      content: '是否重置所有设置？',
+      title: t('tips'),
+      content: t('confirm_reset_config'),
       onOk: () => {
         const _loadingId = openConfigLoading({ proccess: 0 });
         resetConfig(path, () => {
