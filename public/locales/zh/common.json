@@ -177,8 +177,8 @@
 
   "ripple_control": "波纹控制",
   "enable_ripple_control_algorithm": "开启波纹控制之后鼠标会在高速情况下进行算法修正消除波浪形的抖动",
-  "line_correction": "直线修正",
-  "enable_line_correction": "开启直线修正之后鼠标更容易画出直线",
+  "line_correction": "超低功耗",
+  "enable_line_correction": "开启超低功耗之后鼠标更容易画出直线",
   "mouse_synchronization": "移动同步",
   "enable_mouse_synchronization": "开启移动同步之后鼠标的离散率会被算法修",
 

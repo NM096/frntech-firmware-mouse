@@ -48,7 +48,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
           width: '20px',
           height: '20px',
           borderRadius: '1px',
-          backgroundColor: color,
+          backgroundColor: initialValue || color,
           cursor: 'pointer',
         }}
         onClick={() => setIsOpen(!isOpen)}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface SliderProps {
   min?: number;
@@ -10,7 +10,7 @@ interface SliderProps {
 }
 
 const Slider: React.FC<SliderProps> = ({ min = 0, max = 10, step = 1, initialValue = 5, data, onChange }) => {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(0);
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = Number(e.target.value);
@@ -18,6 +18,13 @@ const Slider: React.FC<SliderProps> = ({ min = 0, max = 10, step = 1, initialVal
     onChange?.(newValue);
   };
 
+  const findInitialIndex = () => {
+    const index = data.findIndex((item) => Number(item) === initialValue);
+    return index !== -1 ? index : 0;
+  };
+  useEffect(() => {
+    setValue(findInitialIndex());
+  }, [initialValue]);
   const position = ((value - min) / (max - min)) * 100;
 
   return (
@@ -36,7 +43,7 @@ const Slider: React.FC<SliderProps> = ({ min = 0, max = 10, step = 1, initialVal
       />
       {/* 把数值显示在 thumb 里 */}
       <div className="slider2-thumb-value" style={{ left: `${position}%` }}>
-        {data[value]}
+        {data[value - 1]}
       </div>
     </div>
   );

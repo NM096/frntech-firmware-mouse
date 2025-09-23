@@ -778,7 +778,7 @@ input:focus {
   height: 75vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .dpi-config .dpi-container-item {
   display: flex;

@@ -6,6 +6,7 @@ import Feature from '@/components/ui/Feature';
 import { getDeviceList, listenDriverMessage, onDriverMessage } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
+import { SketchPicker, ColorResult } from 'react-color';
 const Home: React.FC = () => {
   const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice, setCurrentDevice } = useBaseInfoStore();
   const [connected, setConnected] = useState(false);

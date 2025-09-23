@@ -28,6 +28,7 @@ export interface Dpi {
   Level: number;
   DPI: number;
   Value: number;
+  Color: string;
 }
 export interface Profile {
   Version?: number;

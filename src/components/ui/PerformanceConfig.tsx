@@ -21,7 +21,7 @@ const PerformanceConfig = () => {
 
   const { openConfigLoading, close } = useModal();
   const { currentDevice, path, mode, setCurrentDevice } = useBaseInfoStore();
-
+  const { AdvanceSetting } = currentDevice?.Info || {};
   const [advanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(currentDevice?.Info?.AdvanceSetting);
   const [usbReport, setUsbReport] = useState(currentDevice?.Info?.USBReports?.[0] || 0);
   //
@@ -69,18 +69,20 @@ const PerformanceConfig = () => {
   return (
     <div className="performance-config">
       <div className="performance-section">
-        <div className="performance-item">
-          <div className="performance-item-title">{t('report_rate_settings')}</div>
-          <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
-          <div className="performance-radio-group">
-            {rateList.map((rate, index) => (
-              <div className="performance-radio-item" key={index}>
-                <CustomRadio checked={usbReport === index} onChange={() => handleChangeUsbReport(index)} />
-                {rate}
-              </div>
-            ))}
+        {AdvanceSetting?.RippleControl && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('report_rate_settings')}</div>
+            <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
+            <div className="performance-radio-group">
+              {rateList.map((rate, index) => (
+                <div className="performance-radio-item" key={index}>
+                  <CustomRadio checked={usbReport === index} onChange={() => handleChangeUsbReport(index)} />
+                  {rate}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <div className="performance-item">
           <div className="performance-item-title">{t('primary_sleep_time_settings')}</div>
           <div className="performance-item-description">
@@ -109,26 +111,30 @@ const PerformanceConfig = () => {
         </div>
       </div>
       <div className="performance-section">
-        <div className="performance-item">
-          <div className="performance-item-title">{t('ripple_control')}</div>
-          <div className="performance-item-description">
-            {t('enable_ripple_control_algorithm')}
-            <Switch
-              checked={advanceSetting?.MoveWakeUp}
-              onChange={() => handleChangeltitude('MoveWakeUp', !advanceSetting?.MoveWakeUp)}
-            />
+        {AdvanceSetting?.MoveWakeUp && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('ripple_control')}</div>
+            <div className="performance-item-description">
+              {t('enable_ripple_control_algorithm')}
+              <Switch
+                checked={advanceSetting?.MoveWakeUp}
+                onChange={() => handleChangeltitude('MoveWakeUp', !advanceSetting?.MoveWakeUp)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="performance-item">
-          <div className="performance-item-title">{t('line_correction')}</div>
-          <div className="performance-item-description">
-            {t('enable_line_correction')}
-            <Switch
-              checked={advanceSetting?.RippleControl}
-              onChange={() => handleChangeltitude('RippleControl', !advanceSetting?.RippleControl)}
-            />
+        )}
+        {AdvanceSetting?.UltraLowPower && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('line_correction')}</div>
+            <div className="performance-item-description">
+              {t('enable_line_correction')}
+              <Switch
+                checked={advanceSetting?.RippleControl}
+                onChange={() => handleChangeltitude('RippleControl', !advanceSetting?.RippleControl)}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <div className="performance-item">
           <div className="performance-item-title">{t('mouse_synchronization')}</div>
           <div className="performance-item-description">
@@ -139,23 +145,25 @@ const PerformanceConfig = () => {
             />
           </div>
         </div>
-        <div className="performance-item">
-          <div className="performance-item-title">{t('mouse_lift_height')}</div>
-          <div className="performance-item-description">{t('mouse_lift_height_description')}</div>
-          <div className="performance-radio-group">
-            {silentAltitudes.map((i, idx) => {
-              return (
-                <div className="performance-radio-item" key={i}>
-                  <CustomRadio
-                    checked={idx == advanceSetting?.SilentAltitude}
-                    onChange={() => handleChangeltitude('SilentAltitude', idx)}
-                  />
-                  {i}
-                </div>
-              );
-            })}
+        {AdvanceSetting?.SilentAltitude && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('mouse_lift_height')}</div>
+            <div className="performance-item-description">{t('mouse_lift_height_description')}</div>
+            <div className="performance-radio-group">
+              {silentAltitudes.map((i, idx) => {
+                return (
+                  <div className="performance-radio-item" key={i}>
+                    <CustomRadio
+                      checked={idx == advanceSetting?.SilentAltitude}
+                      onChange={() => handleChangeltitude('SilentAltitude', idx)}
+                    />
+                    {i}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
         <div className="performance-item">
           <div className="performance-item-title">{t('mouse_property')}</div>
           <div className="performance-item-description">{t('mouse_property_description')}</div>

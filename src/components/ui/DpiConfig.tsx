@@ -155,14 +155,13 @@ const DpiConfig = () => {
 
   const handleChangeDpiLed = (index: number, hex: string) => {
     openConfigLoading({ proccess: 0 });
-    const newDPILEDs = configData?.DPILEDs.map((led, i) => {
-      if (i === index) {
-        return { ...led, Value: hex };
-      }
-      return led;
-    });
+    const newDPIs = DPIs?.map((dpi, i) => (i === index ? { ...dpi, Color: hex } : dpi));
+    const newDPILEDs = newDPIs?.filter((dpi) => dpi.Open).map((dpi, i) => ({ Index: i, Value: dpi.Color }));
+    console.log('newDPIs', newDPIs);
+    console.log('newDPILEDs', newDPILEDs);
     setConfigData(path, { ...(configData as Config), DPILEDs: newDPILEDs || [] }, () => {
       setConfigDataOnStore({ ...(configData as Config), DPILEDs: newDPILEDs || [] });
+      setProfile({ ...profile, DPIs: newDPIs });
       closeAll();
     });
   };
@@ -210,8 +209,8 @@ const DpiConfig = () => {
                 }}
               />
               <ColorPicker
-                top={index == 0 ? -50 : index == localDPIs.length - 1 ? -300 : -200}
-                initialValue={configData?.DPILEDs[index].Value || ''}
+                top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
+                initialValue={DPIs[index].Color || ''}
                 onChange={(hex) => handleChangeDpiLed(index, hex)}
               />
             </div>

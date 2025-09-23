@@ -25,7 +25,16 @@ const LightConfig = () => {
   const [currentLeInfo, setCurrentLeInfo] = useState(
     LETable.find((item) => item.Value === LEDEffect?.BLMode) || LETable[0]
   );
-
+  const colorList = [
+    '#aa0000',
+    '#00ff00',
+    '#0055ff',
+    '#ff55ff',
+    '#ffff00',
+    '#00ffff',
+    '#ffffff',
+    'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+  ];
   const handleChangeLe = (lang: string) => {
     const _loadingId = openConfigLoading({ proccess: 0 });
     const leItem = LETable.find((item) => item.Lang === lang);
@@ -82,7 +91,7 @@ const LightConfig = () => {
         path,
         {
           ...LEDEffect,
-          Speed: value,
+          Speed: 3 - value,
         },
         (payload) => {
           if (payload) {
@@ -178,7 +187,7 @@ const LightConfig = () => {
                 min={1}
                 max={4}
                 step={1}
-                initialValue={brightness}
+                initialValue={brightness + 1}
                 onChange={(value) => handleBrightnessChange(value)}
                 data={['0', '1', '2', '3']}
               />
@@ -196,7 +205,7 @@ const LightConfig = () => {
                 step={1}
                 initialValue={speed}
                 onChange={(value) => handleSpeedChange(value)}
-                data={['0', '1', '2', '3']}
+                data={['3', '2', '1', '0']}
               />
             </div>
           </div>
@@ -221,7 +230,24 @@ const LightConfig = () => {
           <div className="light-container-item">
             <div>{t('color')}:</div>
             <div className="light-stitle">{t('adjust_mouse_light_color')}</div>
-            <div
+            {colorList.map((color, index) => {
+              return (
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    display: 'inline-block',
+                    margin: '0 10px',
+                    cursor: 'pointer',
+                    borderRadius: '4px',
+                    background: color,
+                  }}
+                  key={color}
+                  onClick={() => handleColorChange(index)}
+                ></div>
+              );
+            })}
+            {/* <div
               style={{
                 width: '400px',
                 margin: '10px',
@@ -249,7 +275,7 @@ const LightConfig = () => {
                   },
                 },
               }}
-            />
+            /> */}
           </div>
         ) : null}
       </div>
