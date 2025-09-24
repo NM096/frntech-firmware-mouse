@@ -96,7 +96,7 @@ const KeyConfig = () => {
     });
     _profile.KeySet[currentDevice?.Info?.Mode || 0] = newKeySet;
     apply(path, _profile, () => {
-      setCurrentProfile(currentModelID, _profile, (payload) => {
+      setCurrentProfile(currentModelID, "profile1", _profile, (payload) => {
         if (payload) {
           storeSetProfile(_profile);
         }

@@ -21,10 +21,10 @@ const DeviceList = () => {
     }
     const ModelID = device.Model?.ModelID;
     setCurrentDevice(device);
-    getCurrentProfile(ModelID, (payload) => {
+    getCurrentProfile(ModelID, "profile1", (payload) => {
       if (!payload) {
         getModelProfile(ModelID, (profilePayload) => {
-          setCurrentProfile(ModelID, profilePayload);
+          setCurrentProfile(ModelID, "profile1", profilePayload);
           setProfile(cloneDeep(profilePayload));
         });
       } else {

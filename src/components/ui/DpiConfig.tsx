@@ -79,7 +79,7 @@ const DpiConfig = () => {
             DPILevels: newDPILevels,
           },
         });
-        setCurrentProfile(currentModelID, { ...profile, DPIs: newDPIs }, (payload) => {
+        setCurrentProfile(currentModelID, "profile1", { ...profile, DPIs: newDPIs }, (payload) => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }

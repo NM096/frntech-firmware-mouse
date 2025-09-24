@@ -141,12 +141,13 @@ export function checkDriver(callback?: (payload: any) => void) {
   });
 }
 
-export function getCurrentProfile(modelID, callback?: (payload: any) => void) {
+export function getCurrentProfile(modelID, name, callback?: (payload: any) => void) {
   astilectron.sendMessage(
     {
-      name: 'GetProfile',
+      name: 'readProfile',
       payload: {
         ModelID: modelID,
+        Name: name,
       },
     },
     function (message) {
@@ -156,13 +157,14 @@ export function getCurrentProfile(modelID, callback?: (payload: any) => void) {
   );
 }
 
-export function setCurrentProfile(modelID, profile, callback?: (payload: any) => void) {
+export function setCurrentProfile(modelID, name, profile, callback?: (payload: any) => void) {
   console.log('setCurrentProfile', modelID, profile);
   astilectron.sendMessage(
     {
-      name: 'SetProfile',
+      name: 'SaveProfile',
       payload: {
         ModelID: modelID,
+        Name: name,
         Profile: profile,
       },
     },
