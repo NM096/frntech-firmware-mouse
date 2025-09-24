@@ -43,7 +43,7 @@ const Slider: React.FC<SliderProps> = ({ min = 0, max = 10, step = 1, initialVal
       />
       {/* 把数值显示在 thumb 里 */}
       <div className="slider2-thumb-value" style={{ left: `${position}%` }}>
-        {data[value - 1]}
+        {data[value]}
       </div>
     </div>
   );

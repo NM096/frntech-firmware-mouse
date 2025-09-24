@@ -1,19 +1,15 @@
 import Dropdown from '@/components/common/Dropdown';
 import Slider2 from '../common/Slider2';
-import { SketchPicker, ColorResult } from 'react-color';
 import { useState, useCallback } from 'react';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useTranslation } from 'react-i18next';
 import { setLE } from '@/utils/driver';
-import { useModal } from '@/components/common/ModalContext';
 import CustomRadio from '../common/CustomRadio';
 import { debounce } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
 
 const LightConfig = () => {
   const { t } = useTranslation();
-  const { openConfigLoading, close } = useModal();
-  const [tempColor, setTempColor] = useState('');
   const { modelConfig, currentDevice, path, setCurrentDevice } = useBaseInfoStore();
   const { LETable = [] } = modelConfig || {};
   const { LEDEffect } = currentDevice?.Info || {};
@@ -36,7 +32,6 @@ const LightConfig = () => {
     'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
   ];
   const handleChangeLe = (lang: string) => {
-    const _loadingId = openConfigLoading({ proccess: 0 });
     const leItem = LETable.find((item) => item.Lang === lang);
     setCurrentLeInfo(leItem || LETable[0]);
     setLE(
@@ -52,7 +47,6 @@ const LightConfig = () => {
             ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, BLMode: leItem?.Value || 0 } } } },
           } as any);
         }
-        close(_loadingId);
       }
     );
   };
@@ -60,7 +54,6 @@ const LightConfig = () => {
   // 亮度变化处理
   const handleBrightnessChange = useCallback(
     debounce((value: number) => {
-      const _loadingId = openConfigLoading({ proccess: 0 });
       setBrightness(value);
       setLE(
         path,
@@ -75,7 +68,6 @@ const LightConfig = () => {
               ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Brightness: value } } } },
             } as any);
           }
-          close(_loadingId);
         }
       );
     }, 300),
@@ -85,7 +77,6 @@ const LightConfig = () => {
   // 速度变化处理
   const handleSpeedChange = useCallback(
     debounce((value: number) => {
-      const _loadingId = openConfigLoading({ proccess: 0 });
       setSpeed(value);
       setLE(
         path,
@@ -100,7 +91,6 @@ const LightConfig = () => {
               ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Speed: value } } } },
             } as any);
           }
-          close(_loadingId);
         }
       );
     }, 300),
@@ -110,7 +100,6 @@ const LightConfig = () => {
   // 方向变化处理
   const handleDirectionChange = useCallback(
     (value: number) => {
-      const _loadingId = openConfigLoading({ proccess: 0 });
       setDirection(value);
       setLE(
         path,
@@ -125,7 +114,6 @@ const LightConfig = () => {
               ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, BLDirection: value } } } },
             } as any);
           }
-          close(_loadingId);
         }
       );
     },
@@ -135,8 +123,6 @@ const LightConfig = () => {
   // 颜色变化处理
   const handleColorChange = useCallback(
     debounce((color: string) => {
-      const _loadingId = openConfigLoading({ proccess: 0 });
-      setTempColor(color);
       setLE(
         path,
         {
@@ -150,7 +136,6 @@ const LightConfig = () => {
               ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Color: color } } } },
             } as any);
           }
-          close(_loadingId);
         }
       );
     }, 300),
@@ -184,8 +169,8 @@ const LightConfig = () => {
             <div className="light-stitle">{t('adjust_mouse_light_brightness')}</div>
             <div className="light-container-slider">
               <Slider2
-                min={1}
-                max={4}
+                min={0}
+                max={3}
                 step={1}
                 initialValue={brightness + 1}
                 onChange={(value) => handleBrightnessChange(value)}
@@ -200,8 +185,8 @@ const LightConfig = () => {
             <div className="light-stitle">{t('adjust_mouse_light_speed')}</div>
             <div className="light-container-slider">
               <Slider2
-                min={1}
-                max={4}
+                min={0}
+                max={3}
                 step={1}
                 initialValue={speed}
                 onChange={(value) => handleSpeedChange(value)}
@@ -247,35 +232,6 @@ const LightConfig = () => {
                 ></div>
               );
             })}
-            {/* <div
-              style={{
-                width: '400px',
-                margin: '10px',
-                backgroundColor: tempColor,
-                height: '30px',
-                borderRadius: '4px',
-              }}
-            ></div>
-            <SketchPicker
-              color={tempColor}
-              onChange={(c: ColorResult) => handleColorChange(c.hex)}
-              styles={{
-                default: {
-                  picker: {
-                    width: '250px',
-                    background: '#2c2c2c', // 修改整体背景色
-                    borderRadius: '6px',
-                    boxShadow: '0',
-                  },
-                  saturation: {
-                    borderRadius: '6px',
-                  },
-                  hue: {
-                    borderRadius: '6px',
-                  },
-                },
-              }}
-            /> */}
           </div>
         ) : null}
       </div>

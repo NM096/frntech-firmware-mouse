@@ -42,7 +42,6 @@ const DpiConfig = () => {
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
   const { DPILevels } = currentDevice?.Info || {};
-  const { openConfigLoading, closeAll } = useModal();
   const [localDPIs, setLocalDPIs] = useState<Dpi[]>(DPIs);
   const [currentDpiIdx, setCurrentDpiIdx] = useState<number>(findOpenDpiIndex(DPILevels?.[mode] || 0, DPIs) || 0);
   const handleSwitchOpenDpi = throttle((index: number, isChecked: boolean) => {
@@ -53,7 +52,6 @@ const DpiConfig = () => {
       return;
     }
     const newDPILevels: number[] = cloneDeep(DPILevels) || [];
-    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.map((dpi, idx) => {
       if (idx === index) {
         dpi.Open = isChecked;
@@ -83,14 +81,12 @@ const DpiConfig = () => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }
-          closeAll();
         });
       }
     );
   }, 1000);
 
   const handleChangeDpi = (index: number, value: Dpi) => {
-    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.map((dpi, i) => {
       if (i === index) {
         dpi = {
@@ -113,7 +109,6 @@ const DpiConfig = () => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }
-          closeAll();
         });
       }
     );
@@ -123,7 +118,6 @@ const DpiConfig = () => {
     if (DPIs[idx].Open === false) {
       return;
     }
-    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs.filter((dpi) => dpi.Open);
     // 查找idx 在所有开启的DPI中的位置
     const currentDpi = DPIs[idx];
@@ -148,21 +142,16 @@ const DpiConfig = () => {
             },
           });
         }
-        closeAll();
       }
     );
   };
 
   const handleChangeDpiLed = (index: number, hex: string) => {
-    openConfigLoading({ proccess: 0 });
     const newDPIs = DPIs?.map((dpi, i) => (i === index ? { ...dpi, Color: hex } : dpi));
     const newDPILEDs = newDPIs?.filter((dpi) => dpi.Open).map((dpi, i) => ({ Index: i, Value: dpi.Color }));
-    console.log('newDPIs', newDPIs);
-    console.log('newDPILEDs', newDPILEDs);
     setConfigData(path, { ...(configData as Config), DPILEDs: newDPILEDs || [] }, () => {
       setConfigDataOnStore({ ...(configData as Config), DPILEDs: newDPILEDs || [] });
       setProfile({ ...profile, DPIs: newDPIs });
-      closeAll();
     });
   };
 

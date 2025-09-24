@@ -2,13 +2,12 @@ import Keyboard from './KeyFeature/Keyboard';
 import Mouse from './KeyFeature/Mouse';
 import Macro from './KeyFeature/Macro';
 import KeyMouse from '@/components/common/KeyMouse';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Keys from '@/config/keys.json';
 import { setCurrentProfile, apply } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { KeyDefine, KeyItem } from '@/types/profile';
 import { cloneDeep } from 'lodash';
-import { useModal } from '@/components/common/ModalContext';
 import { useProfileStore } from '@/store/useProfile';
 import { useTranslation } from 'react-i18next';
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
@@ -23,7 +22,6 @@ const KeyConfig = () => {
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
   const { profile: storeProfile, setProfile: storeSetProfile } = useProfileStore();
   const [profile, setProfile] = useState(storeProfile);
-  const { openConfigLoading, closeAll } = useModal();
   const sideList: { key: sidebarKey; title: string }[] = [
     { key: 'Mouse', title: t('mouse_function') },
     { key: 'Keyboard', title: t('keyboard_function') },
@@ -70,19 +68,26 @@ const KeyConfig = () => {
     Macro: () => (
       <Macro
         onChange={(value) => {
-          console.log(value, 'Macro onChange');
           handleKeyChange(value);
         }}
+        confirm={handleSettingKey}
         initialMacro={currentKeyDefine}
       />
     ),
   };
   const handleKeyChange = (key: KeyItem) => {
-    setCurrentKeyDefine((prev) => (prev ? { ...prev, ...key } : undefined));
-  };
+    console.log(key, 'handleKeyChange');
 
+    setCurrentKeyDefine((prev) => (prev ? { ...prev, ...key } : undefined));
+    if (key.Value !== '0x8000' && key.Value !== '0x2000') {
+      handleSettingKey();
+    } else {
+      if (key.Value == '0x8000' && key.Macro && key.Macro?.Name && key.Macro?.Category) {
+        handleSettingKey();
+      }
+    }
+  };
   const handleSettingKey = () => {
-    openConfigLoading({ proccess: 0 });
     const _profile = cloneDeep(profile);
     const currentKeySet = _profile?.KeySet[currentDevice?.Info?.Mode || 0];
     const newKeySet = currentKeySet.map((keyDefines) => {
@@ -96,14 +101,14 @@ const KeyConfig = () => {
     });
     _profile.KeySet[currentDevice?.Info?.Mode || 0] = newKeySet;
     apply(path, _profile, () => {
-      setCurrentProfile(currentModelID, "profile1", _profile, (payload) => {
+      setCurrentProfile(currentModelID, 'profile1', _profile, (payload) => {
         if (payload) {
           storeSetProfile(_profile);
         }
-        closeAll();
       });
     });
   };
+
   // 同步Key 按键默认值
   useEffect(() => {
     if (activeKey == null) return;
@@ -155,10 +160,10 @@ const KeyConfig = () => {
                 );
               })}
             </div>
-            <div className="key-config-section-actions">
+            {/* <div className="key-config-section-actions">
               <div onClick={() => handleSettingKey()}>{t('apply')}</div>
               <div onClick={() => setActiveKey(null)}>{t('cancel')}</div>
-            </div>
+            </div> */}
           </div>
           <div className="key-config-feature-list">{sidebarComponents[activeSidebar]() || null}</div>
         </div>

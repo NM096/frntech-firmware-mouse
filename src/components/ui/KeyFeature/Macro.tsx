@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 interface MacroProps {
   onChange?: (keyDefine: KeyItem) => void;
   initialMacro?: KeyDefine;
+  confirm?: () => void;
 }
 
-const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
+const Macro: React.FC<MacroProps> = ({ onChange, initialMacro, confirm }) => {
   const { t } = useTranslation();
   const [categorys, setCategorys] = React.useState<string[]>([]);
   const [macros, setMacros] = React.useState<string[]>([]);

@@ -103,9 +103,17 @@ export interface DeviceData {
 
 export interface ModelConfig {
   LETable?: LightEffect[];
+  Advance?: Advance;
   SensorInfo?: SensorInfo;
 }
 
+export interface Advance {
+  MoveWakeUp?: boolean;
+  RippleControl?: boolean;
+  SilentAltitude?: boolean;
+  UltraLowDelay?: boolean;
+  UltraLowPower?: boolean;
+}
 export interface LightEffect {
   Name?: string;
   Lang?: string;

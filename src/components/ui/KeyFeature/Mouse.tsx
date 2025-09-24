@@ -24,7 +24,9 @@ const Mouse: React.FC<MouseProp> = ({ list, onChange, keyDefine }) => {
             cursor: 'pointer',
             fontSize: '12px',
           }}
-          onClick={() => onChange(item)}
+          onClick={() => {
+            onChange(item);
+          }}
         >
           <span>{t(item.Lang)}</span>
           <CustomRadio checked={keyDefine?.Value === item.Value} customSize={'small'} />

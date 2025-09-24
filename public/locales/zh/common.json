@@ -189,5 +189,7 @@
   "open_mouse_property": "打开鼠标属性",
   "back_to_device_selection": "返回设备选择",
   "charging": "充电中",
-  "wired_connection": "有线连接"
+  "used_battery": "剩余电量",
+  "wired_connection": "有线连接",
+  "two_point_four_g_connection": "2.4G连接"
 }

@@ -205,7 +205,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
     setIsListening(false);
   };
 
-  const generateShortcut = useCallback(() => {
+  useEffect(() => {
     let value = keyValue;
     let show = '';
 
@@ -234,18 +234,13 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
 
     const hexValue = '0x' + value.toString(16).padStart(4, '0').toUpperCase();
 
-    return {
+    onChange({
       Name: show,
       Value: hexValue,
       Show: show,
       Lang: show,
-    };
+    });
   }, [keyValue, keyDisplay, modifiers]);
-
-  useEffect(() => {
-    const shortcut = generateShortcut();
-    onChange(shortcut);
-  }, [generateShortcut, onChange]);
 
   const clearShortcut = () => {
     setKeyValue(0);

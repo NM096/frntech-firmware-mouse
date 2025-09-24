@@ -6,7 +6,6 @@ import ic_window from '@/assets/windows_1.png';
 import ic_window2 from '@/assets/windows_2.png';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useState } from 'react';
-import { useModal } from '@/components/common/ModalContext';
 import { setReportRate } from '@/utils/driver';
 import type { AdvanceSetting } from '@/types/device-data';
 import { setAdvanceSetting as sendAdvanceSetting, openMouseProperties } from '@/utils/driver';
@@ -19,15 +18,14 @@ const PerformanceConfig = () => {
   const silentAltitudes = ['1 MM', '2 MM', '3 MM', '4 MM'];
   const rateList = ['125Hz', '250Hz', '500Hz', '1000Hz'];
 
-  const { openConfigLoading, close } = useModal();
-  const { currentDevice, path, mode, setCurrentDevice } = useBaseInfoStore();
+  const { currentDevice, path, mode, setCurrentDevice, modelConfig } = useBaseInfoStore();
+
   const { AdvanceSetting } = currentDevice?.Info || {};
   const [advanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(currentDevice?.Info?.AdvanceSetting);
   const [usbReport, setUsbReport] = useState(currentDevice?.Info?.USBReports?.[0] || 0);
   //
   const handleChangeUsbReport = (index: number) => {
     setUsbReport(index);
-    const _loadingId = openConfigLoading({ proccess: 0 });
     const newUsbReport = currentDevice?.Info?.USBReports || [0, 0, 0, 0];
     newUsbReport[mode] = index;
     setReportRate(
@@ -43,12 +41,10 @@ const PerformanceConfig = () => {
             ...{ Info: { ...currentDevice?.Info, ...{ USBReports: newUsbReport } } },
           } as any);
         }
-        close(_loadingId);
       }
     );
   };
   const handleChangeltitude = (name: string, value: number | boolean) => {
-    const _loadingId = openConfigLoading({ proccess: 0 });
     const newAdvanceSetting = cloneDeep({ ...advanceSetting, [name]: value });
     setAdvanceSetting(newAdvanceSetting);
     sendAdvanceSetting(path, newAdvanceSetting, (payload) => {
@@ -58,7 +54,6 @@ const PerformanceConfig = () => {
           ...{ Info: { ...currentDevice?.Info, ...{ AdvanceSetting: newAdvanceSetting } } },
         } as any);
       }
-      close(_loadingId);
     });
   };
 
@@ -69,7 +64,7 @@ const PerformanceConfig = () => {
   return (
     <div className="performance-config">
       <div className="performance-section">
-        {AdvanceSetting?.RippleControl && (
+        {modelConfig?.Advance?.RippleControl && (
           <div className="performance-item">
             <div className="performance-item-title">{t('report_rate_settings')}</div>
             <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
@@ -111,7 +106,7 @@ const PerformanceConfig = () => {
         </div>
       </div>
       <div className="performance-section">
-        {AdvanceSetting?.MoveWakeUp && (
+        {modelConfig?.Advance?.MoveWakeUp && (
           <div className="performance-item">
             <div className="performance-item-title">{t('ripple_control')}</div>
             <div className="performance-item-description">
@@ -123,7 +118,7 @@ const PerformanceConfig = () => {
             </div>
           </div>
         )}
-        {AdvanceSetting?.UltraLowPower && (
+        {modelConfig?.Advance?.UltraLowPower && (
           <div className="performance-item">
             <div className="performance-item-title">{t('line_correction')}</div>
             <div className="performance-item-description">
@@ -145,7 +140,7 @@ const PerformanceConfig = () => {
             />
           </div>
         </div>
-        {AdvanceSetting?.SilentAltitude && (
+        {modelConfig?.Advance?.SilentAltitude && (
           <div className="performance-item">
             <div className="performance-item-title">{t('mouse_lift_height')}</div>
             <div className="performance-item-description">{t('mouse_lift_height_description')}</div>

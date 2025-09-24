@@ -24,7 +24,7 @@ const shell = require('electron').shell;
 
 const Header = () => {
   const { t } = useTranslation();
-  const { openAlert, openConfigLoading, close: modalClose } = useModal();
+  const { openAlert } = useModal();
 
   const { path, isMaxWindow, setIsMaxWindow } = useBaseInfoStore();
   const handleCheckDriver = () => {
@@ -37,10 +37,7 @@ const Header = () => {
       title: t('tips'),
       content: t('confirm_reset_config'),
       onOk: () => {
-        const _loadingId = openConfigLoading({ proccess: 0 });
-        resetConfig(path, () => {
-          modalClose(_loadingId);
-        });
+        resetConfig(path, () => {});
       },
     });
   };
