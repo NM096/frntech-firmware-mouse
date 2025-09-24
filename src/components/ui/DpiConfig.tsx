@@ -79,7 +79,7 @@ const DpiConfig = () => {
             DPILevels: newDPILevels,
           },
         });
-        setCurrentProfile(currentModelID, "profile1", { ...profile, DPIs: newDPIs }, (payload) => {
+        setCurrentProfile(currentModelID, 'profile1', { ...profile, DPIs: newDPIs }, (payload) => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }
@@ -210,7 +210,7 @@ const DpiConfig = () => {
               />
               <ColorPicker
                 top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
-                initialValue={DPIs[index].Color || ''}
+                initialValue={DPIs[index]?.Color || ''}
                 onChange={(hex) => handleChangeDpiLed(index, hex)}
               />
             </div>
