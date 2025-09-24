@@ -82,7 +82,7 @@ export function listenDriverMessage() {
 export function getModelList(callback?: (payload: any) => void) {
   astilectron.sendMessage({ name: 'GetModelList' }, function (message: any) {
     console.log(`-------${message?.name}-------`, message?.payload);
-    callback?.(message.payload);
+    callback?.(message?.payload);
   });
 }
 
@@ -97,7 +97,7 @@ export function getModelConfig(modelID, callback?: (payload: any) => void) {
     },
     function (message: any) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -113,7 +113,7 @@ export function getModelKeyMap(modelID, callback?: (payload: any) => void) {
     },
     function (message: any) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -129,7 +129,7 @@ export function getModelProfile(modelID, callback?: (payload: any) => void) {
     },
     function (message: any) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -137,7 +137,7 @@ export function getModelProfile(modelID, callback?: (payload: any) => void) {
 export function checkDriver(callback?: (payload: any) => void) {
   astilectron.sendMessage({ name: 'CheckDriver' }, function (message: any) {
     console.log(`-------${message?.name}-------`, message?.payload);
-    callback?.(message.payload);
+    callback?.(message?.payload);
   });
 }
 
@@ -170,7 +170,7 @@ export function setCurrentProfile(modelID, name, profile, callback?: (payload: a
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -182,7 +182,7 @@ export function getSoftwareVersion(callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -194,7 +194,7 @@ export function getDeviceList(callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -210,7 +210,7 @@ export function importProfile(modelID, path, callback?: (payload: any) => void) 
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -227,7 +227,7 @@ export function exportProfile(modelID, profile, path, callback?: (payload: any) 
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -243,7 +243,7 @@ export function setLE(device, le, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -258,7 +258,7 @@ export function getCustomLE(device, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -274,7 +274,7 @@ export function setCustomLE(device, cle, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -290,7 +290,7 @@ export function setMode(device, mode, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -305,7 +305,7 @@ export function getDPI(device, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -323,7 +323,7 @@ export function setDPI(device, mode, dpi, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -339,7 +339,7 @@ export function setReportRate(device, rr, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -355,7 +355,7 @@ export function setAdvanceSetting(device, advance, callback?: (payload: any) => 
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -371,7 +371,7 @@ export function getConfigData(device, callback?: (payload: Config) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -387,7 +387,7 @@ export function setConfigData(device, config: Config, callback?: (payload: any) 
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -404,7 +404,7 @@ export function apply(device, profile, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -416,7 +416,7 @@ export function openMouseProperties(callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -431,7 +431,7 @@ export function reset(device, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -443,7 +443,7 @@ export function getMacroCategorys(callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -458,7 +458,7 @@ export function addMacroCategory(category, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -473,7 +473,7 @@ export function delMacroCategory(category, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -488,7 +488,7 @@ export function getMacros(category, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -504,7 +504,7 @@ export function addMacro(category, name, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -520,7 +520,7 @@ export function delMacro(category, name, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -536,7 +536,7 @@ export function readMacro(category, name, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -553,7 +553,7 @@ export function saveMacro(category, name, macrofile, callback?: (payload: any) =
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -568,7 +568,7 @@ export function importMacro(path, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -593,7 +593,7 @@ export function exportMacro(name, macrofile, path, callback?: (payload: any) => 
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -609,7 +609,7 @@ export function upgradeFireware(device, modelID, callback?: (payload: any) => vo
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -621,7 +621,7 @@ export function loadAppConfig(callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -637,7 +637,7 @@ export function saveAppConfig(config, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -649,7 +649,7 @@ export function getSystemConfig(callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
@@ -664,7 +664,7 @@ export function setSystemConfig(config, callback?: (payload: any) => void) {
     },
     function (message) {
       console.log(`-------${message?.name}-------`, message?.payload);
-      callback?.(message.payload);
+      callback?.(message?.payload);
     }
   );
 }
