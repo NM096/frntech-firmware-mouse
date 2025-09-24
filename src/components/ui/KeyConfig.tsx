@@ -2,7 +2,7 @@ import Keyboard from './KeyFeature/Keyboard';
 import Mouse from './KeyFeature/Mouse';
 import Macro from './KeyFeature/Macro';
 import KeyMouse from '@/components/common/KeyMouse';
-import { useCallback, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Keys from '@/config/keys.json';
 import { setCurrentProfile, apply } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
@@ -10,6 +10,7 @@ import type { KeyDefine, KeyItem } from '@/types/profile';
 import { cloneDeep } from 'lodash';
 import { useProfileStore } from '@/store/useProfile';
 import { useTranslation } from 'react-i18next';
+import { debounce } from 'lodash';
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 
 const KeyConfig = () => {
@@ -77,17 +78,20 @@ const KeyConfig = () => {
   };
   const handleKeyChange = (key: KeyItem) => {
     console.log(key, 'handleKeyChange');
-
-    setCurrentKeyDefine((prev) => (prev ? { ...prev, ...key } : undefined));
-    if (key.Value !== '0x8000' && key.Value !== '0x2000') {
-      handleSettingKey();
-    } else {
-      if (key.Value == '0x8000' && key.Macro && key.Macro?.Name && key.Macro?.Category) {
-        handleSettingKey();
+    setCurrentKeyDefine((prev) => {
+      const newKeyDefine = prev ? { ...prev, ...key } : undefined;
+      if (key?.Value !== '0x8000' && key?.Value !== '0x2000') {
+        handleSettingKey(newKeyDefine);
+      } else {
+        if (key?.Value == '0x8000' && key?.Macro && key?.Macro?.Name && key?.Macro?.Category) {
+          handleSettingKey(newKeyDefine);
+        }
       }
-    }
+      return newKeyDefine;
+    });
   };
-  const handleSettingKey = () => {
+
+  const handleSettingKey = debounce((currentKeyDefine: KeyDefine) => {
     const _profile = cloneDeep(profile);
     const currentKeySet = _profile?.KeySet[currentDevice?.Info?.Mode || 0];
     const newKeySet = currentKeySet.map((keyDefines) => {
@@ -100,6 +104,7 @@ const KeyConfig = () => {
       return keyDefines;
     });
     _profile.KeySet[currentDevice?.Info?.Mode || 0] = newKeySet;
+
     apply(path, _profile, () => {
       setCurrentProfile(currentModelID, 'profile1', _profile, (payload) => {
         if (payload) {
@@ -107,7 +112,7 @@ const KeyConfig = () => {
         }
       });
     });
-  };
+  }, 1000);
 
   // 同步Key 按键默认值
   useEffect(() => {
@@ -129,7 +134,7 @@ const KeyConfig = () => {
     setCurrentDevice(storeCurrentDevice);
   }, [storeCurrentDevice]);
   useEffect(() => {
-    setProfile(storeProfile);
+    setProfile(cloneDeep(storeProfile));
   }, [storeProfile]);
   return (
     <div className="key-config-container">

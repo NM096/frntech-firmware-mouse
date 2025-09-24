@@ -23,40 +23,34 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ keyDefines, activeKey, onKeySelect 
   const { t } = useTranslation();
   const { currentDevice, currentModelID } = useBaseInfoStore();
 
-  const baseKeys: Key[] = useMemo(
-    () => [
-      // { index: 0, label: '左键', Lang: 'mouse_kf_left', style: { position: 'absolute', left: '9%', top: '27%' } },
-      // { index: 1, label: '右键', Lang: 'mouse_kf_right', style: { position: 'absolute', left: '90%', top: '27%' } },
-      // { index: 2, label: '中键', Lang: 'mouse_kf_middle', style: { position: 'absolute', left: '90%', top: '4%' } },
-      // { index: 3, label: '后退', Lang: 'mouse_kf_back', style: { position: 'absolute', left: '9%', top: '69%' } },
-      // { index: 4, label: '前进', Lang: 'mouse_kf_forward', style: { position: 'absolute', left: '9%', top: '43%' } },
-    ],
-    []
-  );
+  const baseKeys: Key[] = [
+    // { index: 0, label: '左键', Lang: 'mouse_kf_left', style: { position: 'absolute', left: '9%', top: '27%' } },
+    // { index: 1, label: '右键', Lang: 'mouse_kf_right', style: { position: 'absolute', left: '90%', top: '27%' } },
+    // { index: 2, label: '中键', Lang: 'mouse_kf_middle', style: { position: 'absolute', left: '90%', top: '4%' } },
+    // { index: 3, label: '后退', Lang: 'mouse_kf_back', style: { position: 'absolute', left: '9%', top: '69%' } },
+    // { index: 4, label: '前进', Lang: 'mouse_kf_forward', style: { position: 'absolute', left: '9%', top: '43%' } },
+  ];
 
   const [keys, setKeys] = useState<(Key & Partial<KeyDefine>)[]>(cloneDeep(baseKeys));
   useEffect(() => {
-    if (!keyDefines || keys.length > 0) return;
+    console.log('Updating keys with keys:', keys);
+    console.log('Updating keys with keyDefines:', keyDefines);
+    if (!keyDefines || keys.length == 0) return;
 
-    setKeys((prevKeys) => {
-      console.log('Updating keys with prevKeys:', prevKeys);
-      console.log('Updating keys with baseKeys:', baseKeys);
-      const newKeys = cloneDeep(baseKeys).map((item) => {
-        const keyDefine = keyDefines.find((keyDefine) => Number(keyDefine.Index) == item.index);
-        return {
-          ...item,
-          ...keyDefine,
-        };
-      });
-      console.log('New keys after merging with keyDefines:', newKeys);
-      return newKeys;
+    const newKeys = cloneDeep(keys).map((item) => {
+      const keyDefine = keyDefines.find((keyDefine) => Number(keyDefine.Index) == Number(item.index));
+      return {
+        ...item,
+        ...keyDefine,
+      };
     });
-  }, [keyDefines, baseKeys, keys.length]);
+    console.log('New keys after merging with keyDefines:', newKeys);
+    setKeys(newKeys);
+  }, [keyDefines]);
 
   useEffect(() => {
     if (!currentModelID) return;
     getModelKeyMap(currentModelID, (keymap) => {
-      console.log(`${JSON.stringify(keyDefines)} now keymap`);
       setKeys(
         keymap.map((item) => ({
           index: item.LogicCode,
