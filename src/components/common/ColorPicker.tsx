@@ -53,7 +53,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
         }}
         onClick={() => setIsOpen(!isOpen)}
       />
-
       {isOpen && (
         <div
           style={{
