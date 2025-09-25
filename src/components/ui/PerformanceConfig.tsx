@@ -106,23 +106,35 @@ const PerformanceConfig = () => {
         </div>
       </div>
       <div className="performance-section">
-        {modelConfig?.Advance?.MoveWakeUp && (
+        {modelConfig?.Advance?.UltraLowDelay && (
           <div className="performance-item">
-            <div className="performance-item-title">{t('ripple_control')}</div>
+            <div className="performance-item-title">{t('ultralow_delay_title')}</div>
             <div className="performance-item-description">
-              {t('enable_ripple_control_algorithm')}
+              {t('ultralow_delay_desc')}
               <Switch
-                checked={advanceSetting?.MoveWakeUp}
-                onChange={() => handleChangeltitude('MoveWakeUp', !advanceSetting?.MoveWakeUp)}
+                checked={advanceSetting?.UltraLowDelay}
+                onChange={() => handleChangeltitude('UltraLowDelay', !advanceSetting?.UltraLowDelay)}
               />
             </div>
           </div>
         )}
         {modelConfig?.Advance?.UltraLowPower && (
           <div className="performance-item">
-            <div className="performance-item-title">{t('line_correction')}</div>
+            <div className="performance-item-title">{t('ultralow_power_title')}</div>
             <div className="performance-item-description">
-              {t('enable_line_correction')}
+              {t('ultralow_power_desc')}
+              <Switch
+                checked={advanceSetting?.UltraLowPower}
+                onChange={() => handleChangeltitude('UltraLowPower', !advanceSetting?.UltraLowPower)}
+              />
+            </div>
+          </div>
+        )}
+        {modelConfig?.Advance?.RippleControl && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('ripple_control_title')}</div>
+            <div className="performance-item-description">
+              {t('ripple_control_desc')}
               <Switch
                 checked={advanceSetting?.RippleControl}
                 onChange={() => handleChangeltitude('RippleControl', !advanceSetting?.RippleControl)}
@@ -130,20 +142,22 @@ const PerformanceConfig = () => {
             </div>
           </div>
         )}
-        <div className="performance-item">
-          <div className="performance-item-title">{t('mouse_synchronization')}</div>
-          <div className="performance-item-description">
-            {t('enable_mouse_synchronization')}
-            <Switch
-              checked={advanceSetting?.UltraLowDelay}
-              onChange={() => handleChangeltitude('UltraLowDelay', !advanceSetting?.UltraLowDelay)}
-            />
+        {modelConfig?.Advance?.MoveWakeUp && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('move_wakeup_title')}</div>
+            <div className="performance-item-description">
+              {t('move_wakeup_desc')}
+              <Switch
+                checked={advanceSetting?.MoveWakeUp}
+                onChange={() => handleChangeltitude('MoveWakeUp', !advanceSetting?.MoveWakeUp)}
+              />
+            </div>
           </div>
-        </div>
+        )}
         {modelConfig?.Advance?.SilentAltitude && (
           <div className="performance-item">
-            <div className="performance-item-title">{t('mouse_lift_height')}</div>
-            <div className="performance-item-description">{t('mouse_lift_height_description')}</div>
+            <div className="performance-item-title">{t('silent_altitude_title')}</div>
+            <div className="performance-item-description">{t('silent_altitude_desc')}</div>
             <div className="performance-radio-group">
               {silentAltitudes.map((i, idx) => {
                 return (
@@ -160,8 +174,8 @@ const PerformanceConfig = () => {
           </div>
         )}
         <div className="performance-item">
-          <div className="performance-item-title">{t('mouse_property')}</div>
-          <div className="performance-item-description">{t('mouse_property_description')}</div>
+          <div className="performance-item-title">{t('mouse_property_title')}</div>
+          <div className="performance-item-description">{t('mouse_property_desc')}</div>
           <div className="performance-item-open" onClick={() => handleOpenMouseProperty()}>
             <HoverImage src={ic_window} hoverSrc={ic_window2} alt="Reset" className="icon-7" />
             {t('open_mouse_property')}
