@@ -185,8 +185,8 @@
   "move_wakeup_desc": "开启移动唤醒之后鼠标进入深度休眠可以通过移动唤醒鼠标",
   "silent_altitude_title": "鼠标抬起高度",
   "silent_altitude_desc": "设置鼠标抬起时的高度",
-  "mouse_property": "鼠标属性",
-  "mouse_property_description": "Windows系统鼠标属性设置",
+  "mouse_property_title": "鼠标属性",
+  "mouse_property_desc": "Windows系统鼠标属性设置",
   "open_mouse_property": "打开鼠标属性",
 
   "back_to_device_selection": "返回设备选择",
