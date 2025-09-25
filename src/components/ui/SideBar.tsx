@@ -42,7 +42,7 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
   const { Battery, Charge } = currentDevice?.Info?.Mouse || {};
   const { RFDevice } = currentDevice || {};
   const getBatteryIcon = () => {
-    if (Charge) {
+    if (Charge || !RFDevice) {
       return ic_battery_charginng;
     } else {
       const batteryLevels = Object.keys(batteryIcons)
@@ -70,7 +70,7 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
             <div className="sidebar-item-power">
               <img src={getBatteryIcon()} alt="battery" className="sidebar-icon-connection" />
               {/* <HoverImage src={ic_charge} hoverSrc={ic_charge} alt="Logo" className="sidebar-icon-connection" /> */}
-              {Charge ? t('charging') : t('used_battery')}
+              {!RFDevice ? t('charging') : t('used_battery')}
             </div>
             <div className="sidebar-item-connection">
               <HoverImage src={wireless_4k} hoverSrc={wireless_4k} alt="Logo" className="sidebar-icon-connection" />

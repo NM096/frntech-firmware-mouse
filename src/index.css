@@ -1151,7 +1151,7 @@ input:focus {
   gap: 10px;
   height: calc(100% - 60px);
   font-size: 14px;
-  margin: 30px 20px;
+  margin: 20px;
 }
 .macro-item-left,
 .macro-item-right {
@@ -1168,7 +1168,7 @@ input:focus {
   /* height: calc(100% - 20px); */
   display: flex;
   flex-direction: column;
-  max-height: 700px;
+  max-height: 500px;
 }
 
 .macro-item-left .macro-btn-group {
