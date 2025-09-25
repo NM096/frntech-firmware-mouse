@@ -84,6 +84,10 @@ const DpiConfig = () => {
         });
       }
     );
+    const newDPILEDs = newDPIs?.filter((dpi) => dpi.Open).map((dpi, i) => ({ Index: i, Value: dpi.Color }));
+    setConfigData(path, { ...(configData as Config), DPILEDs: newDPILEDs || [] }, () => {
+      setConfigDataOnStore({ ...(configData as Config), DPILEDs: newDPILEDs || [] });
+    });
   }, 1000);
 
   const handleChangeDpi = (index: number, value: Dpi) => {
