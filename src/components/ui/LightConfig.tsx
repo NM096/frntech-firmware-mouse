@@ -169,9 +169,6 @@ const LightConfig = () => {
             <div className="light-stitle">{t('adjust_mouse_light_brightness')}</div>
             <div className="light-container-slider">
               <Slider2
-                min={0}
-                max={3}
-                step={1}
                 initialValue={brightness + 1}
                 onChange={(value) => handleBrightnessChange(value)}
                 data={['0', '1', '2', '3']}
@@ -179,18 +176,15 @@ const LightConfig = () => {
             </div>
           </div>
         ) : null}
-        {(currentLeInfo?.Config ?? 0) & 0x02 ? (
+        {!((currentLeInfo?.Config ?? 0) & 0x02) ? (
           <div className="light-container-item">
             <div>{t('speed')}:</div>
             <div className="light-stitle">{t('adjust_mouse_light_speed')}</div>
             <div className="light-container-slider">
               <Slider2
-                min={0}
-                max={3}
-                step={1}
                 initialValue={speed}
                 onChange={(value) => handleSpeedChange(value)}
-                data={['3', '2', '1', '0']}
+                data={['0', '1', '2', '3']}
               />
             </div>
           </div>

@@ -5,27 +5,32 @@ interface SliderProps {
   max?: number;
   step?: number;
   initialValue?: number;
-  data: string[]; // 新增 data 属性
+  data: string[];
   onChange?: (value: number) => void;
 }
-
-const Slider: React.FC<SliderProps> = ({ min = 0, max = 10, step = 1, initialValue = 5, data, onChange }) => {
+const Slider: React.FC<SliderProps> = ({ initialValue = 5, data, onChange }) => {
+  // 默认 value 直接是索引
   const [value, setValue] = useState(0);
-
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(e.target.value);
-    setValue(newValue);
-    onChange?.(newValue);
-  };
 
   const findInitialIndex = () => {
     const index = data.findIndex((item) => Number(item) === initialValue);
     return index !== -1 ? index : 0;
   };
+
   useEffect(() => {
-    setValue(findInitialIndex());
-  }, [initialValue]);
-  const position = ((value - min) / (max - min)) * 100;
+    const idx = findInitialIndex();
+    if (idx !== value) {
+      setValue(idx);
+    }
+  }, [initialValue, data]);
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newIndex = Number(e.target.value);
+    setValue(newIndex);
+    onChange?.(Number(data[newIndex])); // 通知外部实际数值
+  };
+
+  const position = ((value - 0) / (data.length - 1)) * 100;
 
   return (
     <div className="slider2-wrapper">
@@ -34,19 +39,17 @@ const Slider: React.FC<SliderProps> = ({ min = 0, max = 10, step = 1, initialVal
         className="slider2"
         value={value}
         onChange={handleSliderChange}
-        min={min}
-        max={max}
-        step={step}
+        min={0}
+        max={data.length - 1}
+        step={1}
         style={{
           background: `linear-gradient(to right, #d4d6d6 ${position}%, #3c4041 ${position}%)`,
         }}
       />
-      {/* 把数值显示在 thumb 里 */}
       <div className="slider2-thumb-value" style={{ left: `${position}%` }}>
         {data[value]}
       </div>
     </div>
   );
 };
-
 export default Slider;

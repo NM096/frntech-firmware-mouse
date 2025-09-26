@@ -52,11 +52,7 @@ export default function MacroActionList({ events, delayMode }: MacroActionListPr
               {getIcon(event.type)}
               <span>
                 {/* {event.code} */}
-                {delayMode == 'record' && events[index * 2 + 1]?.type === 'Delay'
-                  ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3)
-                  : delayMode == 'default' && events[index * 2 + 1]?.type === 'Delay'
-                    ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3)
-                    : 0.01}
+                {events[index * 2 + 1]?.code ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3) : '0.001'}
                 {t('second')}
               </span>
               {isDown(event) ? (
