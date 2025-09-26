@@ -477,7 +477,7 @@ const MacroConfig = () => {
         </ul>
       </div>
       <div className="macro-item-right">
-        <div>{t('recording_delay_mode')}:</div>
+        <div>{t('recording_delay_mode')}</div>
         <ul
           className="macro-delay-mode"
           onMouseEnter={() => {

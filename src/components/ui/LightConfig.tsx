@@ -16,7 +16,7 @@ const LightConfig = () => {
 
   const [direction, setDirection] = useState(LEDEffect?.BLDirection || 0);
   const [brightness, setBrightness] = useState(LEDEffect?.Brightness || 0);
-  const [speed, setSpeed] = useState(LEDEffect?.Speed || 0);
+  const [speed, setSpeed] = useState(3 - (LEDEffect?.Speed || 0));
 
   const [currentLeInfo, setCurrentLeInfo] = useState(
     LETable.find((item) => item.Value === LEDEffect?.BLMode) || LETable[0]
@@ -169,16 +169,16 @@ const LightConfig = () => {
             <div className="light-stitle">{t('adjust_mouse_light_brightness')}</div>
             <div className="light-container-slider">
               <Slider2
-                initialValue={brightness + 1}
+                initialValue={brightness}
                 onChange={(value) => handleBrightnessChange(value)}
                 data={['0', '1', '2', '3']}
               />
             </div>
           </div>
         ) : null}
-        {!((currentLeInfo?.Config ?? 0) & 0x02) ? (
+        {((currentLeInfo?.Config ?? 0) & 0x02) ? (
           <div className="light-container-item">
-            <div>{t('speed')}:</div>
+            <div>{t('speed')}</div>
             <div className="light-stitle">{t('adjust_mouse_light_speed')}</div>
             <div className="light-container-slider">
               <Slider2
@@ -191,7 +191,7 @@ const LightConfig = () => {
         ) : null}
         {(currentLeInfo?.Config ?? 0) & 0x04 ? (
           <div className="light-container-item">
-            <div>{t('direction')}:</div>
+            <div>{t('direction')}</div>
             <div className="light-stitle">{t('adjust_mouse_light_direction')}</div>
             <div className="light-container-slider direction-btn-group">
               <label className="direction-btn-radio">
@@ -207,7 +207,7 @@ const LightConfig = () => {
         ) : null}
         {(currentLeInfo?.Config ?? 0) & 0x08 ? (
           <div className="light-container-item">
-            <div>{t('color')}:</div>
+            <div>{t('color')}</div>
             <div className="light-stitle">{t('adjust_mouse_light_color')}</div>
             {colorList.map((color, index) => {
               return (
