@@ -13,7 +13,7 @@ interface MacroActionListProps {
   delayMode: 'record' | 'default' | 'min';
 }
 
-export default function MacroActionList({ events, delayMode }: MacroActionListProps) {
+export default function MacroActionList({ events }: MacroActionListProps) {
   const { t } = useTranslation();
 
   const getIcon = (type: MacroEvent['type']) => {
