@@ -104,8 +104,13 @@ const useActionMacroFile = () => {
       return newList;
     });
   };
-  const updateStepMouse = (event: MouseEvent) => {
+  const updateStepMouse = (mouseKey: string) => {
     if (currentStepIdx === null) return;
+    setRecordList((prev) => {
+      const newList = [...prev];
+      newList[currentStepIdx] = { ...newList[currentStepIdx], name: mouseKey };
+      return newList;
+    });
   };
   return {
     recordList,
@@ -118,6 +123,7 @@ const useActionMacroFile = () => {
     selectStep,
     updateStepDelay,
     updateStepKeyboard,
+    updateStepMouse,
   };
 };
 

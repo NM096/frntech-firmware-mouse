@@ -17,7 +17,7 @@ import ic_move from '@/assets/ic_move.png';
 import ic_play from '@/assets/play.png';
 
 import ic_stop from '@/assets/stopPlay.png';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useGlobalClickBlocker } from '@/hooks/useGlobalClickBlocker';
 import {
   getMacroCategorys,
@@ -76,9 +76,11 @@ const MacroConfig = () => {
     selectStep,
     updateStepDelay,
     updateStepKeyboard,
+    updateStepMouse,
   } = useActionMacroFile();
 
   useGlobalClickBlocker();
+  const [isFocus, setIsFocus] = useState(false);
   const { startRecording, stopRecording } = useMacroStore();
   const handleSwitchCategory = (category: string) => {
     setCurrentCategory(category);
@@ -269,9 +271,22 @@ const MacroConfig = () => {
       });
   };
 
-  const listenerMacroStepFocus = (event: KeyboardEvent) => {
-    updateStepKeyboard(event);
-  };
+  const listenerMacroStepFocus = useCallback(
+    (event: KeyboardEvent) => {
+      updateStepKeyboard(event);
+    },
+    [updateStepKeyboard]
+  );
+
+  useEffect(() => {
+    if (isFocus) {
+      document.addEventListener('keydown', listenerMacroStepFocus);
+    }
+    return () => {
+      document.removeEventListener('keydown', listenerMacroStepFocus);
+    };
+  }, [isFocus, listenerMacroStepFocus]);
+  console.log('listenerMacroStepFocus');
   useEffect(() => {
     getMacroCategorys((CategoryList) => {
       setCategory(CategoryList);
@@ -571,13 +586,17 @@ const MacroConfig = () => {
         </ul>
         {currentStepIdx !== null && (
           <div>
-            <div style={{ margin: '10px 0' }}>按键</div>
+            <div style={{ margin: '10px 0' }}>{t('keyboard')}</div>
             {['MouseDown', 'MouseUp'].includes(recordedActions[currentStepIdx]?.type) ? (
               <Dropdown
                 borderColor="#ff7b00"
                 options={['mouse_kf_mouse_left', 'mouse_kf_mouse_right']}
-                defaultValue={recordedActions[currentStepIdx]?.name || 'mouse_kf_mouse_left'}
-                onChange={() => {}}
+                defaultValue={
+                  recordedActions[currentStepIdx]?.name === 'LeftDown' ? 'mouse_kf_mouse_left' : 'mouse_kf_mouse_right'
+                }
+                onChange={(e) => {
+                  updateStepMouse(e === 'mouse_kf_mouse_left' ? 'LeftDown' : 'RightDown');
+                }}
                 size="small"
               />
             ) : (
@@ -592,16 +611,15 @@ const MacroConfig = () => {
                   border: '0px',
                 }}
                 onFocus={() => {
-                  document.addEventListener('keydown', listenerMacroStepFocus);
+                  setIsFocus(true);
                 }}
                 onBlur={() => {
-                  console.log('输入框失去焦点');
-                  document.removeEventListener('keydown', listenerMacroStepFocus);
+                  setIsFocus(false);
                 }}
               />
             )}
 
-            <div style={{ margin: '10px 0' }}>延迟(ms) </div>
+            <div style={{ margin: '10px 0' }}>{t('delay')} (ms) </div>
             <input
               type="text"
               value={recordedActions[currentStepIdx + 1]?.code}

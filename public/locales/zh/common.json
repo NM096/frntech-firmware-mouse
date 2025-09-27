@@ -191,5 +191,7 @@
   "charging": "充电中",
   "used_battery": "剩余电量",
   "wired_connection": "有线连接",
-  "two_point_four_g_connection": "2.4G连接"
+  "two_point_four_g_connection": "2.4G连接",
+  "delay": " 延迟 ",
+  "keyboard": "按键"
 }
