@@ -1,7 +1,7 @@
 import type { MacroEvent } from '@/types/macro';
 import { useEffect, useRef, useState, useCallback } from 'react';
 
-function getKeyName(event: KeyboardEvent) {
+export function getKeyName(event: KeyboardEvent) {
   let name = event.key;
   if (name === 'Shift') {
     if (event.code === 'ShiftLeft') name = 'Left Shift';
@@ -19,7 +19,7 @@ function getKeyName(event: KeyboardEvent) {
   return name;
 }
 
-function getMouseName(event: MouseEvent) {
+export function getMouseName(event: MouseEvent) {
   let name = '';
   switch (event.button) {
     case 0:
@@ -118,6 +118,9 @@ export function useMacroRecorder(
 
   const stop = useCallback(() => {
     lastEventTime.current = null;
+    if (records.length > 0 && records[records.length - 1].type !== 'Delay') {
+      setRecords((prev) => [...prev, { type: 'Delay', name: '10', code: '10' }]);
+    }
     return records;
   }, [records]);
 

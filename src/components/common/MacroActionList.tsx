@@ -11,9 +11,11 @@ interface MacroActionListProps {
   events: MacroEvent[];
   showDelay: boolean;
   delayMode: 'record' | 'default' | 'min';
+  onSelectStep?: (index: number) => void;
+  selectIndex?: number | null;
 }
 
-export default function MacroActionList({ events, delayMode }: MacroActionListProps) {
+export default function MacroActionList({ events, delayMode, onSelectStep, selectIndex }: MacroActionListProps) {
   const { t } = useTranslation();
 
   const getIcon = (type: MacroEvent['type']) => {
@@ -47,7 +49,11 @@ export default function MacroActionList({ events, delayMode }: MacroActionListPr
         events
           .filter((event) => event.type !== 'Delay')
           .map((event, index) => (
-            <li className="macro-content-item" key={index + event.code + event.type + event.name}>
+            <li
+              className={`macro-content-item ${onSelectStep && index * 2 === (selectIndex ?? -1) ? 'selected' : ''}`}
+              key={index + event.code + event.type + event.name}
+              onClick={() => onSelectStep?.(index * 2)}
+            >
               <span>{index + 1}</span>
               {getIcon(event.type)}
               <span>

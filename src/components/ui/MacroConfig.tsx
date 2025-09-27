@@ -18,6 +18,7 @@ import ic_play from '@/assets/play.png';
 
 import ic_stop from '@/assets/stopPlay.png';
 import { useEffect, useState } from 'react';
+import { useGlobalClickBlocker } from '@/hooks/useGlobalClickBlocker';
 import {
   getMacroCategorys,
   addMacroCategory,
@@ -38,6 +39,9 @@ import { useMacroRecorder } from '@/hooks/useMacroRecorder';
 import MacroActionList from '../common/MacroActionList';
 import { KeyFormatter } from '@/utils/common';
 import { useTranslation } from 'react-i18next';
+import { useAllowClick } from '@/hooks/useAllowClick';
+import { useMacroStore } from '@/store/macroStore';
+import useActionMacroFile from '@/hooks/useActionMacroFile';
 const { dialog } = require('electron').remote;
 
 export interface MacroEvent {
@@ -60,9 +64,22 @@ const MacroConfig = () => {
 
   const [recording, setRecording] = useState(false);
   const [openRecords, setOpenRecords] = useState(false);
-  const { records, clearRecords, setRecords } = useMacroRecorder(recording, openRecords, delayMode, minDelay);
+  const { records, clearRecords, setRecords, stop } = useMacroRecorder(recording, openRecords, delayMode, minDelay);
   const [recordedActions, setRecordedActions] = useState<MacroEvent[]>([]);
+  const {
+    recordList,
+    currentStepIdx,
+    setRecordList,
+    moveUpStep,
+    moveDownStep,
+    deleteStep,
+    selectStep,
+    updateStepDelay,
+    updateStepKeyboard,
+  } = useActionMacroFile();
 
+  useGlobalClickBlocker();
+  const { startRecording, stopRecording } = useMacroStore();
   const handleSwitchCategory = (category: string) => {
     setCurrentCategory(category);
     getMacros(category, (payload) => {
@@ -188,6 +205,7 @@ const MacroConfig = () => {
   const handleSave = () => {
     setRecording(false);
     setOpenRecords(false);
+    stop();
     saveMacro(
       currentCategory,
       currentMacroFile,
@@ -250,6 +268,10 @@ const MacroConfig = () => {
         importMacro(result.filePaths[0]);
       });
   };
+
+  const listenerMacroStepFocus = (event: KeyboardEvent) => {
+    updateStepKeyboard(event);
+  };
   useEffect(() => {
     getMacroCategorys((CategoryList) => {
       setCategory(CategoryList);
@@ -271,6 +293,7 @@ const MacroConfig = () => {
           console.log('data.Content', KeyFormatter.lowercaseKeys(data.Content));
           // setRecordedActions(KeyFormatter.lowercaseKeys(data.Content) || []);
           setRecords(KeyFormatter.lowercaseKeys(data.Content) || []);
+          setRecordList(KeyFormatter.lowercaseKeys(data.Content) || []);
         } else {
           setRecordedActions([]);
         }
@@ -281,6 +304,10 @@ const MacroConfig = () => {
   useEffect(() => {
     setRecordedActions(records);
   }, [records]);
+  useEffect(() => {
+    setRecordedActions(recordList);
+    console.log('recordList changed', recordList);
+  }, [recordList]);
 
   const categoryMenu = [
     // {
@@ -321,6 +348,11 @@ const MacroConfig = () => {
       onClick: handleExportMacroFile,
     },
   ];
+
+  useEffect(() => {
+    console.log('recordList', recordList);
+    console.log('currentStepIdx', currentStepIdx);
+  }, [recordList, currentStepIdx]);
   return (
     <div className="macro-config">
       <div className="macro-item-left">
@@ -406,7 +438,12 @@ const MacroConfig = () => {
           {recording ? (
             <div
               className="macro-record-btn"
-              onClick={() => setRecording(false)}
+              data-allow-click
+              onClick={() => {
+                setRecording(false);
+
+                stopRecording();
+              }}
               onMouseEnter={() => {
                 setOpenRecords(false);
               }}
@@ -425,6 +462,7 @@ const MacroConfig = () => {
                   // setRecords(currentMacroFile || [])
                   setRecording(true);
                   setOpenRecords(true);
+                  startRecording();
                 }
               }}
             >
@@ -432,14 +470,27 @@ const MacroConfig = () => {
               {t('start_recording')}
             </div>
           )}
-          {/* <HoverImage
+          <HoverImage
             src={delete_macro_action_1}
             hoverSrc={delete_macro_action_2}
             alt="Logo"
             className="back-btn-icon"
-          /> */}
-          {/* <HoverImage src={btn_up_1} hoverSrc={btn_up_2} alt="Logo" className="back-btn-icon" />
-          <HoverImage src={btn_down_1} hoverSrc={btn_down_2} alt="Logo" className="back-btn-icon" /> */}
+            onClick={() => deleteStep()}
+          />
+          <HoverImage
+            src={btn_up_1}
+            hoverSrc={btn_up_2}
+            alt="Logo"
+            className="back-btn-icon"
+            onClick={() => moveUpStep()}
+          />
+          <HoverImage
+            src={btn_down_1}
+            hoverSrc={btn_down_2}
+            alt="Logo"
+            className="back-btn-icon"
+            onClick={() => moveDownStep()}
+          />
           <div
             onMouseEnter={() => {
               setOpenRecords(false);
@@ -473,7 +524,13 @@ const MacroConfig = () => {
           </div> */}
         </div>
         <ul className="macro-content-body">
-          <MacroActionList events={recordedActions} delayMode={delayMode} showDelay={false} />
+          <MacroActionList
+            events={recordedActions}
+            delayMode={delayMode}
+            showDelay={false}
+            onSelectStep={selectStep}
+            selectIndex={currentStepIdx}
+          />
         </ul>
       </div>
       <div className="macro-item-right">
@@ -512,17 +569,55 @@ const MacroConfig = () => {
             {t('min_delay')}
           </li>
         </ul>
-        {/* <div>
-          <div>按键</div>
-          <div style={{ width: '95%' }}>
-            <Dropdown borderColor="#ff7b00" options={Mouse.map((i) => i.Lang)} onChange={() => {}} size="small" />
+        {currentStepIdx !== null && (
+          <div>
+            <div style={{ margin: '10px 0' }}>按键</div>
+            {['MouseDown', 'MouseUp'].includes(recordedActions[currentStepIdx]?.type) ? (
+              <Dropdown
+                borderColor="#ff7b00"
+                options={['mouse_kf_mouse_left', 'mouse_kf_mouse_right']}
+                defaultValue={recordedActions[currentStepIdx]?.name || 'mouse_kf_mouse_left'}
+                onChange={() => {}}
+                size="small"
+              />
+            ) : (
+              <input
+                type="text"
+                value={recordedActions[currentStepIdx]?.name}
+                style={{
+                  width: '100%',
+                  backgroundColor: 'white',
+                  color: 'black',
+                  textAlign: 'center',
+                  border: '0px',
+                }}
+                onFocus={() => {
+                  document.addEventListener('keydown', listenerMacroStepFocus);
+                }}
+                onBlur={() => {
+                  console.log('输入框失去焦点');
+                  document.removeEventListener('keydown', listenerMacroStepFocus);
+                }}
+              />
+            )}
+
+            <div style={{ margin: '10px 0' }}>延迟(ms) </div>
+            <input
+              type="text"
+              value={recordedActions[currentStepIdx + 1]?.code}
+              style={{
+                width: '100%',
+                backgroundColor: 'white',
+                color: 'black',
+                textAlign: 'center',
+                border: '0px',
+              }}
+              onChange={(e) => {
+                updateStepDelay(Number(e.target.value));
+              }}
+            />
           </div>
-          <div> 延迟(ms) </div>
-          <input
-            type="text"
-            style={{ width: '100%', backgroundColor: 'white', color: 'black', textAlign: 'center', border: '0px' }}
-          />
-        </div> */}
+        )}
         <div
           className="macro-action-btn"
           onClick={() => handleSave()}
