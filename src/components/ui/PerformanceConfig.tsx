@@ -5,10 +5,9 @@ import { Switch } from '../common/Switch';
 import ic_window from '@/assets/windows_1.png';
 import ic_window2 from '@/assets/windows_2.png';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-import { useState } from 'react';
-import { setReportRate } from '@/utils/driver';
+import { useEffect, useState } from 'react';
 import type { AdvanceSetting } from '@/types/device-data';
-import { setAdvanceSetting as sendAdvanceSetting, openMouseProperties } from '@/utils/driver';
+import { setReportRate, setAdvanceSetting as sendAdvanceSetting, openMouseProperties } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 const PerformanceConfig = () => {
@@ -21,18 +20,19 @@ const PerformanceConfig = () => {
   const { currentDevice, path, mode, setCurrentDevice, modelConfig } = useBaseInfoStore();
 
   const { AdvanceSetting } = currentDevice?.Info || {};
-  const [advanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(currentDevice?.Info?.AdvanceSetting);
-  const [usbReport, setUsbReport] = useState(currentDevice?.Info?.USBReports?.[0] || 0);
+  const [advanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(AdvanceSetting);
+  const [usbReport, setUsbReport] = useState(currentDevice?.Info?.USBReports?.[mode] || 0);
   //
   const handleChangeUsbReport = (index: number) => {
+    const { USBReports, WLReports } = currentDevice?.Info || {};
     setUsbReport(index);
-    const newUsbReport = currentDevice?.Info?.USBReports || [0, 0, 0, 0];
+    const newUsbReport = USBReports || [0, 0, 0, 0];
     newUsbReport[mode] = index;
     setReportRate(
       path,
       {
         USBReports: newUsbReport,
-        WLReports: currentDevice?.Info?.WLReports || [0, 0, 0, 0],
+        WLReports: WLReports || [0, 0, 0, 0],
       },
       (payload) => {
         if (payload) {
@@ -60,6 +60,10 @@ const PerformanceConfig = () => {
   const handleOpenMouseProperty = () => {
     openMouseProperties();
   };
+  useEffect(() => {
+    setAdvanceSetting(currentDevice?.Info?.AdvanceSetting);
+    setUsbReport(currentDevice?.Info?.USBReports?.[mode] || 0);
+  }, [currentDevice]);
 
   return (
     <div className="performance-config">

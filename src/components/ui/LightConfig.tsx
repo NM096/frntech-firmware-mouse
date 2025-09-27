@@ -152,7 +152,7 @@ const LightConfig = () => {
       </div>
       <div className="light-container">
         <div className="light-container-select">
-          {t('light_effect')}
+          {t('light_effect')}:
           <label>
             <Dropdown
               borderColor="#ff7f0e"
@@ -165,7 +165,7 @@ const LightConfig = () => {
         </div>
         {(currentLeInfo?.Config ?? 0) & 0x01 ? (
           <div className="light-container-item">
-            <div>{t('brightness')}</div>
+            <div>{t('brightness')}:</div>
             <div className="light-stitle">{t('adjust_mouse_light_brightness')}</div>
             <div className="light-container-slider">
               <Slider2
@@ -176,7 +176,7 @@ const LightConfig = () => {
             </div>
           </div>
         ) : null}
-        {!((currentLeInfo?.Config ?? 0) & 0x02) ? (
+        {(currentLeInfo?.Config ?? 0) & 0x02 ? (
           <div className="light-container-item">
             <div>{t('speed')}:</div>
             <div className="light-stitle">{t('adjust_mouse_light_speed')}</div>

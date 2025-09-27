@@ -1,3 +1,4 @@
+import type { LEDEffect, AdvanceSetting } from './device';
 export interface MacroContent {
   Type: string;
   Name: string;
@@ -35,6 +36,10 @@ export interface Profile {
   KeySet: KeyDefine[][];
   ModelID?: string;
   DPIs?: Dpi[];
+  LEDEffect?: LEDEffect;
+  USBReports?: number[];
+  WLReports?: number[];
+  AdvanceSetting?: AdvanceSetting;
 }
 
 export interface KeyItem {
