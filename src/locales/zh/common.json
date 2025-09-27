@@ -309,5 +309,6 @@
   "brightnessPlus": "亮度+",
   "keyCombinations": "组合键",
   "disableKey": "禁用按键",
-  "macroFunction": "宏功能"
+  "macroFunction": "宏功能",
+  "resetCurrentPageConfig": "恢复当前页面默认配置"
 }

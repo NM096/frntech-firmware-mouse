@@ -13,10 +13,10 @@ import ic_macro from '@/assets/macro.png';
 
 import setting from '@/assets/setting_1.png';
 import settingHover from '@/assets/setting_2.png';
-import reset from '@/assets/reset_1.png';
+import ic_reset from '@/assets/reset_1.png';
 import ic_max from '@/assets/max.png';
 import resetHover from '@/assets/reset_2.png';
-import profile from '@/assets/profile_icon.png';
+import ic_profile from '@/assets/profile_icon.png';
 import type { Config } from '@/types/data-config';
 import HoverImage from '@/components/common/HoverImage';
 import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
@@ -24,6 +24,7 @@ import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useState } from 'react';
 export type sidebarKey = 'DpiConfig' | 'KeyConfig' | 'LightConfig' | 'PerformanceConfig' | 'MacroConfig';
 import { useTranslation } from 'react-i18next';
+import { useModal } from '@/components/common/ModalContext';
 import {
   setCurrentProfile,
   setDPI,
@@ -32,6 +33,7 @@ import {
   setLE,
   setReportRate,
   setAdvanceSetting,
+  reset,
 } from '@/utils/driver';
 import { useProfileStore } from '@/store/useProfile';
 
@@ -66,6 +68,16 @@ const Feature = () => {
     MacroConfig: () => <MacroConfig />,
   };
 
+  const { openAlert } = useModal();
+  const resetMouse = () => {
+    openAlert({
+      title: t('tips'),
+      content: t('confirm_reset_config'),
+      onOk: () => {
+        reset(path, () => {});
+      },
+    });
+  };
   const resetPageConfig = () => {
     switch (activeSidebar) {
       case 'DpiConfig':
@@ -144,19 +156,18 @@ const Feature = () => {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <div className="actions">
-        {/*   <HoverImage src={reset} hoverSrc={resetHover} alt="Reset" className="icon-7" onClick={resetMouse} />
-          <div className="divider"></div>
-        
-          <div className="profile hover-bg">
-            <HoverImage src={profile} hoverSrc={profile} alt="Profile" className="icon-7" />
-            <div className="profile-text">配置设置</div>
-          </div>
+        <HoverImage src={ic_reset} hoverSrc={resetHover} alt="Reset" className="icon-7" onClick={resetMouse} />
+        <div className="divider"></div>
 
-          <div className="divider"></div>
-          */}
+        <div className="profile hover-bg">
+          <HoverImage src={ic_profile} hoverSrc={ic_profile} alt="Profile" className="icon-7" />
+          <div className="profile-text">配置设置</div>
+        </div>
+
+        <div className="divider"></div>
         {activeSidebar !== 'MacroConfig' && (
           <div className="reset-default-tips" onClick={() => resetPageConfig()}>
-            恢复当前页面默认配置
+            {t('resetCurrentPageConfig')}
           </div>
         )}
         <HoverImage src={setting} hoverSrc={settingHover} alt="Setting" className="icon-7" onClick={open} />

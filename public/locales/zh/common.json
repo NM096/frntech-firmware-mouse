@@ -193,5 +193,6 @@
   "wired_connection": "有线连接",
   "two_point_four_g_connection": "2.4G连接",
   "delay": " 延迟 ",
-  "keyboard": "按键"
+  "keyboard": "按键",
+  "resetCurrentPageConfig": "恢复当前页面默认配置"
 }

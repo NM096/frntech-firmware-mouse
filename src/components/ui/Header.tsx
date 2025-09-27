@@ -12,7 +12,7 @@ import settingHover from '@/assets/setting_2.png';
 import reset from '@/assets/reset_1.png';
 import ic_max from '@/assets/max.png';
 import resetHover from '@/assets/reset_2.png';
-import profile from '@/assets/profile_icon.png';
+
 import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
 import { useModal } from '@/components/common/ModalContext';
 import { reset as resetConfig, unmaximizeApp } from '@/utils/driver';
@@ -24,7 +24,6 @@ const shell = require('electron').shell;
 
 const Header = () => {
   const { t } = useTranslation();
-  const { openAlert } = useModal();
 
   const { path, isMaxWindow, setIsMaxWindow } = useBaseInfoStore();
   const handleCheckDriver = () => {
@@ -32,15 +31,7 @@ const Header = () => {
       console.log(payload);
     });
   };
-  const resetMouse = () => {
-    openAlert({
-      title: t('tips'),
-      content: t('confirm_reset_config'),
-      onOk: () => {
-        resetConfig(path, () => {});
-      },
-    });
-  };
+
   const handleMaximize = () => {
     if (isMaxWindow) {
       unmaximizeApp();
