@@ -40,7 +40,7 @@ export default function MacroActionList({ events, delayMode, onSelectStep, selec
   };
 
   useEffect(() => {
-    console.log(events);
+    console.log(delayMode);
     console.log(events.filter((event) => event.type !== 'Delay'));
   }, [events]);
   return (

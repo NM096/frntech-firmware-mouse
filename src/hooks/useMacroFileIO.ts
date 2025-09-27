@@ -1,11 +1,12 @@
 import type { Macro, MacroFile } from '@/types/macro';
 import { useCallback } from 'react';
-import { genId } from '@/store/macroStore';
+export const genId = () => Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
 
 export function useMacroFileIO() {
   /**
    * 导出多个 MacroFile（不包含 id）
    */
+
   const exportJson = useCallback((files: MacroFile[], filename = 'macros.json') => {
     const data = files.map((file) => ({
       name: file.name,
