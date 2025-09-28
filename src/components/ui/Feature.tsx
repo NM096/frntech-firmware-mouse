@@ -81,6 +81,8 @@ const Feature = () => {
           setTimeout(() => {
             setIsReset(false);
           }, 5000);
+          setCurrentProfile(currentModelID, currentConfigFileName, defaultProfile);
+          setProfile(defaultProfile!);
         });
       },
     });

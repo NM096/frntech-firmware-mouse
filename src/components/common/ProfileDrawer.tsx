@@ -14,6 +14,7 @@ import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useModal } from './ModalContext';
 import { toast } from 'sonner';
 import { useProfileStore } from '@/store/useProfile';
+import { get } from 'http';
 type ProfileDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -83,6 +84,14 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       },
     });
   };
+  const handleSelectProfile = (profile: string) => {
+    setCurrentConfigFileName(profile);
+    getProfileByName(currentModelID, profile, (data) => {
+      if (data) {
+        setCurrentProfile(currentModelID, profile, data);
+      }
+    });
+  };
   const _getProfileList = () => {
     GetProfiles(currentModelID, (profileList) => {
       console.log('Profile list:', profileList);
@@ -133,7 +142,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                       <li
                         className={`${currentConfigFileName === profile ? 'active' : ''} macro-file-item`}
                         key={profile}
-                        onClick={() => setCurrentConfigFileName(profile)}
+                        onClick={() => handleSelectProfile(profile)}
                       >
                         <span>{profile}</span>
                         <IconMenu

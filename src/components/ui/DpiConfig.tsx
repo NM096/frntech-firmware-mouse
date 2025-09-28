@@ -29,15 +29,17 @@ const findOpenDpiIndex = (num: number, DPIs: Dpi[]) => {
 const DpiConfig = () => {
   const { t } = useTranslation();
   const {
-    currentDevice: storeCurrentDevice,
+    // currentDevice: storeCurrentDevice,
+    currentDevice,
     currentModelID,
     mode,
     path,
-    setCurrentDevice: setStoreCurrentDevice,
+    // setCurrentDevice: setStoreCurrentDevice,
+    setCurrentDevice,
     configData,
     setConfigData: setConfigDataOnStore,
   } = useBaseInfoStore();
-  const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
+  // const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
   const { currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
@@ -70,7 +72,7 @@ const DpiConfig = () => {
         DPIs: newDPIs.filter((dpi) => dpi.Open),
       },
       () => {
-        setStoreCurrentDevice({
+        setCurrentDevice({
           ...currentDevice,
           Info: {
             ...currentDevice?.Info,
@@ -97,6 +99,7 @@ const DpiConfig = () => {
           ...value,
           Level: dpi.Level,
           Open: dpi.Open,
+          Color: dpi.Color,
         };
       }
       return dpi;
@@ -109,7 +112,7 @@ const DpiConfig = () => {
         DPIs: newDPIs.filter((dpi) => dpi.Open),
       },
       () => {
-        setCurrentProfile(currentModelID, { ...profile, DPIs: newDPIs }, (payload) => {
+        setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, DPIs: newDPIs }, (payload) => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }
@@ -160,10 +163,10 @@ const DpiConfig = () => {
   };
 
   useEffect(() => {
-    setCurrentDevice(storeCurrentDevice);
+    // setCurrentDevice(currentDevice);
     setLocalDPIs(DPIs);
-    setCurrentDpiIdx(findOpenDpiIndex(storeCurrentDevice?.Info?.DPILevels?.[mode] || 0, DPIs) || 0);
-  }, [storeCurrentDevice, profile]);
+    setCurrentDpiIdx(findOpenDpiIndex(currentDevice?.Info?.DPILevels?.[mode] || 0, DPIs) || 0);
+  }, [currentDevice, profile]);
 
   return (
     <div className="dpi-config">

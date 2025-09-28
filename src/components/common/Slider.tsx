@@ -7,29 +7,37 @@ interface SliderProps {
   onChange: (value: Dpi) => void;
 }
 
-const Slider: React.FC<SliderProps> = ({ initialValue = 1, onChange }) => {
+const Slider: React.FC<SliderProps> = ({ initialValue, onChange }) => {
   const { defaultProfile } = useProfileStore();
   const dpiList = defaultProfile?.DPIs || [];
+
   const min = dpiList.length > 0 ? dpiList[0].Level : 0;
   const max = dpiList.length > 0 ? dpiList[dpiList.length - 1].Level : 0;
 
+  // state 统一保存 level
   const [value, setValue] = useState(min);
   const [sliderWidth, setSliderWidth] = useState(0);
   const slider = useRef<HTMLInputElement | null>(null);
 
-  const position = ((value - min) / (max - min)) * 100;
-  const clampedPosition = Math.min(position, 100);
+  // 计算 thumb 位置
+  const position = max > min ? ((value - min) / (max - min)) * 100 : 0;
+  const clampedPosition = Math.min(Math.max(position, 0), 100);
 
-  const handleSliderChange = (value: string) => {
-    setValue(Number(value));
-    const dpi = dpiList.find((dpi) => dpi.Level === Number(value)) || dpiList[0];
-    onChange(dpi);
+  const handleSliderChange = (level: number) => {
+    setValue(level);
+    const dpi = dpiList.find((dpi) => dpi.Level === level) || dpiList[0];
+    if (dpi) onChange(dpi);
   };
 
+  // 初始化时同步一次
   useEffect(() => {
+    if (!initialValue) {
+      setValue(min);
+      return;
+    }
     const dpi = dpiList.find((dpi) => dpi.Value === initialValue);
-    setValue(dpi ? dpi.Level : min);
-  }, [initialValue, defaultProfile]);
+    if (dpi) setValue(dpi.Level);
+  }, [initialValue, dpiList]);
 
   // 监听窗口大小变化，更新 slider 宽度
   useEffect(() => {
@@ -43,9 +51,9 @@ const Slider: React.FC<SliderProps> = ({ initialValue = 1, onChange }) => {
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  const showLabelValue = (step: number) => {
-    const dpi = dpiList.find((dpi) => dpi.Level === step);
-    return dpi ? dpi.DPI : step;
+  const showLabelValue = (level: number) => {
+    const dpi = dpiList.find((dpi) => dpi.Level === level);
+    return dpi ? dpi.DPI : level;
   };
 
   return (
@@ -66,7 +74,7 @@ const Slider: React.FC<SliderProps> = ({ initialValue = 1, onChange }) => {
           type="range"
           className="slider"
           value={value}
-          onChange={(e) => handleSliderChange(e.target.value)}
+          onChange={(e) => handleSliderChange(Number(e.target.value))}
           min={min}
           max={max}
           step={1}

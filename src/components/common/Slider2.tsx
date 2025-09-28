@@ -27,7 +27,7 @@ const Slider: React.FC<SliderProps> = ({ initialValue = 5, data, onChange }) => 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newIndex = Number(e.target.value);
     setValue(newIndex);
-    onChange?.(Number(data[newIndex])); // 通知外部实际数值
+    onChange?.(Number(data[newIndex]));
   };
 
   const position = ((value - 0) / (data.length - 1)) * 100;

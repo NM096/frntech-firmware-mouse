@@ -136,7 +136,7 @@ export function checkDriver(callback?: (payload: any) => void) {
 export function getProfileByName(modelID, name, callback?: (payload: any) => void) {
   astilectron.sendMessage(
     {
-      name: 'readProfile',
+      name: 'ReadProfile',
       payload: {
         ModelID: modelID,
         Name: name,
