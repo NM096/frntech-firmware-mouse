@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 const PerformanceConfig = () => {
   const { t } = useTranslation();
   const sleepTime = ['10', '30', '60', '120', '180', '300', '600'];
-  const deepSleepTime = ['5', '10', '15', '20', '30', '60'];
+  const deepSleepTime = ['5', '10', '15', '20', '30', '40', '60'];
   const silentAltitudes = ['1 MM', '2 MM', '3 MM', '4 MM'];
   const rateList = ['125Hz', '250Hz', '500Hz', '1000Hz'];
 
