@@ -8,7 +8,10 @@ import { Switch } from './Switch';
 import CustomRadio from './CustomRadio';
 import { useConfig } from '@/context/ConfigContext';
 import { useI18nToggle } from '@/hooks/useI18nToggle';
-import { getSoftwareVersion, loadAppConfig, saveAppConfig } from '@/utils/driver';
+import { getSoftwareVersion, loadAppConfig, saveAppConfig, upgradeFireware } from '@/utils/driver';
+import { useBaseInfoStore } from '@/store/useBaseInfoStore';
+import { useModal } from './ModalContext';
+import { useProfileStore } from '@/store/useProfile';
 type SettingsDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -21,11 +24,16 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
   const { t } = useTranslation();
   const config = useConfig();
   const { lang: currentLang, toggleLang, setLang } = useI18nToggle();
+
+  const { currentDevice, path, currentModelID } = useBaseInfoStore();
+  const { setUpgradeProcess, setIsUpgrade } = useProfileStore();
+  const { Info, Model } = currentDevice || {};
   const [visible, setVisible] = useState(false);
   const [version, setVersion] = useState('0.1.0');
   const [autoStart, setAutoStart] = useState(false);
   const [dpiDialogOpen, setDpiDialogOpen] = useState(false);
   const [lowPowerDialogOpen, setLowPowerDialogOpen] = useState(false);
+  const { openAlert, closeAll, openUpgradeLoading } = useModal();
 
   const open = () => setVisible(true);
   const close = () => setVisible(false);
@@ -91,6 +99,23 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
     });
   };
 
+  const handleUpgradeDevice = () => {
+    setVisible(false);
+    openAlert({
+      title: '固件升级',
+      content: '确认升级固件？请确保在升级过程中不要断开设备连接。',
+      onOk: () => {
+        openUpgradeLoading({ proccess: 0 });
+        setUpgradeProcess(0);
+        setIsUpgrade(true);
+        upgradeFireware(path, currentModelID, () => {
+          closeAll();
+          setIsUpgrade(false);
+        });
+      },
+    });
+  };
+
   return (
     <SettingsDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
@@ -106,9 +131,14 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
         <div>
           <div className="settings-section">
             <h3 className="section-title">{t('software_version')}</h3>
-            <p className="text">
+            <div className="version-content">
               {t('version_number')} <span className="version">{version.split('+')[0]}</span>
-            </p>
+              {(Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
+                <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
+                  固件升级
+                </p>
+              ) : null}
+            </div>
           </div>
 
           <div className="settings-section">

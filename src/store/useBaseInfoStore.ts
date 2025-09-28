@@ -20,6 +20,7 @@ interface DeviceInfoState {
   setDeviceMap: (map: DeviceData | null) => void;
   setCurrentDevice: (device: DeviceInfo | null) => void;
   clearCurrentDevice: () => void;
+  setCurrentConfigFileName: (name: string) => void;
 }
 
 export const useBaseInfoStore = create<DeviceInfoState>()(
@@ -34,6 +35,7 @@ export const useBaseInfoStore = create<DeviceInfoState>()(
       path: null,
       configData: null,
       modelConfig: null,
+      setCurrentConfigFileName: (name) => set({ currentConfigFileName: name }),
       setIsMaxWindow: (isMax) => set({ isMaxWindow: isMax }),
       setModelConfig: (config) => set({ modelConfig: config }),
       setConfigData: (config) => set({ configData: config }),

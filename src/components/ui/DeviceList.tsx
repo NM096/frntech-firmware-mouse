@@ -4,12 +4,12 @@ import Power from '@/components/common/PowerIcon';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceInfo } from '@/types/device-data';
 import { useProfileStore } from '@/store/useProfile';
-import { getCurrentProfile, getModelProfile, setCurrentProfile, getConfigData, getModelConfig } from '@/utils/driver';
+import { getProfileByName, getModelProfile, setCurrentProfile, getConfigData, getModelConfig } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
 
 const DeviceList = () => {
-  const { deviceMap, setCurrentDevice, setConfigData, setModelConfig } = useBaseInfoStore();
+  const { deviceMap, setCurrentDevice, setConfigData, setModelConfig, currentConfigFileName } = useBaseInfoStore();
   const { setDefaultProfile } = useProfileStore();
   const { setProfile } = useProfileStore();
 
@@ -21,11 +21,11 @@ const DeviceList = () => {
     }
     const ModelID = device.Model?.ModelID;
     setCurrentDevice(device);
-    getCurrentProfile(ModelID, 'profile1', (payload) => {
+    getProfileByName(ModelID, currentConfigFileName, (payload) => {
       if (!payload) {
         getModelProfile(ModelID, (profilePayload) => {
           console.log(profilePayload);
-          setCurrentProfile(ModelID, 'profile1', profilePayload);
+          setCurrentProfile(ModelID, currentConfigFileName, profilePayload);
           setProfile(cloneDeep(profilePayload));
         });
       } else {

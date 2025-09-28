@@ -196,5 +196,13 @@
   "two_point_four_g_connection": "2.4G连接",
   "delay": " 延迟 ",
   "keyboard": "按键",
-  "resetCurrentPageConfig": "恢复当前页面默认配置"
+  "resetCurrentPageConfig": "恢复当前页面默认配置",
+
+  "confirm_delete_profile": "确认删除配置文件",
+  "confirm_delete_profile_desc": "确认删除配置文件：{{profile}}？",
+  "delete_profile": "删除配置文件",
+  "create_profile": "创建配置文件",
+  "profile_name": "配置文件名称",
+  "profile_file_exists": "配置文件已存在",
+  "create_profile_desc": "创建配置文件成功"
 }

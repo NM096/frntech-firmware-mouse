@@ -13,7 +13,6 @@ import ic_clear from '@/assets/clear.png';
 import ic_delete from '@/assets/delete.png';
 import ic_add from '@/assets/ic_add.png';
 import ic_more from '@/assets/ic_more.png';
-import ic_move from '@/assets/ic_move.png';
 import ic_play from '@/assets/play.png';
 
 import ic_stop from '@/assets/stopPlay.png';

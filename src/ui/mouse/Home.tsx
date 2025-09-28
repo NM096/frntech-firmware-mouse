@@ -4,10 +4,12 @@ import NoDevice from '@/components/ui/NoDevice';
 import DeviceList from '@/components/ui/DeviceList';
 import Feature from '@/components/ui/Feature';
 import { getDeviceList, listenDriverMessage, onDriverMessage } from '@/utils/driver';
+import { useProfileStore } from '@/store/useProfile';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
 const Home: React.FC = () => {
   const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice, setCurrentDevice } = useBaseInfoStore();
+  const { setUpgradeProcess, setIsUpgrade, isUpgrade, isReset } = useProfileStore();
   const [connected, setConnected] = useState(false);
   useEffect(() => {
     getDeviceList((deviceList: any) => {
@@ -22,6 +24,7 @@ const Home: React.FC = () => {
     });
     listenChangeDeviceList();
     listenChangeDeviceInfo();
+    listenUpgradeProgress();
     listenDriverMessage();
   }, []);
   const hasCanSelectedDevice = (deviceList: any): boolean => {
@@ -34,7 +37,6 @@ const Home: React.FC = () => {
       }
       const g24DeviceKeys = Object.keys(deviceList).filter((key) => deviceList[key].RFDevice);
       const hasG24DeviceOnline = g24DeviceKeys.map((key) => deviceList[key].Info?.Mouse?.Online).includes(true);
-      console.log('G24 online status:', hasG24DeviceOnline);
       return hasG24DeviceOnline;
     }
     return false;
@@ -47,10 +49,22 @@ const Home: React.FC = () => {
         .map((key) => ({ [key]: deviceList[key] }))
         .reduce((acc, curr) => ({ ...acc, ...curr }), {});
       setDeviceMap(filteredList as DeviceData);
-      setConnected(hasCanSelectedDevice(deviceList));
-      if (!deviceList[path!]) {
+
+      const { isReset, isUpgrade } = useProfileStore.getState();
+      console.log('isUpgrade,isReset', isUpgrade, isReset);
+      if (!isReset) {
+        setConnected(hasCanSelectedDevice(deviceList));
+      }
+      if (!deviceList[path!] && !isUpgrade && !isReset) {
         clearCurrentDevice();
       }
+    });
+  };
+
+  const listenUpgradeProgress = () => {
+    onDriverMessage('UpgradeProgress', (payload) => {
+      console.log('Upgrade progress payload:', payload);
+      setUpgradeProcess(payload?.Progress || 0);
     });
   };
   const listenChangeDeviceInfo = () => {

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import GlobalLoading from './GlobalLoading';
 import { useTranslation } from 'react-i18next';
+import UpgradeLoading from './UpgradeLoading';
 type LoadingOptions = {
   proccess?: number;
   onOk?: () => void;
@@ -23,12 +24,14 @@ type AlertOptions = {
 
 type ModalItem =
   | { type: 'loading'; id: string; options: LoadingOptions }
+  | { type: 'upgradeLoading'; id: string; options: LoadingOptions }
   | { type: 'confirm'; id: string; options: ConfirmOptions }
   | { type: 'alert'; id: string; options: AlertOptions }
   | { type: 'custom'; id: string; content: ReactNode };
 
 type ModalContextType = {
   openConfigLoading: (options: LoadingOptions) => string;
+  openUpgradeLoading: (options: LoadingOptions) => string;
   openConfirm: (options: ConfirmOptions) => string;
   openAlert: (options: AlertOptions) => string;
   openCustom: (content: ReactNode) => string;
@@ -47,6 +50,11 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const openConfigLoading = (options: LoadingOptions) => {
     const id = genId();
     setModals((prev) => [...prev, { type: 'loading', id, options }]);
+    return id;
+  };
+  const openUpgradeLoading = (options: LoadingOptions) => {
+    const id = genId();
+    setModals((prev) => [...prev, { type: 'upgradeLoading', id, options }]);
     return id;
   };
   const openConfirm = (options: ConfirmOptions) => {
@@ -83,7 +91,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const closeAll = () => setModals([]);
 
   return (
-    <ModalContext.Provider value={{ openConfigLoading, openConfirm, openAlert, openCustom, close, closeAll }}>
+    <ModalContext.Provider
+      value={{ openConfigLoading, openConfirm, openAlert, openCustom, close, closeAll, openUpgradeLoading }}
+    >
       {children}
       {createPortal(
         <div>
@@ -92,6 +102,13 @@ export function ModalProvider({ children }: { children: ReactNode }) {
               return (
                 <div className="global-loading-container" key={m.id}>
                   <GlobalLoading id={m.id} onClose={close} autoClose={false} />
+                </div>
+              );
+            }
+            if (m.type === 'upgradeLoading') {
+              return (
+                <div className="global-loading-container" key={m.id}>
+                  <UpgradeLoading id={m.id} onClose={close} autoClose={false} />
                 </div>
               );
             }
@@ -176,9 +193,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             if (m.type === 'custom') {
               return (
                 <div key={m.id} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                  <div className="p-6 bg-white shadow-xl rounded-2xl">
+                  <div className="rounded-2xl bg-white p-6 shadow-xl">
                     {m.content}
-                    <button className="px-4 py-2 mt-4 bg-gray-200 rounded" onClick={() => close(m.id)}>
+                    <button className="mt-4 rounded bg-gray-200 px-4 py-2" onClick={() => close(m.id)}>
                       {t('close')}
                     </button>
                   </div>

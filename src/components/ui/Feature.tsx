@@ -25,6 +25,7 @@ import { useState } from 'react';
 export type sidebarKey = 'DpiConfig' | 'KeyConfig' | 'LightConfig' | 'PerformanceConfig' | 'MacroConfig';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '@/components/common/ModalContext';
+import { useProfileDrawer } from '@/components/common/ProfileDrawer';
 import {
   setCurrentProfile,
   setDPI,
@@ -40,6 +41,7 @@ import { useProfileStore } from '@/store/useProfile';
 const Feature = () => {
   const { t } = useTranslation();
   const { open } = useSettingsDrawer();
+  const { open: openProfileDrawer } = useProfileDrawer();
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('DpiConfig');
   const sideList: { key: sidebarKey; title: string; icon: string }[] = [
     { key: 'DpiConfig', title: t('DpiConfig'), icon: ic_dpi },
@@ -59,7 +61,7 @@ const Feature = () => {
     currentConfigFileName,
   } = useBaseInfoStore();
   const { DPILevels } = currentDevice?.Info || {};
-  const { defaultProfile, profile, setProfile } = useProfileStore();
+  const { defaultProfile, profile, setProfile, setIsReset } = useProfileStore();
   const sidebarComponents = {
     DpiConfig: () => <DpiConfig />,
     KeyConfig: () => <KeyConfig />,
@@ -74,7 +76,12 @@ const Feature = () => {
       title: t('tips'),
       content: t('confirm_reset_config'),
       onOk: () => {
-        reset(path, () => {});
+        setIsReset(true);
+        reset(path, () => {
+          setTimeout(() => {
+            setIsReset(false);
+          }, 5000);
+        });
       },
     });
   };
@@ -159,7 +166,7 @@ const Feature = () => {
         <HoverImage src={ic_reset} hoverSrc={resetHover} alt="Reset" className="icon-7" onClick={resetMouse} />
         <div className="divider"></div>
 
-        <div className="profile hover-bg">
+        <div className="profile hover-bg" onClick={openProfileDrawer}>
           <HoverImage src={ic_profile} hoverSrc={ic_profile} alt="Profile" className="icon-7" />
           <div className="profile-text">配置设置</div>
         </div>

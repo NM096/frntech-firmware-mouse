@@ -3,14 +3,17 @@ import Home from '@/ui/mouse/Home';
 import NotFound from '@/ui/NotFound';
 import { ModalProvider } from '@/components/common/ModalContext';
 import { SettingsDrawerProvider } from '@/components/common/SettingsDrawer';
+import { ProfileDrawerProvider } from '@/components/common/ProfileDrawer';
 function Layout() {
   return (
     <main>
-      <SettingsDrawerProvider>
-        <ModalProvider>
-          <Outlet /> {/* 子路由渲染位置 */}
-        </ModalProvider>
-      </SettingsDrawerProvider>
+      <ModalProvider>
+        <ProfileDrawerProvider>
+          <SettingsDrawerProvider>
+            <Outlet /> {/* 子路由渲染位置 */}
+          </SettingsDrawerProvider>
+        </ProfileDrawerProvider>
+      </ModalProvider>
     </main>
   );
 }

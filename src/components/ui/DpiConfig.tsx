@@ -5,7 +5,6 @@ import CustomRadio from '../common/CustomRadio';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { setCurrentProfile, setDPI, setConfigData } from '@/utils/driver';
 import { useProfileStore } from '@/store/useProfile';
-import { useModal } from '@/components/common/ModalContext';
 import type { Dpi } from '@/types/profile';
 import { cloneDeep } from 'lodash';
 import type { Config } from '@/types/data-config';
@@ -39,6 +38,7 @@ const DpiConfig = () => {
     setConfigData: setConfigDataOnStore,
   } = useBaseInfoStore();
   const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
+  const { currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
   const { DPILevels } = currentDevice?.Info || {};
@@ -77,7 +77,7 @@ const DpiConfig = () => {
             DPILevels: newDPILevels,
           },
         });
-        setCurrentProfile(currentModelID, 'profile1', { ...profile, DPIs: newDPIs }, (payload) => {
+        setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, DPIs: newDPIs }, (payload) => {
           if (payload) {
             setProfile({ ...profile, DPIs: newDPIs });
           }

@@ -43,18 +43,9 @@ const driverMessageHandlers: Record<DriverMessageType, DriverMessageHandler[]> =
   onAppConfig: [],
   DeviceListChanged: [],
   DeviceChanged: [],
-  onUpgradeProgress: [],
-  onMusicLEUpdate: [],
-  onDPIWindow: [],
+  UpgradeProgress: [],
 };
-type DriverMessageType =
-  | 'onAppReady'
-  | 'onAppConfig'
-  | 'DeviceListChanged'
-  | 'DeviceChanged'
-  | 'onUpgradeProgress'
-  | 'onMusicLEUpdate'
-  | 'onDPIWindow';
+type DriverMessageType = 'onAppReady' | 'onAppConfig' | 'DeviceListChanged' | 'DeviceChanged' | 'UpgradeProgress';
 export function onDriverMessage(type: DriverMessageType, handler: DriverMessageHandler) {
   if (!driverMessageHandlers[type]) {
     driverMessageHandlers[type] = [];
@@ -73,7 +64,8 @@ export function listenDriverMessage() {
     console.log('Current handlers:', driverMessageHandlers[message.name]);
     const handlers = driverMessageHandlers[message.name];
     if (handlers && handlers.length) {
-      handlers.forEach((handler) => handler(message.payload));
+      // handlers.forEach((handler) => handler(message.payload));
+      handlers[handlers.length - 1](message.payload); // 只调用最后一个注册的处理函数
     }
   });
 }
@@ -141,7 +133,7 @@ export function checkDriver(callback?: (payload: any) => void) {
   });
 }
 
-export function getCurrentProfile(modelID, name, callback?: (payload: any) => void) {
+export function getProfileByName(modelID, name, callback?: (payload: any) => void) {
   astilectron.sendMessage(
     {
       name: 'readProfile',
@@ -158,7 +150,6 @@ export function getCurrentProfile(modelID, name, callback?: (payload: any) => vo
 }
 
 export function setCurrentProfile(modelID, name, profile, callback?: (payload: any) => void) {
-  console.log('setCurrentProfile', modelID, profile);
   astilectron.sendMessage(
     {
       name: 'SaveProfile',
@@ -599,6 +590,13 @@ export function exportMacro(name, macrofile, path, callback?: (payload: any) => 
 }
 
 export function upgradeFireware(device, modelID, callback?: (payload: any) => void) {
+  console.log({
+    name: 'UpgradeFireware',
+    payload: {
+      Device: device,
+      ModelID: modelID,
+    },
+  });
   astilectron.sendMessage(
     {
       name: 'UpgradeFireware',
@@ -660,6 +658,52 @@ export function setSystemConfig(config, callback?: (payload: any) => void) {
       name: 'SetSystemConfig',
       payload: {
         Config: config,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
+
+export function GetProfiles(modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetProfiles',
+      payload: {
+        ModelID: modelID,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
+export function AddProfile(modelID, name, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'AddProfile',
+      payload: {
+        ModelID: modelID,
+        Name: name,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
+
+export function DelProfile(modelID, name, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'DelProfile',
+      payload: {
+        ModelID: modelID,
+        Name: name,
       },
     },
     function (message) {

@@ -45,11 +45,14 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
   return (
     <label
       style={{
-        display: 'inline-flex',
+        display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
         position: 'relative',
         gap: 8,
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
         ...style,
       }}
     >
@@ -73,6 +76,8 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
           background: '#4c5151',
           cursor: 'pointer',
           position: 'relative', // 让 label 内的绝对定位 span 参照此定位
+          padding: 0,
+          margin: 0,
           boxSizing: 'border-box',
           transition: 'border-color 0.15s',
         }}
@@ -81,18 +86,19 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
       <span
         aria-hidden
         style={{
-          position: 'absolute',
           width: inner,
-          height: inner,
-          borderRadius: '50%',
           background: checked ? color : 'transparent',
-          top:
-            customSize === 'small' ? 'calc(50% - 3px)' : customSize === 'large' ? 'calc(50% - 7px)' : 'calc(50% - 5px)',
-          left:
-            customSize === 'small' ? 'calc(50% - 4px)' : customSize === 'large' ? 'calc(50% - 8px)' : 'calc(50% - 6px)',
-          // transform: 'translate(-50%, -50%)',
+          height: inner,
+          position: 'absolute',
+          borderRadius: '50%',
+
+          transform: 'translateY(-50%)',
+          top: '50%',
+          left: 0,
+          right: 0,
+          margin: '0 auto',
           pointerEvents: 'none',
-          transition: 'background 0.15s',
+          transition: 'background 0.15s ease 0s',
         }}
       />
 

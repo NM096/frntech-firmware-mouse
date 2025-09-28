@@ -16,7 +16,7 @@ type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 const KeyConfig = () => {
   const { t } = useTranslation();
   const { Mouse: mouseKeys, Quit: quitKeys, Media: mediaKeys } = Keys;
-  const { currentModelID, currentDevice: storeCurrentDevice, path } = useBaseInfoStore();
+  const { currentModelID, currentDevice: storeCurrentDevice, path, currentConfigFileName } = useBaseInfoStore();
   const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
   const [activeKey, setActiveKey] = useState<number | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('Mouse');
@@ -106,7 +106,7 @@ const KeyConfig = () => {
     _profile.KeySet[currentDevice?.Info?.Mode || 0] = newKeySet;
 
     apply(path, _profile, () => {
-      setCurrentProfile(currentModelID, 'profile1', _profile, (payload) => {
+      setCurrentProfile(currentModelID, currentConfigFileName, _profile, (payload) => {
         if (payload) {
           storeSetProfile(_profile);
         }

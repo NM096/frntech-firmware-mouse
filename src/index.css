@@ -88,7 +88,7 @@ input:focus {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  -webkit-app-region: drag;
+  /* -webkit-app-region: drag; */
   z-index: 999;
 }
 
@@ -147,12 +147,14 @@ input:focus {
 }
 
 .profile-text {
-  font-size: 12px; /* Tailwind text-xs */
+  font-size: 14px; /* Tailwind text-xs */
   margin-left: 4px;
+  color: #888;
 }
 
 .hover-bg:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 /* Icon 尺寸类 */
@@ -324,6 +326,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
 .confirm-card,
@@ -393,7 +396,50 @@ input:focus {
   border-radius: 3px;
   transition: width 0.3s ease;
 }
-
+/* Profile Drawer start */
+.drawer.drawer-profile {
+  width: 70vw;
+}
+.drawer-profile .back-content {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+}
+.drawer-profile .content-back-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+.profile-container {
+  display: flex;
+  height: 100%;
+  font-size: 14px;
+  width: 100%;
+}
+.profile-game {
+  flex-grow: 10;
+}
+.profile-container .profile-container-center {
+  width: 180px;
+  border: 1px solid #222c2e;
+  background-color: #1f2729;
+  height: 90%;
+  padding: 20px 10px;
+  border-radius: 5px;
+}
+.profile-container .profile-header {
+  display: flex;
+  align-items: center;
+  padding: 0 0 15px;
+  border-bottom: 2px solid #8f8f8f;
+  gap: 40px;
+  justify-content: space-between;
+}
 /* Drawer Style Start */
 .drawer {
   position: fixed;
@@ -418,6 +464,7 @@ input:focus {
     transform 0.35s ease,
     opacity 0.35s ease;
 }
+
 .drawer.open {
   transform: translateX(0);
   opacity: 1;
@@ -447,6 +494,24 @@ input:focus {
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.4s ease;
+}
+.settings-section .version-content {
+  font-size: 14px;
+  color: #bbb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.settings-section .upgrade-firmware {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #666666;
+  color: white;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+.settings-section .upgrade-firmware:hover {
+  color: var(--secondary);
 }
 .drawer.open .settings-section {
   opacity: 1;
@@ -546,16 +611,19 @@ input:focus {
 }
 
 /* 选中状态：内部橙色实心圆 */
-.drawer input[type='radio']:checked::after {
+/* .drawer input[type='radio']:checked::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
   width: 12px;
   height: 12px;
+  transform: translateY(-50%);
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   border-radius: 50%;
   background: var(--secondary);
-}
+} */
 
 /* Drawer Style End */
 
@@ -673,8 +741,6 @@ input:focus {
 /* Switch Style End */
 
 /* SideBar Start */
-.sidebar {
-}
 .sidebar-back {
   display: flex;
   align-items: center;
@@ -742,10 +808,13 @@ input:focus {
 /* Feature Start */
 
 .reset-default-tips {
-  font-size: 12px;
+  font-size: 14px;
   color: #888;
   text-align: center;
   cursor: pointer;
+}
+.reset-default-tips:hover {
+  color: white;
 }
 .feature-container {
   display: flex;
@@ -1108,7 +1177,7 @@ input:focus {
   flex-grow: 1;
 }
 .performance-item {
-  margin: 10px 0 20px;
+  margin: 0;
 }
 .performance-item .performance-item-title {
   font-size: 14px;
