@@ -240,5 +240,25 @@
 		{ "Open": true, "Level": 4, "DPI": 3200, "Value": 32, "Color": "#ff55ff" },
 		{ "Open": true, "Level": 5, "DPI": 4800, "Value": 48, "Color": "#ffff00" },
 		{ "Open": true, "Level": 6, "DPI": 12800, "Value": 128, "Color": "#00ffff" }
-	]
+	],
+	"LEDEffect": {
+		"BLMode": 4,
+		"Brightness": 3,
+		"Speed": 1,
+		"BLDirection": 0,
+		"Color": 7
+	},
+	"USBReports": [3, 3, 3, 3],
+	"WLReports": [3, 3, 3, 3],
+	"AdvanceSetting": {
+		"WLDeepSleep": 1,
+		"WLPrimarySleep": 2,
+		"BLEDeepSleep": 1,
+		"BLEPrimarySleep": 2,
+		"SilentAltitude": 1,
+		"UltraLowDelay": false,
+		"UltraLowPower": false,
+		"RippleControl": false,
+		"MoveWakeUp": false
+	}
 }

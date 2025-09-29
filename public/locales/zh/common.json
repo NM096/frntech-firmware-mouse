@@ -1,4 +1,9 @@
 {
+  "message_title": "信息弹窗",
+  "message_body": "软件保留在此处",
+  "tray_menu_exit": "退出软件",
+  "tray_menu_configuration": "配置入口",
+
   "mouse_key_1": "左键",
   "mouse_key_2": "右键",
   "mouse_key_3": "中键",
@@ -16,6 +21,7 @@
   "mouse_le_3": " 闪烁模式",
   "mouse_le_4": " 呼吸模式",
   "mouse_le_5": " 霓虹模式",
+
   "-------------------------------------------------------------------------------------------": "",
   "dpi_adjustment": "DPI调节",
   "Disable": "禁用",
@@ -129,12 +135,12 @@
   "macro_command": "宏命令",
 
   "page-lightConfig": "----------------------------------------------------------------------------------------",
-  "light_effect": "模式",
-  "brightness": "亮度",
+  "light_effect": "模式：",
+  "brightness": "亮度：",
   "adjust_mouse_light_brightness": "调节鼠标灯光的亮度",
-  "speed": "速度",
+  "speed": "速度：",
   "adjust_mouse_light_speed": "调节鼠标灯光的速度",
-  "direction": "方向",
+  "direction": "方向：",
   "adjust_mouse_light_direction": "调节鼠标灯光的方向",
   "reverse": "反向",
   "forward": "正向",
