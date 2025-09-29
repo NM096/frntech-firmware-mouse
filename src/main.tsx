@@ -10,11 +10,13 @@ import initI18n from './i18n';
 initI18n().then(({ config }) => {
   // i18n 已经初始化完成
   createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <ConfigProvider config={config}>
-        <App />
-      </ConfigProvider>
-      <Toaster richColors position="top-center" />
-    </StrictMode>
+    <>
+      <StrictMode>
+        <ConfigProvider config={config}>
+          <App />
+        </ConfigProvider>
+        <Toaster richColors position="top-center" />
+      </StrictMode>
+    </>
   );
 });

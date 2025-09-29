@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HoverImage from '../common/HoverImage';
 import Slider2 from '../common/Slider2';
 import { Switch } from '../common/Switch';
@@ -7,10 +7,8 @@ import ic_window from '@/assets/windows_1.png';
 import ic_window2 from '@/assets/windows_2.png';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useProfileStore } from '@/store/useProfile';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
-import type { AdvanceSetting } from '@/types/device-data';
 import { setReportRate, setAdvanceSetting, openMouseProperties, setCurrentProfile } from '@/utils/driver';
 const PerformanceConfig = () => {
   const { t } = useTranslation();
@@ -19,8 +17,7 @@ const PerformanceConfig = () => {
   const silentAltitudes = ['1 MM', '2 MM', '3 MM', '4 MM'];
   const rateList = ['125Hz', '250Hz', '500Hz', '1000Hz'];
 
-  const { currentDevice, path, mode, setCurrentDevice, modelConfig, currentModelID, currentConfigFileName } =
-    useBaseInfoStore();
+  const { currentDevice, path, mode, modelConfig, currentModelID, currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const { USBReports, AdvanceSetting } = profile;
   // const { AdvanceSetting } = currentDevice?.Info || {};
@@ -31,14 +28,13 @@ const PerformanceConfig = () => {
     const { USBReports, WLReports } = currentDevice?.Info || {};
     const newUsbReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
     newUsbReport[mode] = index;
-    
+
     // 立即更新profile以反映UI变化
     const updatedProfile = {
       ...profile,
       ...{ USBReports: newUsbReport },
     };
-    setProfile(updatedProfile);
-    
+
     setReportRate(
       path,
       {
@@ -48,32 +44,25 @@ const PerformanceConfig = () => {
       (payload) => {
         if (payload) {
           setCurrentProfile(currentModelID, currentConfigFileName, updatedProfile);
-          setCurrentDevice({
-            ...currentDevice,
-            ...{ Info: { ...currentDevice?.Info, ...{ USBReports: newUsbReport } } },
-          } as any);
+          setProfile(updatedProfile);
         }
       }
     );
   };
   const handleChangeAltitude = (name: string, value: number | boolean) => {
     const newAdvanceSetting = cloneDeep({ ...AdvanceSetting, [name]: value });
-    
+
     // 立即更新profile以确保UI立即反映变化
     const updatedProfile = {
       ...profile,
       ...{ AdvanceSetting: newAdvanceSetting },
     };
-    setProfile(updatedProfile);
-    
+
     setAdvanceSetting(path, newAdvanceSetting, (payload) => {
       if (payload) {
         // 然后保存到设备和配置
         setCurrentProfile(currentModelID, currentConfigFileName, updatedProfile);
-        setCurrentDevice({
-          ...currentDevice,
-          ...{ Info: { ...currentDevice?.Info, ...{ AdvanceSetting: newAdvanceSetting } } },
-        } as any);
+        setProfile(updatedProfile);
       }
     });
   };

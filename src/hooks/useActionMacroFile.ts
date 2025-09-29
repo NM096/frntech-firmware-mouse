@@ -89,7 +89,7 @@ const useActionMacroFile = () => {
     if (currentStepIdx === null) return;
     setRecordList((prev) => {
       const newList = [...prev];
-      newList[currentStepIdx + 1] = { ...newList[currentStepIdx + 1], code: delay, name: delay };
+      newList[currentStepIdx + 1] = { ...newList[currentStepIdx + 1], code: String(delay), name: String(delay) };
       return newList;
     });
   };

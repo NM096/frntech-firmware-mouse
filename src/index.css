@@ -1307,15 +1307,20 @@ input:focus {
   justify-content: left;
   align-items: center;
   gap: 10px;
-  padding: 10px 20px;
+  padding: 0 20px;
+  height: 40px;
   background-color: #14191a;
+}
+.macro-record-btn-group {
+  height: 100%;
+  line-height: 40px;
 }
 
 .macro-record-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-right: 20px;
+  padding-right: 20px;
   cursor: pointer;
 }
 .macro-content-body {

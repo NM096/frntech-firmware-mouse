@@ -82,6 +82,7 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
             {sideList.map((item, index) => {
               return (
                 <div
+                  data-block-click
                   className={`sidebar-list-item ${activeSidebar === item.key ? 'active' : ''}`}
                   key={index}
                   onClick={() => onSidebarChange(item.key)}

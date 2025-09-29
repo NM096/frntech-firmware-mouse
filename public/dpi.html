@@ -90,6 +90,24 @@
       document.addEventListener('DOMContentLoaded', () => {
         updateDPIWidget(5350, 20, 'IN10');
       });
+
+      document.addEventListener('astilectron-ready', function () {
+        astilectron.onMessage(function (message) {
+          switch (message.name) {
+            case 'DPIWindow':
+              astilectron.sendMessage({ name: 'ShowWindow' });
+              updateDPIWidget(message.payload, 50, 'IN10');
+              if (window.dpiCloseTimeout) {
+                clearTimeout(window.dpiCloseTimeout);
+              }
+              window.dpiCloseTimeout = setTimeout(() => {
+                astilectron.sendMessage({ name: 'HideWindow' });
+                window.dpiCloseTimeout = null;
+              }, 10000);
+              break;
+          }
+        });
+      });
     </script>
   </body>
 </html>

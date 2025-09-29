@@ -57,7 +57,6 @@ const MacroConfig = () => {
   const [currentCategory, setCurrentCategory] = useState<string>('');
   const [currentMacroFile, setCurrentMacroFile] = useState<string>('');
   const [macroFiles, setMacroFiles] = useState<string[]>([]);
-  const { Mouse } = Keys;
   const [delayMode, setDelayMode] = useState<'record' | 'default' | 'min'>('record');
   const [minDelay, setMinDelay] = useState(10);
 
@@ -80,7 +79,14 @@ const MacroConfig = () => {
 
   useGlobalClickBlocker();
   const [isFocus, setIsFocus] = useState(false);
-  const { startRecording, stopRecording } = useMacroStore();
+  const {
+    startRecording,
+    stopRecording,
+    setCurrentMacroRecord,
+    setActionMacroRecord,
+    currentMacroRecord,
+    actionMacroRecord,
+  } = useMacroStore();
   const handleSwitchCategory = (category: string) => {
     setCurrentCategory(category);
     getMacros(category, (payload) => {
@@ -204,9 +210,9 @@ const MacroConfig = () => {
   };
 
   const handleSave = () => {
-    setRecording(false);
-    setOpenRecords(false);
-    stop();
+    // setRecording(false);
+    // setOpenRecords(false);
+    // stop();
     saveMacro(
       currentCategory,
       currentMacroFile,
@@ -214,6 +220,7 @@ const MacroConfig = () => {
       (payload) => {
         if (payload) {
           toast.success(t('save_success'));
+          setCurrentMacroRecord(actionMacroRecord);
           getMacros(currentCategory, (payload) => {
             setMacroFiles(payload);
           });
@@ -229,6 +236,7 @@ const MacroConfig = () => {
     readMacro(currentCategory, currentMacroFile, (data) => {
       if (data && Array.isArray(data.Content) && data.Content.length > 0) {
         setRecords(KeyFormatter.lowercaseKeys(data.Content) || []);
+        setActionMacroRecord(KeyFormatter.lowercaseKeys(data.Content) || []);
       } else {
         setRecordedActions([]);
       }
@@ -285,7 +293,7 @@ const MacroConfig = () => {
       document.removeEventListener('keydown', listenerMacroStepFocus);
     };
   }, [isFocus, listenerMacroStepFocus]);
-  console.log('listenerMacroStepFocus');
+
   useEffect(() => {
     getMacroCategorys((CategoryList) => {
       setCategory(CategoryList);
@@ -305,20 +313,25 @@ const MacroConfig = () => {
       readMacro(currentCategory, currentMacroFile, (data) => {
         if (data && Array.isArray(data.Content) && data.Content.length > 0) {
           console.log('data.Content', KeyFormatter.lowercaseKeys(data.Content));
-          // setRecordedActions(KeyFormatter.lowercaseKeys(data.Content) || []);
           setRecords(KeyFormatter.lowercaseKeys(data.Content) || []);
-          setRecordList(KeyFormatter.lowercaseKeys(data.Content) || []);
+          setCurrentMacroRecord(KeyFormatter.lowercaseKeys(data.Content) || []);
         } else {
-          setRecordedActions([]);
+          setRecordList([]);
+          setRecords([]);
         }
         console.log('recordedActions', recordedActions);
       });
+    } else {
+      setRecordedActions([]);
+      setRecords([]);
     }
   }, [currentMacroFile]);
   useEffect(() => {
     setRecordedActions(records);
+    setRecordList(records);
   }, [records]);
   useEffect(() => {
+    setActionMacroRecord(recordList);
     setRecordedActions(recordList);
     console.log('recordList changed', recordList);
   }, [recordList]);
@@ -449,41 +462,47 @@ const MacroConfig = () => {
       </div>
       <div className="macro-item-content">
         <div className="macro-content-header">
-          {recording ? (
-            <div
-              className="macro-record-btn"
-              data-allow-click
-              onClick={() => {
-                setRecording(false);
-
-                stopRecording();
-              }}
-              onMouseEnter={() => {
-                setOpenRecords(false);
-              }}
-              onMouseLeave={() => {
-                setOpenRecords(true);
-              }}
-            >
-              <HoverImage src={ic_stop} hoverSrc={ic_stop} alt="Logo" className="back-btn-icon" />
-              {t('stop_recording')}
-            </div>
-          ) : (
-            <div
-              className="macro-record-btn"
-              onClick={() => {
-                if (currentMacroFile) {
-                  // setRecords(currentMacroFile || [])
-                  setRecording(true);
+          <div className="macro-record-btn-group">
+            {recording ? (
+              <div
+                className="macro-record-btn"
+                data-allow-click
+                onClick={() => {
+                  console.log('onClick', openRecords);
+                  stop();
+                  setRecording(false);
+                  setOpenRecords(false);
+                  stopRecording();
+                }}
+                onMouseEnter={() => {
+                  console.log('onMouseEnter', openRecords);
+                  setOpenRecords(false);
+                }}
+                onMouseLeave={() => {
+                  console.log('onMouseLeave', openRecords);
                   setOpenRecords(true);
-                  startRecording();
-                }
-              }}
-            >
-              <HoverImage src={ic_play} hoverSrc={ic_play} alt="Logo" className="back-btn-icon" />
-              {t('start_recording')}
-            </div>
-          )}
+                }}
+              >
+                <HoverImage src={ic_stop} hoverSrc={ic_stop} alt="Logo" className="back-btn-icon" />
+                {t('stop_recording')}
+              </div>
+            ) : (
+              <div
+                className="macro-record-btn"
+                onClick={() => {
+                  if (currentMacroFile) {
+                    // setRecords(currentMacroFile || [])
+                    setRecording(true);
+                    setOpenRecords(true);
+                    startRecording();
+                  }
+                }}
+              >
+                <HoverImage src={ic_play} hoverSrc={ic_play} alt="Logo" className="back-btn-icon" />
+                {t('start_recording')}
+              </div>
+            )}
+          </div>
           <HoverImage
             src={delete_macro_action_1}
             hoverSrc={delete_macro_action_2}
@@ -505,22 +524,14 @@ const MacroConfig = () => {
             className="back-btn-icon"
             onClick={() => moveDownStep()}
           />
-          <div
-            onMouseEnter={() => {
-              setOpenRecords(false);
-            }}
-            onMouseLeave={() => {
-              setOpenRecords(true);
-            }}
-          >
-            <HoverImage
-              src={ic_clear}
-              hoverSrc={ic_clear}
-              alt="Logo"
-              className="back-btn-icon"
-              onClick={() => clearRecords()}
-            />
-          </div>
+
+          <HoverImage
+            src={ic_clear}
+            hoverSrc={ic_clear}
+            alt="Logo"
+            className="back-btn-icon"
+            onClick={() => clearRecords()}
+          />
           {/* <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />
           <div>
             X:
@@ -572,7 +583,7 @@ const MacroConfig = () => {
               type="number"
               disabled={delayMode !== 'default'}
               min={10}
-              onChange={(e) => setMinDelay(Number(e.target.value))}
+              onChange={(e) => setMinDelay(String(e.target.value))}
               value={minDelay}
               style={{ width: '50px', backgroundColor: 'white', color: 'black', textAlign: 'center', border: '0px' }}
             />

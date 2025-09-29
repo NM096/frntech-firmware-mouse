@@ -49,3 +49,16 @@ export interface KeyItem {
   Show: string;
   Macro?: MacroDefine;
 }
+
+export interface KeyMapItem {
+  KeyName: string;
+  LocationCode: number;
+  LogicCode: number;
+  Position: {
+    Left: number;
+    Top: number;
+    Width: number;
+    Height: number;
+  };
+  Show: string;
+}

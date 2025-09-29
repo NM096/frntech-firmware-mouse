@@ -174,11 +174,6 @@ const Feature = () => {
     }
   };
 
-  const handleSaveConfig = () => {
-    setCurrentProfile(currentModelID, currentConfigFileName, profile);
-    toast.success(t('save_success'));
-  };
-
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <div className="actions">
@@ -190,12 +185,12 @@ const Feature = () => {
           <div className="profile-text">配置设置</div>
         </div>
 
-        <div className="divider"></div>
+        {/* <div className="divider"></div>
         <div className="save-config hover-bg" onClick={handleSaveConfig}>
           <HoverImage src={ic_save} hoverSrc={ic_save} alt="Save" className="icon-7" />
           <div className="save-text">保存配置</div>
-        </div>
-        
+        </div> */}
+
         <div className="divider"></div>
         {activeSidebar !== 'MacroConfig' && (
           <div className="reset-default-tips" onClick={() => resetPageConfig()}>

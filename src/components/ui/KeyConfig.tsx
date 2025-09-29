@@ -16,13 +16,15 @@ type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 const KeyConfig = () => {
   const { t } = useTranslation();
   const { Mouse: mouseKeys, Quit: quitKeys, Media: mediaKeys } = Keys;
-  const { currentModelID, currentDevice: storeCurrentDevice, path, currentConfigFileName } = useBaseInfoStore();
-  const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
+  // const { currentModelID, currentDevice: storeCurrentDevice, path, currentConfigFileName } = useBaseInfoStore();
+  const { currentModelID, currentDevice, path, currentConfigFileName } = useBaseInfoStore();
+  // const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
   const [activeKey, setActiveKey] = useState<number | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('Mouse');
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
-  const { profile: storeProfile, setProfile: storeSetProfile } = useProfileStore();
-  const [profile, setProfile] = useState(storeProfile);
+  // const { profile: storeProfile, setProfile: storeSetProfile } = useProfileStore();
+  const { profile, setProfile } = useProfileStore();
+  // const [profile, setProfile] = useState(storeProfile);
   const sideList: { key: sidebarKey; title: string }[] = [
     { key: 'Mouse', title: t('mouse_function') },
     { key: 'Keyboard', title: t('keyboard_function') },
@@ -108,13 +110,12 @@ const KeyConfig = () => {
     apply(path, _profile, () => {
       setCurrentProfile(currentModelID, currentConfigFileName, _profile, (payload) => {
         if (payload) {
-          storeSetProfile(_profile);
+          setProfile(_profile);
         }
       });
     });
   }, 1000);
 
-  // 同步Key 按键默认值
   useEffect(() => {
     if (activeKey == null) return;
     const keySet = profile.KeySet[currentDevice?.Info?.Mode || 0];
@@ -128,14 +129,8 @@ const KeyConfig = () => {
       if ('0x8000' === keyDefine.Value) setActiveSidebar('Macro');
       if (keyDefine.Lang.includes('[combination_Key]')) setActiveSidebar('Keyboard');
     }
-  }, [activeKey]);
+  }, [activeKey, profile]);
 
-  useEffect(() => {
-    setCurrentDevice(storeCurrentDevice);
-  }, [storeCurrentDevice]);
-  useEffect(() => {
-    setProfile(cloneDeep(storeProfile));
-  }, [storeProfile]);
   return (
     <div className="key-config-container">
       <div className="key-config-mouse">
@@ -144,7 +139,7 @@ const KeyConfig = () => {
           onKeySelect={(keyIndex) => {
             setActiveKey(keyIndex);
           }}
-          keyDefines={profile?.KeySet?.[currentDevice?.Info?.Mode || 0] || []}
+          // keyDefines={profile?.KeySet?.[currentDevice?.Info?.Mode || 0] || []}
         />
       </div>
       {activeKey !== null && (

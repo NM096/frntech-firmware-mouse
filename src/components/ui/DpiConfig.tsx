@@ -158,6 +158,7 @@ const DpiConfig = () => {
     setConfigData(path, { ...(configData as Config), DPILEDs: newDPILEDs || [] }, () => {
       setConfigDataOnStore({ ...(configData as Config), DPILEDs: newDPILEDs || [] });
       setProfile({ ...profile, DPIs: newDPIs });
+      setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, DPIs: newDPIs });
     });
   };
 

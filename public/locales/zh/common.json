@@ -210,5 +210,7 @@
   "create_profile": "创建配置文件",
   "profile_name": "配置文件名称",
   "profile_file_exists": "配置文件已存在",
-  "create_profile_desc": "创建配置文件成功"
+  "create_profile_desc": "创建配置文件成功",
+  "unsaved_macro_record": "未保存的宏记录",
+  "please_complete_save_operation": "请在宏页面保存或者取消宏更改"
 }

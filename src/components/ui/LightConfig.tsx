@@ -1,18 +1,21 @@
 import Dropdown from '@/components/common/Dropdown';
 import Slider2 from '../common/Slider2';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, use, useEffect } from 'react';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useTranslation } from 'react-i18next';
-import { setLE } from '@/utils/driver';
+import { setCurrentProfile, setLE } from '@/utils/driver';
 import CustomRadio from '../common/CustomRadio';
 import { debounce } from 'lodash';
+import { useProfileStore } from '@/store/useProfile';
 const baseUrl = import.meta.env.BASE_URL;
 
 const LightConfig = () => {
   const { t } = useTranslation();
-  const { modelConfig, currentDevice, path, setCurrentDevice } = useBaseInfoStore();
+  const { modelConfig, currentDevice, path, currentModelID, currentConfigFileName, setCurrentDevice } =
+    useBaseInfoStore();
+  const { profile, setProfile } = useProfileStore();
   const { LETable = [] } = modelConfig || {};
-  const { LEDEffect } = currentDevice?.Info || {};
+  const { LEDEffect } = profile || {};
 
   const [direction, setDirection] = useState(LEDEffect?.BLDirection || 0);
   const [brightness, setBrightness] = useState(LEDEffect?.Brightness || 0);
@@ -42,10 +45,10 @@ const LightConfig = () => {
       },
       (payload) => {
         if (payload) {
-          setCurrentDevice({
-            ...currentDevice,
-            ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, BLMode: leItem?.Value || 0 } } } },
-          } as any);
+          const _newLEDffect = { ...LEDEffect, BLMode: leItem?.Value || 0 };
+          setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, LEDEffect: _newLEDffect }, () => {
+            setProfile({ ...profile, LEDEffect: _newLEDffect });
+          });
         }
       }
     );
@@ -63,15 +66,15 @@ const LightConfig = () => {
         },
         (payload) => {
           if (payload) {
-            setCurrentDevice({
-              ...currentDevice,
-              ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Brightness: value } } } },
-            } as any);
+            const _newLEDffect = { ...LEDEffect, Brightness: value };
+            setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, LEDEffect: _newLEDffect }, () => {
+              setProfile({ ...profile, LEDEffect: _newLEDffect });
+            });
           }
         }
       );
     }, 300),
-    [LEDEffect, path, currentDevice, setCurrentDevice]
+    [LEDEffect, path, currentModelID, currentConfigFileName, profile, setProfile]
   );
 
   // 速度变化处理
@@ -86,10 +89,10 @@ const LightConfig = () => {
         },
         (payload) => {
           if (payload) {
-            setCurrentDevice({
-              ...currentDevice,
-              ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Speed: value } } } },
-            } as any);
+            const _newLEDffect = { ...LEDEffect, Speed: 3 - value };
+            setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, LEDEffect: _newLEDffect }, () => {
+              setProfile({ ...profile, LEDEffect: _newLEDffect });
+            });
           }
         }
       );
@@ -109,10 +112,10 @@ const LightConfig = () => {
         },
         (payload) => {
           if (payload) {
-            setCurrentDevice({
-              ...currentDevice,
-              ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, BLDirection: value } } } },
-            } as any);
+            const _newLEDffect = { ...LEDEffect, BLDirection: value };
+            setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, LEDEffect: _newLEDffect }, () => {
+              setProfile({ ...profile, LEDEffect: _newLEDffect });
+            });
           }
         }
       );
@@ -132,16 +135,22 @@ const LightConfig = () => {
         },
         (payload) => {
           if (payload) {
-            setCurrentDevice({
-              ...currentDevice,
-              ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Color: selectedColor } } } },
-            } as any);
+            const _newLEDffect = { ...LEDEffect, Color: Number(selectedColor) };
+            setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, LEDEffect: _newLEDffect }, () => {
+              setProfile({ ...profile, LEDEffect: _newLEDffect });
+            });
           }
         }
       );
     }, 300),
     [LEDEffect, path, currentDevice, setCurrentDevice, colorList]
   );
+  useEffect(() => {
+    setCurrentLeInfo(LETable.find((item) => item.Value === LEDEffect?.BLMode) || LETable[0]);
+    setDirection(LEDEffect?.BLDirection || 0);
+    setBrightness(LEDEffect?.Brightness || 0);
+    setSpeed(3 - (LEDEffect?.Speed || 0));
+  }, [profile]);
   return (
     <div className="light-config">
       <div className="mouse-container">

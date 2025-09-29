@@ -3,13 +3,14 @@ import Header from '../../components/ui/Header';
 import NoDevice from '@/components/ui/NoDevice';
 import DeviceList from '@/components/ui/DeviceList';
 import Feature from '@/components/ui/Feature';
-import { getDeviceList, listenDriverMessage, onDriverMessage } from '@/utils/driver';
+import { getDeviceList, listenDriverMessage, onDriverMessage, showWindow, hideWindow } from '@/utils/driver';
 import { useProfileStore } from '@/store/useProfile';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
 const Home: React.FC = () => {
-  const { deviceMap, setDeviceMap, currentDevice, path, clearCurrentDevice, setCurrentDevice } = useBaseInfoStore();
-  const { setUpgradeProcess, setIsUpgrade, isUpgrade, isReset } = useProfileStore();
+  const { deviceMap, setDeviceMap, currentDevice, mode, path, clearCurrentDevice, setCurrentDevice } =
+    useBaseInfoStore();
+  const { setUpgradeProcess } = useProfileStore();
   const [connected, setConnected] = useState(false);
   useEffect(() => {
     getDeviceList((deviceList: any) => {
@@ -80,6 +81,18 @@ const Home: React.FC = () => {
           },
         };
         if (path == deviceInfo.Device) {
+          // const currentDpiLevel = currentDevice?.Info?.DPILevels![mode || 0] || 0;
+          // const newDpiLevel = deviceInfo.Info?.DPILevels![mode || 0] || 0;
+          // if (currentDpiLevel !== newDpiLevel) {
+          //   showWindow();
+          //   if ((window as any).dpiCloseTimeout) {
+          //     clearTimeout((window as any).dpiCloseTimeout);
+          //   }
+          //   (window as any).dpiCloseTimeout = setTimeout(() => {
+          //     hideWindow();
+          //     (window as any).dpiCloseTimeout = null;
+          //   }, 10000);
+          // }
           setCurrentDevice({
             ...currentDevice,
             Info: deviceInfo.Info,
