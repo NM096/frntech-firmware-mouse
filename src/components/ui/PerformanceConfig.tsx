@@ -1,16 +1,17 @@
-import CustomRadio from '../common/CustomRadio';
+import React from 'react';
 import HoverImage from '../common/HoverImage';
 import Slider2 from '../common/Slider2';
 import { Switch } from '../common/Switch';
+import CustomRadio from '../common/CustomRadio';
 import ic_window from '@/assets/windows_1.png';
 import ic_window2 from '@/assets/windows_2.png';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
+import { useProfileStore } from '@/store/useProfile';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { cloneDeep } from 'lodash';
 import type { AdvanceSetting } from '@/types/device-data';
 import { setReportRate, setAdvanceSetting, openMouseProperties, setCurrentProfile } from '@/utils/driver';
-import { cloneDeep } from 'lodash';
-import { useTranslation } from 'react-i18next';
-import { useProfileStore } from '@/store/useProfile';
 const PerformanceConfig = () => {
   const { t } = useTranslation();
   const sleepTime = ['10', '30', '60', '120', '180', '300', '600'];
@@ -20,7 +21,7 @@ const PerformanceConfig = () => {
 
   const { currentDevice, path, mode, setCurrentDevice, modelConfig, currentModelID, currentConfigFileName } =
     useBaseInfoStore();
-  const { profile } = useProfileStore();
+  const { profile, setProfile } = useProfileStore();
   const { USBReports, AdvanceSetting } = profile;
   // const { AdvanceSetting } = currentDevice?.Info || {};
   // const [AdvanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(AdvanceSetting);
@@ -28,8 +29,16 @@ const PerformanceConfig = () => {
   //
   const handleChangeUsbReport = (index: number) => {
     const { USBReports, WLReports } = currentDevice?.Info || {};
-    const newUsbReport = USBReports || [0, 0, 0, 0];
+    const newUsbReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
     newUsbReport[mode] = index;
+    
+    // 立即更新profile以反映UI变化
+    const updatedProfile = {
+      ...profile,
+      ...{ USBReports: newUsbReport },
+    };
+    setProfile(updatedProfile);
+    
     setReportRate(
       path,
       {
@@ -38,7 +47,7 @@ const PerformanceConfig = () => {
       },
       (payload) => {
         if (payload) {
-          setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, ...{ USBReports: newUsbReport } });
+          setCurrentProfile(currentModelID, currentConfigFileName, updatedProfile);
           setCurrentDevice({
             ...currentDevice,
             ...{ Info: { ...currentDevice?.Info, ...{ USBReports: newUsbReport } } },
@@ -47,14 +56,20 @@ const PerformanceConfig = () => {
       }
     );
   };
-  const handleChangeltitude = (name: string, value: number | boolean) => {
+  const handleChangeAltitude = (name: string, value: number | boolean) => {
     const newAdvanceSetting = cloneDeep({ ...AdvanceSetting, [name]: value });
+    
+    // 立即更新profile以确保UI立即反映变化
+    const updatedProfile = {
+      ...profile,
+      ...{ AdvanceSetting: newAdvanceSetting },
+    };
+    setProfile(updatedProfile);
+    
     setAdvanceSetting(path, newAdvanceSetting, (payload) => {
       if (payload) {
-        setCurrentProfile(currentModelID, currentConfigFileName, {
-          ...profile,
-          ...{ AdvanceSetting: newAdvanceSetting },
-        });
+        // 然后保存到设备和配置
+        setCurrentProfile(currentModelID, currentConfigFileName, updatedProfile);
         setCurrentDevice({
           ...currentDevice,
           ...{ Info: { ...currentDevice?.Info, ...{ AdvanceSetting: newAdvanceSetting } } },
@@ -97,8 +112,8 @@ const PerformanceConfig = () => {
             max={sleepTime.length - 1}
             data={sleepTime}
             step={1}
-            initialValue={AdvanceSetting?.WLPrimarySleep}
-            onChange={(value) => handleChangeltitude('WLPrimarySleep', value)}
+            initialValue={AdvanceSetting?.WLPrimarySleep || 2}
+            onChange={(value) => handleChangeAltitude('WLPrimarySleep', value)}
           />
         </div>
         <div className="performance-item">
@@ -109,8 +124,8 @@ const PerformanceConfig = () => {
             max={deepSleepTime.length - 1}
             data={deepSleepTime}
             step={1}
-            initialValue={AdvanceSetting?.WLDeepSleep}
-            onChange={(value) => handleChangeltitude('WLDeepSleep', value)}
+            initialValue={AdvanceSetting?.WLDeepSleep || 4}
+            onChange={(value) => handleChangeAltitude('WLDeepSleep', value)}
           />
         </div>
       </div>
@@ -121,8 +136,8 @@ const PerformanceConfig = () => {
             <div className="performance-item-description">
               {t('ultralow_delay_desc')}
               <Switch
-                checked={AdvanceSetting?.UltraLowDelay}
-                onChange={() => handleChangeltitude('UltraLowDelay', !AdvanceSetting?.UltraLowDelay)}
+                checked={AdvanceSetting?.UltraLowDelay || false}
+                onChange={() => handleChangeAltitude('UltraLowDelay', !AdvanceSetting?.UltraLowDelay)}
               />
             </div>
           </div>
@@ -133,8 +148,8 @@ const PerformanceConfig = () => {
             <div className="performance-item-description">
               {t('ultralow_power_desc')}
               <Switch
-                checked={AdvanceSetting?.UltraLowPower}
-                onChange={() => handleChangeltitude('UltraLowPower', !AdvanceSetting?.UltraLowPower)}
+                checked={AdvanceSetting?.UltraLowPower || false}
+                onChange={() => handleChangeAltitude('UltraLowPower', !AdvanceSetting?.UltraLowPower)}
               />
             </div>
           </div>
@@ -145,8 +160,8 @@ const PerformanceConfig = () => {
             <div className="performance-item-description">
               {t('ripple_control_desc')}
               <Switch
-                checked={AdvanceSetting?.RippleControl}
-                onChange={() => handleChangeltitude('RippleControl', !AdvanceSetting?.RippleControl)}
+                checked={AdvanceSetting?.RippleControl || false}
+                onChange={() => handleChangeAltitude('RippleControl', !AdvanceSetting?.RippleControl)}
               />
             </div>
           </div>
@@ -157,8 +172,8 @@ const PerformanceConfig = () => {
             <div className="performance-item-description">
               {t('move_wakeup_desc')}
               <Switch
-                checked={AdvanceSetting?.MoveWakeUp}
-                onChange={() => handleChangeltitude('MoveWakeUp', !AdvanceSetting?.MoveWakeUp)}
+                checked={AdvanceSetting?.MoveWakeUp || false}
+                onChange={() => handleChangeAltitude('MoveWakeUp', !AdvanceSetting?.MoveWakeUp)}
               />
             </div>
           </div>
@@ -172,8 +187,8 @@ const PerformanceConfig = () => {
                 return (
                   <div className="performance-radio-item" key={i}>
                     <CustomRadio
-                      checked={idx == AdvanceSetting?.SilentAltitude}
-                      onChange={() => handleChangeltitude('SilentAltitude', idx)}
+                      checked={idx === (AdvanceSetting?.SilentAltitude || 0)}
+                      onChange={() => handleChangeAltitude('SilentAltitude', idx)}
                     />
                     {i}
                   </div>

@@ -1,16 +1,16 @@
-import Keyboard from './KeyFeature/Keyboard';
+import React from 'react';
 import Mouse from './KeyFeature/Mouse';
 import Macro from './KeyFeature/Macro';
+import Keyboard from './KeyFeature/Keyboard';
 import KeyMouse from '@/components/common/KeyMouse';
 import { useRef, useEffect, useState } from 'react';
 import Keys from '@/config/keys.json';
 import { setCurrentProfile, apply } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-import type { KeyDefine, KeyItem } from '@/types/profile';
-import { cloneDeep } from 'lodash';
 import { useProfileStore } from '@/store/useProfile';
 import { useTranslation } from 'react-i18next';
-import { debounce } from 'lodash';
+import { cloneDeep, debounce } from 'lodash';
+import type { KeyDefine, KeyItem } from '@/types/profile';
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 
 const KeyConfig = () => {

@@ -36,6 +36,16 @@ export function hideWindow() {
   astilectron.sendMessage({ name: 'HideWindow' });
 }
 
+// 禁用Electron窗口滚动条
+export function disableScrollbars() {
+  astilectron.sendMessage({ name: 'DisableScrollbars' });
+}
+
+// 启用Electron窗口滚动条
+export function enableScrollbars() {
+  astilectron.sendMessage({ name: 'EnableScrollbars' });
+}
+
 type DriverMessageHandler = (payload: any) => void;
 
 const driverMessageHandlers: Record<DriverMessageType, DriverMessageHandler[]> = {

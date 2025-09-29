@@ -133,9 +133,13 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
             <h3 className="section-title">{t('software_version')}</h3>
             <div className="version-content">
               {t('version_number')} <span className="version">{version.split('+')[0]}</span>
-              {(Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
+              {(Info?.FWVersion ?? 0) < (Model?.FWVersion ?? 0) ? (
                 <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
                   固件升级
+                </p>
+              ) : (Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
+                <p className="no-upgrade">
+                  当前已是最新版本
                 </p>
               ) : null}
             </div>

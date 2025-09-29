@@ -63,6 +63,9 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: #1a2123;
 }
 input:focus {
   outline: none;
@@ -88,7 +91,7 @@ input:focus {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  /* -webkit-app-region: drag; */
+  -webkit-app-region: drag;
   z-index: 999;
 }
 
@@ -167,6 +170,12 @@ input:focus {
 .icon-7 {
   width: 28px;
   height: 28px;
+  cursor: pointer;
+}
+
+.icon-save {
+  width: 16px;
+  height: 16px;
   cursor: pointer;
 }
 
@@ -280,8 +289,8 @@ input:focus {
 .home-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh); /* h-screen */
-  /* height: calc(100vh - 32px); */
+  /* 使用calc(100vh - 32px)来考虑上下各16px的padding，避免内容溢出 */
+  height: calc(100vh);
   padding: 16px; /* p-4 */
   color: white; /* text-white */
   background: linear-gradient(to bottom right, #1a2226, #191c1b);

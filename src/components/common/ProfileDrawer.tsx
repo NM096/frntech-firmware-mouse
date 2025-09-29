@@ -14,7 +14,6 @@ import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useModal } from './ModalContext';
 import { toast } from 'sonner';
 import { useProfileStore } from '@/store/useProfile';
-import { get } from 'http';
 type ProfileDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -26,7 +25,7 @@ const ProfileDrawerContext = createContext<ProfileDrawerContextType | null>(null
 export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
   const { currentModelID, currentConfigFileName, setCurrentConfigFileName } = useBaseInfoStore();
-  const { defaultProfile } = useProfileStore();
+  const { defaultProfile, setProfile } = useProfileStore();
   const [visible, setVisible] = useState(false);
   const { openConfirm, openAlert } = useModal();
   const open = () => setVisible(true);
@@ -78,8 +77,8 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
         AddProfile(currentModelID, value, () => {
           setCurrentProfile(currentModelID, value, defaultProfile);
           _getProfileList();
-          // setCurrentConfigFileName(value);
-          // toast.success(t('create_profile_desc'));
+          setCurrentConfigFileName(value);
+          toast.success(t('create_profile_desc'));
         });
       },
     });
@@ -89,6 +88,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     getProfileByName(currentModelID, profile, (data) => {
       if (data) {
         setCurrentProfile(currentModelID, profile, data);
+        setProfile(data); // 更新本地profile状态，确保UI正确反映切换后的配置
       }
     });
   };
@@ -99,8 +99,10 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     });
   };
   useEffect(() => {
-    _getProfileList();
-  }, []);
+    if (currentModelID) {
+      _getProfileList();
+    }
+  }, [currentModelID]);
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
       {children}

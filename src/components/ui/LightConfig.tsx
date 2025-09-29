@@ -122,24 +122,25 @@ const LightConfig = () => {
 
   // 颜色变化处理
   const handleColorChange = useCallback(
-    debounce((color: string) => {
+    debounce((colorIndex: number) => {
+      const selectedColor = colorList[colorIndex];
       setLE(
         path,
         {
           ...LEDEffect,
-          Color: color,
+          Color: selectedColor,
         },
         (payload) => {
           if (payload) {
             setCurrentDevice({
               ...currentDevice,
-              ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Color: color } } } },
+              ...{ Info: { ...currentDevice?.Info, ...{ LEDEffect: { ...LEDEffect, Color: selectedColor } } } },
             } as any);
           }
         }
       );
     }, 300),
-    [LEDEffect, path, currentDevice, setCurrentDevice]
+    [LEDEffect, path, currentDevice, setCurrentDevice, colorList]
   );
   return (
     <div className="light-config">

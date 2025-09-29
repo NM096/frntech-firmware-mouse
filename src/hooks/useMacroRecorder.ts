@@ -118,10 +118,33 @@ export function useMacroRecorder(
 
   const stop = useCallback(() => {
     lastEventTime.current = null;
-    if (records.length > 0 && records[records.length - 1].type !== 'Delay') {
-      setRecords((prev) => [...prev, { type: 'Delay', name: '10', code: '10' }]);
+    
+    // 移除最后一个可能的鼠标点击事件（解决点击停止按钮时录制了点击事件的问题）
+    let filteredRecords = records;
+    
+    // 检查并移除最后一个鼠标事件
+    if (records.length > 0) {
+      // 检查最后一个事件是否为鼠标事件
+      if (records[records.length - 1].type === 'MouseDown' || records[records.length - 1].type === 'MouseUp') {
+        filteredRecords = records.slice(0, -1);
+      }
+      // 如果最后一个事件是延迟，且前一个事件是鼠标事件，也移除这两个事件
+      else if (records.length > 1 && records[records.length - 1].type === 'Delay') {
+        if (records[records.length - 2].type === 'MouseDown' || records[records.length - 2].type === 'MouseUp') {
+          filteredRecords = records.slice(0, -2);
+        }
+      }
     }
-    return records;
+    
+    // 如果需要，添加结束延迟
+    if (filteredRecords.length > 0 && filteredRecords[filteredRecords.length - 1].type !== 'Delay') {
+      const finalRecords = [...filteredRecords, { type: 'Delay' as const, name: '10', code: '10' }];
+      setRecords(finalRecords);
+      return finalRecords;
+    }
+    
+    setRecords(filteredRecords);
+    return filteredRecords;
   }, [records]);
 
   return { records, stop, clearRecords, setRecords };

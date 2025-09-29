@@ -17,7 +17,6 @@ const findOpenDpiIndex = (num: number, DPIs: Dpi[]) => {
   for (let i = 0; i <= DPIs.length; i++) {
     if (DPIs[i]?.Open || false) {
       if (count === num) {
-        count++;
         return i;
       }
       count++;
