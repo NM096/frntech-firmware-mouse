@@ -141,7 +141,7 @@ const DpiConfig = () => {
       },
       (result) => {
         if (result) {
-          setStoreCurrentDevice({
+          setCurrentDevice({
             ...currentDevice,
             Info: {
               ...currentDevice?.Info,
