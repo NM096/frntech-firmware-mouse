@@ -583,7 +583,7 @@ const MacroConfig = () => {
               type="number"
               disabled={delayMode !== 'default'}
               min={10}
-              onChange={(e) => setMinDelay(String(e.target.value))}
+              onChange={(e) => setMinDelay(Number(e.target.value))}
               value={minDelay}
               style={{ width: '50px', backgroundColor: 'white', color: 'black', textAlign: 'center', border: '0px' }}
             />
