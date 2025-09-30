@@ -92,7 +92,7 @@ input:focus {
   justify-content: space-between;
   width: 100%;
   -webkit-app-region: drag;
-  z-index: 999;
+  z-index: 0;
 }
 
 .header-left {
@@ -335,7 +335,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 1;
 }
 
 .confirm-card,
@@ -408,6 +408,8 @@ input:focus {
 /* Profile Drawer start */
 .drawer.drawer-profile {
   width: 70vw;
+  z-index: 3;
+  -webkit-app-region: no-drag;
 }
 .drawer-profile .back-content {
   display: flex;
@@ -423,6 +425,7 @@ input:focus {
   display: flex;
   align-items: center;
   padding: 20px;
+  -webkit-app-region: no-drag;
 }
 .profile-container {
   display: flex;
@@ -461,10 +464,11 @@ input:focus {
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
-  z-index: 1001;
+  z-index: 3;
   display: flex;
+  -webkit-app-region: no-drag;
 
-  /* 初始状态：隐藏在右侧 + 透明 */
+  /* 初始状态：隐藏在右侧 + 透明 */ 
   transform: translateX(100%);
   opacity: 0;
 
@@ -477,7 +481,6 @@ input:focus {
 .drawer.open {
   transform: translateX(0);
   opacity: 1;
-  -webkit-app-region: no-drag;
 }
 
 /* 遮罩层 */
@@ -491,8 +494,7 @@ input:focus {
   transition:
     opacity 0.35s ease,
     visibility 0.35s ease;
-  z-index: 1000;
-  -webkit-app-region: no-drag;
+  z-index: 2;
 }
 .drawer-overlay.show {
   opacity: 1;
@@ -539,6 +541,7 @@ input:focus {
   cursor: pointer;
   display: flex;
   align-items: center;
+  -webkit-app-region: no-drag;
 }
 .back-btn-icon {
   width: 15px;
