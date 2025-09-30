@@ -8,12 +8,24 @@ import ic_add from '@/assets/ic_add.png';
 import ic_more from '@/assets/ic_more.png';
 import IconMenu from '../common/IconMenu';
 import ic_save from '@/assets/ic_save.png';
-import { GetProfiles, AddProfile, DelProfile, getProfileByName, setCurrentProfile } from '@/utils/driver';
+import {
+  GetProfiles,
+  AddProfile,
+  DelProfile,
+  getProfileByName,
+  setCurrentProfile,
+  setReportRate,
+  setAdvanceSetting,
+  setDPI,
+  apply,
+  setLE,
+} from '@/utils/driver';
 import HoverImage from '@/components/common/HoverImage';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useModal } from './ModalContext';
 import { toast } from 'sonner';
 import { useProfileStore } from '@/store/useProfile';
+import type { Profile } from '@/types/profile';
 type ProfileDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -24,7 +36,8 @@ const ProfileDrawerContext = createContext<ProfileDrawerContextType | null>(null
 
 export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
-  const { currentModelID, currentConfigFileName, setCurrentConfigFileName } = useBaseInfoStore();
+  const { currentModelID, currentConfigFileName, setCurrentConfigFileName, path, mode, currentDevice } =
+    useBaseInfoStore();
   const { defaultProfile, setProfile } = useProfileStore();
   const [visible, setVisible] = useState(false);
   const { openConfirm, openAlert } = useModal();
@@ -87,10 +100,26 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     setCurrentConfigFileName(profile);
     getProfileByName(currentModelID, profile, (data) => {
       if (data) {
+        handleApplyProfileToMouse(data);
         setCurrentProfile(currentModelID, profile, data);
         setProfile(data); // 更新本地profile状态，确保UI正确反映切换后的配置
       }
     });
+  };
+  const handleApplyProfileToMouse = (profile: Profile) => {
+    const { LEDEffect, DPIs, USBReports, WLReports, AdvanceSetting } = profile;
+    const { DPILevels } = currentDevice?.Info || {};
+    setDPI(path, mode, {
+      DPILevels: DPILevels || [],
+      DPIs: DPIs || [],
+    });
+    apply(path, profile);
+    setLE(path, LEDEffect);
+    setReportRate(path, {
+      USBReports: USBReports || [],
+      WLReports: WLReports || [],
+    });
+    setAdvanceSetting(path, AdvanceSetting);
   };
   const _getProfileList = () => {
     GetProfiles(currentModelID, (profileList) => {

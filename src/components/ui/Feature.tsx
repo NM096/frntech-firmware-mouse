@@ -151,19 +151,6 @@ const Feature = () => {
           WLReports: defaultProfile?.WLReports,
         });
         setAdvanceSetting(path, defaultProfile?.AdvanceSetting);
-        setCurrentDevice({
-          ...currentDevice,
-          ...{
-            Info: {
-              ...currentDevice?.Info,
-              ...{
-                AdvanceSetting: defaultProfile?.AdvanceSetting,
-                USBReports: defaultProfile?.USBReports,
-                WLReports: defaultProfile?.WLReports,
-              },
-            },
-          },
-        } as any);
         setProfile({
           ...profile,
           USBReports: defaultProfile?.USBReports,
@@ -179,7 +166,6 @@ const Feature = () => {
       <div className="actions">
         <HoverImage src={ic_reset} hoverSrc={resetHover} alt="Reset" className="icon-7" onClick={resetMouse} />
         <div className="divider"></div>
-
         <div className="profile hover-bg" onClick={openProfileDrawer}>
           <HoverImage src={ic_profile} hoverSrc={ic_profile} alt="Profile" className="icon-7" />
           <div className="profile-text">配置设置</div>
