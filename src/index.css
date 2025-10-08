@@ -66,16 +66,11 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
   background: #1a2123;
-  /* 适配1178x675的页面尺寸 */
-  width: 1178px;
-  height: 675px;
-  /* 确保背景色一致，避免底部色块 */
-  background: linear-gradient(to bottom right, #1a2226, #191c1b);
 }
 input:focus {
   outline: none;
-  border: none; /* 如果你不希望显示边框 */
-  box-shadow: none; /* 如果有阴影效果，去掉它 */
+  border: none; 
+  box-shadow: none; 
 }
 
 @keyframes battery {
@@ -313,14 +308,10 @@ input:focus {
   /* 减去Header的高度60px，确保内容不被遮挡 */
   height: calc(100vh - 60px);
   padding: 16px; /* p-4 */
-  padding-top: 16px; /* 恢复正常padding，因为Header已固定定位 */
+  padding-top: 16px; 
   color: white; /* text-white */
   background: linear-gradient(to bottom right, #1a2226, #191c1b);
   box-sizing: border-box;
-  /* 适配1178x675的页面尺寸 */
-  max-width: 1178px;
-  max-height: 675px;
-  margin: 0 auto;
   /* 添加圆角，与header保持一致 */
   border-radius: 0 0 8px 8px;
 }
