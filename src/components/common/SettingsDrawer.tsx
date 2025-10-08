@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useContext, useState } from 'react';
+import React, { createContext, useEffect, useContext, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ReactNode } from 'react';
 import HoverImage from './HoverImage';
@@ -12,6 +12,7 @@ import { getSoftwareVersion, loadAppConfig, saveAppConfig, upgradeFireware } fro
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useModal } from './ModalContext';
 import { useProfileStore } from '@/store/useProfile';
+import Portal from './Portal';
 type SettingsDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -116,90 +117,117 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
     });
   };
 
+  const drawerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const drawer = drawerRef.current;
+    const header = document.querySelector('.header-center');
+
+    if (visible) {
+      header?.setAttribute('data-drag-disabled', 'true');
+      header?.setAttribute('style', '-webkit-app-region: no-drag');
+
+      if (drawer) {
+        setTimeout(() => {
+          drawer.style.setProperty('-webkit-app-region', 'no-drag');
+          drawer.style.zIndex = '9999';
+          void drawer.offsetHeight;
+          drawer.style.transform = 'translateZ(0)';
+          console.log('Drawer styles applied for visibility');
+        }, 1000);
+      }
+    } else {
+      header?.setAttribute('style', '-webkit-app-region: drag');
+      drawer?.removeAttribute('style');
+    }
+  }, [visible]);
   return (
     <SettingsDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
-      <div className={`drawer-overlay ${visible ? 'show' : ''}`} onClick={close}></div>
-      <div className={`drawer ${visible ? 'open' : ''}`}>
-        <div className="settings-header">
-          <button className="back-btn" onClick={close}>
-            <HoverImage src={back1} hoverSrc={back2} alt="Logo" className="back-btn-icon" />
-            {t('back_to_home')}
-          </button>
-        </div>
+      <Portal>
+        {visible && (
+          <>
+            <div className={`drawer-overlay ${visible ? 'show' : ''}`} onClick={close}></div>
+            <div className={`drawer ${visible ? 'open' : ''}`} ref={drawerRef}>
+              <div className="settings-header">
+                <button className="back-btn" onClick={close}>
+                  <HoverImage src={back1} hoverSrc={back2} alt="Logo" className="back-btn-icon" />
+                  {t('back_to_home')}
+                </button>
+              </div>
 
-        <div>
-          <div className="settings-section">
-            <h3 className="section-title">{t('software_version')}</h3>
-            <div className="version-content">
-              {t('version_number')} <span className="version">{version.split('+')[0]}</span>
-              {(Info?.FWVersion ?? 0) < (Model?.FWVersion ?? 0) ? (
-                <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
-                  固件升级
-                </p>
-              ) : (Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
-                <p className="no-upgrade">
-                  当前已是最新版本
-                </p>
-              ) : null}
-            </div>
-          </div>
+              <div>
+                <div className="settings-section">
+                  <h3 className="section-title">{t('software_version')}</h3>
+                  <div className="version-content">
+                    {t('version_number')} <span className="version">{version.split('+')[0]}</span>
+                    {(Info?.FWVersion ?? 0) < (Model?.FWVersion ?? 0) ? (
+                      <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
+                        固件升级
+                      </p>
+                    ) : (Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
+                      <p className="no-upgrade">当前已是最新版本</p>
+                    ) : null}
+                  </div>
+                </div>
 
-          <div className="settings-section">
-            <h3 className="section-title">{t('language_select')}</h3>
-            <div className="lang-options">
-              {config &&
-                config.supportedLangs.map((lang) => {
-                  return (
-                    <label
-                      key={lang.code}
-                      onChange={() => {
-                        handleChangeLanguage(lang.code);
+                <div className="settings-section">
+                  <h3 className="section-title">{t('language_select')}</h3>
+                  <div className="lang-options">
+                    {config &&
+                      config.supportedLangs.map((lang) => {
+                        return (
+                          <label
+                            key={lang.code}
+                            onChange={() => {
+                              handleChangeLanguage(lang.code);
+                            }}
+                          >
+                            <CustomRadio checked={lang.code === currentLang} />
+                            {lang.name}
+                          </label>
+                        );
+                      })}
+                  </div>
+                </div>
+
+                <div className="settings-section">
+                  <h3 className="section-title">{t('general_settings')}</h3>
+                  <div className="toggle-item">
+                    <span>{t('auto_start')}</span>
+                    <Switch
+                      size="small"
+                      checked={autoStart}
+                      onChange={(e) => {
+                        handleAutoStartChange(e);
                       }}
-                    >
-                      <CustomRadio checked={lang.code === currentLang} />
-                      {lang.name}
-                    </label>
-                  );
-                })}
+                    />
+                  </div>
+                  <div className="toggle-item">
+                    <span>{t('dpi_dialog_switch')}</span>
+                    <Switch
+                      size="small"
+                      checked={dpiDialogOpen}
+                      onChange={(e) => {
+                        handleDpiDialogChange(e);
+                      }}
+                    />
+                  </div>
+                  <div className="toggle-item">
+                    <span>{t('low_battery_dialog')}</span>
+                    <Switch
+                      size="small"
+                      checked={lowPowerDialogOpen}
+                      onChange={(e) => {
+                        handleLowPowerDialogChange(e);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className="settings-section">
-            <h3 className="section-title">{t('general_settings')}</h3>
-            <div className="toggle-item">
-              <span>{t('auto_start')}</span>
-              <Switch
-                size="small"
-                checked={autoStart}
-                onChange={(e) => {
-                  handleAutoStartChange(e);
-                }}
-              />
-            </div>
-            <div className="toggle-item">
-              <span>{t('dpi_dialog_switch')}</span>
-              <Switch
-                size="small"
-                checked={dpiDialogOpen}
-                onChange={(e) => {
-                  handleDpiDialogChange(e);
-                }}
-              />
-            </div>
-            <div className="toggle-item">
-              <span>{t('low_battery_dialog')}</span>
-              <Switch
-                size="small"
-                checked={lowPowerDialogOpen}
-                onChange={(e) => {
-                  handleLowPowerDialogChange(e);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+          </>
+        )}
+      </Portal>
     </SettingsDrawerContext.Provider>
   );
 };

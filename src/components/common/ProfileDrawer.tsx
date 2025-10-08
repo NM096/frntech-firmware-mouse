@@ -28,6 +28,7 @@ import { useModal } from './ModalContext';
 import { toast } from 'sonner';
 import { useProfileStore } from '@/store/useProfile';
 import type { Profile } from '@/types/profile';
+import Portal from './Portal';
 type ProfileDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -316,11 +317,14 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       header?.setAttribute('style', '-webkit-app-region: no-drag');
 
       if (drawer) {
-        drawer.style.setProperty('-webkit-app-region', 'no-drag');
-        drawer.style.zIndex = '9999';
+        setTimeout(() => {
+          drawer.style.setProperty('-webkit-app-region', 'no-drag');
+          drawer.style.zIndex = '9999';
 
-        void drawer.offsetHeight;
-        drawer.style.transform = 'translateZ(0)';
+          void drawer.offsetHeight;
+          drawer.style.transform = 'translateZ(0)';
+          console.log('Drawer styles applied for visibility');
+        }, 1000);
       }
     } else {
       header?.setAttribute('style', '-webkit-app-region: drag');
@@ -330,64 +334,82 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
-      <div className={`drawer-overlay ${visible ? 'show' : ''}`} onClick={close}></div>
-      <div className={`drawer drawer-profile ${visible ? 'open' : ''}`} ref={drawerRef}>
-        <div className="profile-container">
-          <div className="back-content">
-            <div className="content-back-btn" onClick={close}>
-              <HoverImage src={back1} hoverSrc={back2} alt="Logo" className="back-btn-icon" />
-              {t('back_to_home')}
-            </div>
-          </div>
-          <div className="profile-container-center">
-            <div className="profile-header">
-              <div>配置列表</div>
-              <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                <div onClick={() => handleImportProfile()} className="flex items-center">
-                  <HoverImage
-                    src={ic_save}
-                    hoverSrc={ic_save}
-                    alt="ic_import"
-                    className="back-btn-icon cursor-pointer"
-                  />
+      <Portal>
+        {visible && (
+          <>
+            <div className={`drawer-overlay ${visible ? 'show' : ''}`} onClick={close}></div>
+            <div className={`drawer drawer-profile ${visible ? 'open' : ''}`} ref={drawerRef}>
+              <div className="profile-container">
+                <div className="back-content">
+                  <div className="content-back-btn" onClick={close}>
+                    <HoverImage src={back1} hoverSrc={back2} alt="Logo" className="back-btn-icon" />
+                    {t('back_to_home')}
+                  </div>
                 </div>
-                <div onClick={() => handleDeleteProfile()} className="flex items-center">
-                  <HoverImage
-                    src={ic_delete}
-                    hoverSrc={ic_delete}
-                    alt="ic_delete"
-                    className="back-btn-icon cursor-pointer"
-                  />
-                </div>
-                <div onClick={() => handleCreateProfile()} className="flex items-center">
-                  <HoverImage src={ic_add} hoverSrc={ic_add} alt="ic_add" className="back-btn-icon cursor-pointer" />
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="macro-file-group">
-                <ul>
-                  {profileList &&
-                    profileList.map((profile: string) => (
-                      <li
-                        className={`${currentConfigFileName === profile ? 'active' : ''} macro-file-item`}
-                        key={profile}
-                        onClick={() => handleSelectProfile(profile)}
-                      >
-                        <span>{profile}</span>
-                        <IconMenu
-                          icon={<HoverImage src={ic_more} hoverSrc={ic_more} alt="ic_more" className="back-btn-icon" />}
-                          menu={fileMenu}
+                <div className="profile-container-center">
+                  <div className="profile-header">
+                    <div>配置列表</div>
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+                      <div onClick={() => handleImportProfile()} className="flex items-center">
+                        <HoverImage
+                          src={ic_save}
+                          hoverSrc={ic_save}
+                          alt="ic_import"
+                          className="back-btn-icon cursor-pointer"
                         />
-                      </li>
-                    ))}
-                </ul>
+                      </div>
+                      <div onClick={() => handleDeleteProfile()} className="flex items-center">
+                        <HoverImage
+                          src={ic_delete}
+                          hoverSrc={ic_delete}
+                          alt="ic_delete"
+                          className="back-btn-icon cursor-pointer"
+                        />
+                      </div>
+                      <div onClick={() => handleCreateProfile()} className="flex items-center">
+                        <HoverImage
+                          src={ic_add}
+                          hoverSrc={ic_add}
+                          alt="ic_add"
+                          className="back-btn-icon cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="macro-file-group">
+                      <ul>
+                        {profileList &&
+                          profileList.map((profile: string) => (
+                            <li
+                              className={`${currentConfigFileName === profile ? 'active' : ''} macro-file-item`}
+                              key={profile}
+                              onClick={() => handleSelectProfile(profile)}
+                            >
+                              <span>{profile}</span>
+                              <IconMenu
+                                icon={
+                                  <HoverImage
+                                    src={ic_more}
+                                    hoverSrc={ic_more}
+                                    alt="ic_more"
+                                    className="back-btn-icon"
+                                  />
+                                }
+                                menu={fileMenu}
+                              />
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="profile-game"></div>
               </div>
             </div>
-          </div>
-          <div className="profile-game"></div>
-        </div>
-      </div>
+          </>
+        )}
+      </Portal>
     </ProfileDrawerContext.Provider>
   );
 };
