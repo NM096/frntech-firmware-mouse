@@ -67,7 +67,7 @@ body {
   overflow-y: hidden;
   background: #1a2123;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: linear-gradient(to bottom right, #1a2226, #191c1b);
 }
 input:focus {
@@ -97,9 +97,7 @@ input:focus {
   height: 60px;
   width: 100%;
   z-index: 4;
-  /* 添加圆角 */
   border-radius: 8px 8px 0 0;
-  /* 确保整个header可以拖动 */
   -webkit-app-region: drag;
 }
 
@@ -309,12 +307,15 @@ input:focus {
   display: flex;
   flex-direction: column;
   /* 减去Header的高度60px，确保内容不被遮挡 */
-  height: calc(100% - 60px);
+  height: calc(100vh - 60px);
   padding: 16px; /* p-4 */
-  padding-top: 16px; 
+  padding-top: 16px; /* 恢复正常padding，因为Header已固定定位 */
   color: white; /* text-white */
   background: linear-gradient(to bottom right, #1a2226, #191c1b);
   box-sizing: border-box;
+  /* 移除固定最大尺寸限制，让容器能够完全填充窗口 */
+  width: 100%;
+  margin: 0;
   /* 添加圆角，与header保持一致 */
   border-radius: 0 0 8px 8px;
 }
@@ -491,7 +492,7 @@ input:focus {
   top: 0;
   right: 0;
   width: 50vw;
-  height: 100%;
+  height: 100vh;
   background: #1a2124;
   color: #fff;
   padding: 20px;
@@ -587,6 +588,12 @@ input:focus {
   cursor: pointer;
   padding: 5px;
   display: inline-block;
+  pointer-events: auto;
+}
+
+/* 确保.back-btn-icon内的图片也能响应点击事件 */
+.back-btn-icon img {
+  pointer-events: auto;
 }
 .back-btn:hover {
   color: #fff;
@@ -633,7 +640,6 @@ input:focus {
   color: #ccc;
 }
 
-/* 隐藏原生 radio */
 .drawer input[type='radio'] {
   appearance: none;
   -webkit-appearance: none;

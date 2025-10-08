@@ -107,12 +107,13 @@ const KeyConfig = () => {
     });
     _profile.KeySet[currentDevice?.Info?.Mode || 0] = newKeySet;
 
-    apply(path, _profile, () => {
-      setCurrentProfile(currentModelID, currentConfigFileName, _profile, (payload) => {
-        if (payload) {
-          setProfile(_profile);
-        }
-      });
+    // 1. 先保存配置文件
+    setCurrentProfile(currentModelID, currentConfigFileName, _profile, (payload) => {
+      if (payload) {
+        setProfile(_profile);
+        // 2. 然后应用配置到设备
+        useProfileStore.getState().updateProfile();
+      }
     });
   }, 1000);
 

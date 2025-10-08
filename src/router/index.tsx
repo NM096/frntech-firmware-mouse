@@ -1,5 +1,5 @@
-import { Routes, Route, Outlet, HashRouter, BrowserRouter } from 'react-router-dom';
 import { useEffect } from 'react';
+import { HashRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Home from '@/ui/mouse/Home';
 import NotFound from '@/ui/NotFound';
 import { ModalProvider } from '@/components/common/ModalContext';
