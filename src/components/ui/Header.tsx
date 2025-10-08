@@ -53,7 +53,7 @@ const Header = () => {
           onClick={() => shell.openPath('http://www.inphic.cn/')}
         />
       </div>
-
+      <div className="header-center"></div>
       <div className="header-right">
         <div className="window-controls">
           <HoverImage src={min} hoverSrc={minHover} alt="Minimize" className="icon-5" onClick={minimizeApp} />

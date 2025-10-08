@@ -72,8 +72,8 @@ body {
 }
 input:focus {
   outline: none;
-  border: none; 
-  box-shadow: none; 
+  border: none;
+  box-shadow: none;
 }
 
 @keyframes battery {
@@ -98,7 +98,7 @@ input:focus {
   width: 100%;
   z-index: 4;
   border-radius: 8px 8px 0 0;
-  -webkit-app-region: drag;
+  /* -webkit-app-region: drag; */
 }
 
 .header-left {
@@ -127,15 +127,15 @@ input:focus {
 .window-controls {
   display: flex;
   align-items: center;
-  gap: 8px; /* Tailwind gap-2 */
+  gap: 8px;
 }
 .window-controls > img {
   -webkit-app-region: no-drag;
 }
 
 .header-center {
-  flex: 1;
-  min-width: 0;
+  flex-grow: 1;
+  height: 100%;
   -webkit-app-region: drag;
 }
 
@@ -144,8 +144,8 @@ input:focus {
   margin: 10px 0;
   display: flex;
   align-items: center;
-  gap: 16px; /* Tailwind gap-4 */
-  margin-right: 20px; /* Tailwind mr-5 */
+  gap: 16px;
+  margin-right: 20px;
   justify-content: flex-end;
 }
 .actions > img {
@@ -442,7 +442,7 @@ input:focus {
 /* Profile Drawer start */
 .drawer.drawer-profile {
   width: 70vw;
-  z-index: 3;
+  z-index: 999;
   -webkit-app-region: no-drag;
 }
 .drawer-profile .back-content {
@@ -471,7 +471,7 @@ input:focus {
   flex-grow: 10;
 }
 .profile-container .profile-container-center {
-  width: 180px;
+  width: 230px;
   border: 1px solid #222c2e;
   background-color: #1f2729;
   height: 90%;
@@ -502,7 +502,7 @@ input:focus {
   display: flex;
   -webkit-app-region: no-drag;
 
-  /* 初始状态：隐藏在右侧 + 透明 */ 
+  /* 初始状态：隐藏在右侧 + 透明 */
   transform: translateX(100%);
   opacity: 0;
 
@@ -1468,10 +1468,10 @@ textarea,
 }
 
 /* 确保输入框中的文本可以选中 */
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
 textarea {
   -webkit-user-select: text;
   -moz-user-select: text;

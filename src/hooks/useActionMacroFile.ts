@@ -1,4 +1,3 @@
-import { key } from '@/utils/keys';
 import { useState } from 'react';
 import { getKeyName, getMouseName } from '@/hooks/useMacroRecorder';
 const useActionMacroFile = () => {
