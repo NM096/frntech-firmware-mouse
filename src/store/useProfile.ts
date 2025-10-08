@@ -29,30 +29,35 @@ export const useProfileStore = create<ProfileState>()(
       upgradeProcess: 0,
       profile: cloneDeep(defaultProfile),
       defaultProfile: cloneDeep(defaultProfile),
-      setDefaultProfile: (newProfile) => set({ defaultProfile: newProfile }),
+      setDefaultProfile: (newProfile) => set((state) => ({ defaultProfile: newProfile })),
       setProfile: (newProfile) => set({ profile: newProfile }),
       updateProfile: async () => {
         try {
           const { path, mode, currentDevice } = useBaseInfoStore.getState();
           // 在zustand store中，我们可以通过set函数的回调参数获取当前状态
-          set(state => {
+          set((state) => {
             if (path && state.profile) {
               const { LEDEffect, DPIs, USBReports, WLReports, AdvanceSetting } = state.profile;
               const { DPILevels } = currentDevice?.Info || {};
-              
+
               // 先应用其他设置
               apply(path, state.profile);
-              
+
               // 最后设置DPI，确保不会被其他设置覆盖
               setTimeout(() => {
-                setDPI(path, mode, {
-                  DPILevels: DPILevels || [],
-                  DPIs: DPIs || [],
-                }, () => {
-                  console.log('DPI设置已应用到鼠标设备');
-                });
+                setDPI(
+                  path,
+                  mode,
+                  {
+                    DPILevels: DPILevels || [],
+                    DPIs: DPIs || [],
+                  },
+                  () => {
+                    console.log('DPI设置已应用到鼠标设备');
+                  }
+                );
               }, 100);
-              
+
               console.log('配置已成功发送到鼠标设备');
             }
             return {};

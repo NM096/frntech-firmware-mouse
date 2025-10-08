@@ -28,6 +28,7 @@ import { useTranslation } from 'react-i18next';
 import { useModal } from '@/components/common/ModalContext';
 import { useProfileDrawer } from '@/components/common/ProfileDrawer';
 import { toast } from 'sonner';
+import { cloneDeep } from 'lodash';
 import {
   setCurrentProfile,
   setDPI,
@@ -62,8 +63,9 @@ const Feature = () => {
     setConfigData: setConfigDataOnStore,
     currentConfigFileName,
   } = useBaseInfoStore();
-  const { DPILevels } = currentDevice?.Info || {};
-  const { defaultProfile, profile, setProfile, setIsReset } = useProfileStore();
+  const DPILevels = cloneDeep(currentDevice?.Info?.DPILevels || {});
+  const { profile, setProfile, setIsReset } = useProfileStore();
+  const defaultProfile = cloneDeep(useProfileStore.getState().defaultProfile);
   const sidebarComponents = {
     DpiConfig: () => <DpiConfig />,
     KeyConfig: () => <KeyConfig />,
@@ -84,7 +86,7 @@ const Feature = () => {
             setIsReset(false);
           }, 5000);
           setCurrentProfile(currentModelID, currentConfigFileName, defaultProfile);
-          setProfile(defaultProfile!);
+          setProfile(defaultProfile);
         });
       },
     });
