@@ -29,12 +29,14 @@ const PerformanceConfig = () => {
     const newUsbReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
     newUsbReport[mode] = index;
 
-    // 立即更新profile以反映UI变化
+    // 立即更新profile以反映UI变化 - 这是修复响应延迟的关键
     const updatedProfile = {
       ...profile,
       ...{ USBReports: newUsbReport },
     };
+    setProfile(updatedProfile);
 
+    // 然后异步发送配置到设备
     setReportRate(
       path,
       {
@@ -43,8 +45,8 @@ const PerformanceConfig = () => {
       },
       (payload) => {
         if (payload) {
+          // 设备确认后保存到配置文件
           setCurrentProfile(currentModelID, currentConfigFileName, updatedProfile);
-          setProfile(updatedProfile);
         }
       }
     );
@@ -52,17 +54,18 @@ const PerformanceConfig = () => {
   const handleChangeAltitude = (name: string, value: number | boolean) => {
     const newAdvanceSetting = cloneDeep({ ...AdvanceSetting, [name]: value });
 
-    // 立即更新profile以确保UI立即反映变化
+    // 立即更新profile以确保UI立即反映变化 - 这是修复响应延迟的关键
     const updatedProfile = {
       ...profile,
       ...{ AdvanceSetting: newAdvanceSetting },
     };
+    setProfile(updatedProfile);
 
+    // 然后异步发送配置到设备
     setAdvanceSetting(path, newAdvanceSetting, (payload) => {
       if (payload) {
-        // 然后保存到设备和配置
+        // 设备确认后保存到配置文件
         setCurrentProfile(currentModelID, currentConfigFileName, updatedProfile);
-        setProfile(updatedProfile);
       }
     });
   };

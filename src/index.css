@@ -66,6 +66,11 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
   background: #1a2123;
+  /* 适配1178x675的页面尺寸 */
+  width: 1178px;
+  height: 675px;
+  /* 确保背景色一致，避免底部色块 */
+  background: linear-gradient(to bottom right, #1a2226, #191c1b);
 }
 input:focus {
   outline: none;
@@ -89,14 +94,22 @@ input:focus {
 .header {
   position: relative;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  height: 60px;
   width: 100%;
+  z-index: 4;
+  /* 添加圆角 */
+  border-radius: 8px 8px 0 0;
+  /* 确保整个header可以拖动 */
   -webkit-app-region: drag;
-  z-index: 0;
 }
 
 .header-left {
   display: flex;
+  align-items: center;
+  padding-left: 16px;
+  -webkit-app-region: no-drag;
 }
 
 .logo {
@@ -107,10 +120,12 @@ input:focus {
 
 .header-right {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16px; /* Tailwind gap-4 */
+  gap: 16px;
+  padding-right: 16px;
+  -webkit-app-region: no-drag;
 }
 
 .window-controls {
@@ -120,6 +135,12 @@ input:focus {
 }
 .window-controls > img {
   -webkit-app-region: no-drag;
+}
+
+.header-center {
+  flex: 1;
+  min-width: 0;
+  -webkit-app-region: drag;
 }
 
 .actions {
@@ -289,12 +310,19 @@ input:focus {
 .home-container {
   display: flex;
   flex-direction: column;
-  /* 使用calc(100vh - 32px)来考虑上下各16px的padding，避免内容溢出 */
-  height: calc(100vh);
+  /* 减去Header的高度60px，确保内容不被遮挡 */
+  height: calc(100vh - 60px);
   padding: 16px; /* p-4 */
+  padding-top: 16px; /* 恢复正常padding，因为Header已固定定位 */
   color: white; /* text-white */
   background: linear-gradient(to bottom right, #1a2226, #191c1b);
   box-sizing: border-box;
+  /* 适配1178x675的页面尺寸 */
+  max-width: 1178px;
+  max-height: 675px;
+  margin: 0 auto;
+  /* 添加圆角，与header保持一致 */
+  border-radius: 0 0 8px 8px;
 }
 
 .no-device-container {
@@ -320,14 +348,25 @@ input:focus {
   width: 5rem; /* w-20 */
 }
 
-.custom-confirm-container,
+.custom-confirm-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
 .global-loading-container {
   position: fixed;
   top: 50%;
   left: 0;
   right: 0;
   margin: 0 auto;
-  /* animation: fadeIn 0.3s ease-in-out; */
   transform: translateY(-50%);
   height: 100%;
   width: 100%;
@@ -335,7 +374,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 1000;
 }
 
 .confirm-card,
@@ -542,12 +581,18 @@ input:focus {
   display: flex;
   align-items: center;
   -webkit-app-region: no-drag;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 .back-btn-icon {
   width: 15px;
   height: 15px;
   margin-right: 8px;
   cursor: pointer;
+  padding: 5px;
+  display: inline-block;
 }
 .back-btn:hover {
   color: #fff;
@@ -1309,6 +1354,7 @@ input:focus {
   display: flex;
   justify-content: left;
   align-items: center;
+  flex-direction: row;
   gap: 10px;
   padding: 0 20px;
   height: 40px;
@@ -1366,4 +1412,69 @@ input:focus {
 /* Icon Menu Start */
 .icon-menu-container .icon-menu-item:hover {
   background: rgba(150, 60, 20, 0.6);
+}
+
+/* 全局样式 - 禁止文本选择和图片拖拽，但保持按钮可点击 */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 禁止图片拖拽 */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* 确保按钮、输入框和可点击元素可以正常交互 */
+button,
+input,
+select,
+textarea,
+[role="button"],
+[onclick],
+[onmousedown],
+[onmouseup],
+[draggable="true"],
+.hover-bg,
+.device-card,
+.power-wrapper,
+.logo,
+.icon-5,
+.icon-7,
+.icon-save,
+.macro-action-btn,
+.macro-record-btn,
+.macro-content-item,
+.icon-menu-item,
+.profile,
+/* Switch组件可点击 */
+.switch,
+/* CustomRadio组件可点击 */
+.radio-container,
+/* HoverImage组件可点击 */
+.hover-image-container {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: auto;
+}
+
+/* 确保输入框中的文本可以选中 */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }

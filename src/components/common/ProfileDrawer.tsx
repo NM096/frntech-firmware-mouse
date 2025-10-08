@@ -19,6 +19,8 @@ import {
   setDPI,
   apply,
   setLE,
+  importProfile,
+  exportProfile,
 } from '@/utils/driver';
 import HoverImage from '@/components/common/HoverImage';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
@@ -38,7 +40,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const { t } = useTranslation();
   const { currentModelID, currentConfigFileName, setCurrentConfigFileName, path, mode, currentDevice } =
     useBaseInfoStore();
-  const { defaultProfile, setProfile } = useProfileStore();
+  const { defaultProfile, setProfile, updateProfile } = useProfileStore();
   const [visible, setVisible] = useState(false);
   const { openConfirm, openAlert } = useModal();
   const open = () => setVisible(true);
@@ -48,7 +50,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const [profileList, setProfileList] = useState<string[]>([]);
   const fileMenu = [
     {
-      label: t('delete_macro_file'),
+      label: t('delete_profile_file'),
       value: 'delete',
       onClick: () => {
         handleDeleteProfile();
@@ -56,9 +58,51 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     },
 
     {
-      label: t('export_macro_file'),
+      label: t('export_profile_file'),
       value: 'export',
-      onClick: () => {},
+      onClick: () => {
+        if (currentModelID && currentConfigFileName) {
+          try {
+            // 先获取配置文件内容
+            getProfileByName(currentModelID, currentConfigFileName, (profileData) => {
+              if (profileData) {
+                try {
+                  console.log('Profile data retrieved successfully:', profileData);
+                  
+                  // 转换为JSON字符串
+                  const jsonString = JSON.stringify(profileData, null, 2);
+                  console.log('JSON string length:', jsonString.length);
+                  
+                  // 创建Blob对象
+                  const blob = new Blob([jsonString], { type: 'application/json' });
+                  
+                  // 创建下载链接
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = currentConfigFileName || 'profile.json';
+                  
+                  // 添加到文档并触发点击
+                  document.body.appendChild(link);
+                  link.click();
+                  
+                  // 清理
+                  setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  }, 100);
+                } catch (error) {
+                  console.error('Export profile error during file creation:', error);
+                }
+              } else {
+                console.error('Failed to get profile data');
+              }
+            });
+          } catch (error) {
+            console.error('Export profile error:', error);
+          }
+        }
+      },
     },
   ];
 
@@ -69,8 +113,9 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       onOk: () => {
         DelProfile(currentModelID, currentConfigFileName, (success) => {
           if (success) {
-            toast.success(t('delete_profile'));
             _getProfileList();
+          } else {
+            console.error('Delete profile failed');
           }
         });
       },
@@ -84,14 +129,13 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       onOk: (value) => {
         if (!value) return;
         if (profileList.includes(value)) {
-          toast.error(t('profile_file_exists'));
+          console.error('Profile file already exists');
           return;
         }
         AddProfile(currentModelID, value, () => {
           setCurrentProfile(currentModelID, value, defaultProfile);
           _getProfileList();
           setCurrentConfigFileName(value);
-          toast.success(t('create_profile_desc'));
         });
       },
     });
@@ -100,9 +144,32 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     setCurrentConfigFileName(profile);
     getProfileByName(currentModelID, profile, (data) => {
       if (data) {
-        handleApplyProfileToMouse(data);
+        // 先更新本地状态
+        setProfile(data);
         setCurrentProfile(currentModelID, profile, data);
-        setProfile(data); // 更新本地profile状态，确保UI正确反映切换后的配置
+        
+        // 然后应用配置到鼠标，确保DPI设置在最后执行
+        const { LEDEffect, DPIs, USBReports, WLReports, AdvanceSetting } = data;
+        const { DPILevels } = currentDevice?.Info || {};
+        
+        // 先应用其他设置
+        apply(path, data);
+        setLE(path, LEDEffect);
+        setReportRate(path, {
+          USBReports: USBReports || [],
+          WLReports: WLReports || [],
+        });
+        setAdvanceSetting(path, AdvanceSetting);
+        
+        // 最后设置DPI，确保不会被其他设置覆盖
+        setTimeout(() => {
+          setDPI(path, mode, {
+            DPILevels: DPILevels || [],
+            DPIs: DPIs || [],
+          }, () => {
+            console.log('DPI设置已应用到鼠标设备');
+          });
+        }, 100);
       }
     });
   };
@@ -127,6 +194,73 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       setProfileList(profileList);
     });
   };
+
+  const handleImportProfile = () => {
+    // 创建一个隐藏的文件输入元素
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.style.display = 'none';
+    fileInput.accept = '.json'; // 限制只能选择JSON文件
+    
+    // 设置文件选择事件处理
+    fileInput.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file && currentModelID) {
+        // 创建FileReader来读取文件内容
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+          try {
+            // 尝试解析文件内容
+            const fileContent = event.target?.result as string;
+            const profileData = JSON.parse(fileContent);
+            
+            // 直接使用文件名作为配置名称
+            const profileName = file.name.replace('.json', '');
+            
+            console.log('Importing profile:', profileName, profileData);
+            
+            // 首先检查配置名称是否已存在
+            if (profileList.includes(profileName)) {
+              console.error('Profile name already exists:', profileName);
+              return;
+            }
+            
+            // 先添加配置文件
+            AddProfile(currentModelID, profileName, () => {
+              // 然后设置配置内容
+              setCurrentProfile(currentModelID, profileName, profileData, (success) => {
+                if (success) {
+                  _getProfileList(); // 重新获取配置列表
+                  console.log('Profile imported successfully:', profileName);
+                } else {
+                  console.error('Failed to set profile content');
+                }
+              });
+            });
+          } catch (error) {
+            console.error('Failed to read or parse profile file:', error);
+          }
+        };
+        
+        reader.onerror = () => {
+          console.error('Error reading file');
+        };
+        
+        // 以文本形式读取文件
+        reader.readAsText(file);
+      }
+    });
+    
+    // 添加到DOM并触发点击
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    
+    // 清理
+    setTimeout(() => {
+      document.body.removeChild(fileInput);
+    }, 100);
+  };
   useEffect(() => {
     if (currentModelID) {
       _getProfileList();
@@ -147,22 +281,26 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
           <div className="profile-container-center">
             <div className="profile-header">
               <div>配置列表</div>
-              <div>
-                <HoverImage src={ic_save} hoverSrc={ic_save} alt="ic_save" className="back-btn-icon" />
-                <HoverImage
-                  src={ic_delete}
-                  hoverSrc={ic_delete}
-                  alt="ic_delete"
-                  className="back-btn-icon"
-                  onClick={() => handleDeleteProfile()}
-                />
-                <HoverImage
-                  src={ic_add}
-                  hoverSrc={ic_add}
-                  alt="ic_add"
-                  className="back-btn-icon"
-                  onClick={() => handleCreateProfile()}
-                />
+              <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+                <div onClick={() => handleImportProfile()} className="flex items-center">
+                  <HoverImage src={ic_save} hoverSrc={ic_save} alt="ic_import" className="back-btn-icon cursor-pointer" />
+                </div>
+                <div onClick={() => handleDeleteProfile()} className="flex items-center">
+                  <HoverImage
+                    src={ic_delete}
+                    hoverSrc={ic_delete}
+                    alt="ic_delete"
+                    className="back-btn-icon cursor-pointer"
+                  />
+                </div>
+                <div onClick={() => handleCreateProfile()} className="flex items-center">
+                  <HoverImage
+                    src={ic_add}
+                    hoverSrc={ic_add}
+                    alt="ic_add"
+                    className="back-btn-icon cursor-pointer"
+                  />
+                </div>
               </div>
             </div>
             <div>

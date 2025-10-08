@@ -163,6 +163,10 @@
   "delete_macro_file": "删除宏文件",
   "import_macro_file": "导入宏文件",
   "export_macro_file": "导出宏文件",
+  "export_profile_success": "导出配置成功",
+  "export_profile_failure": "导出配置失败",
+  "get_profile_failure": "获取配置失败",
+  "select_save_location": "请选择保存位置",
   "stop_recording": "停止录制",
   "start_recording": "开始录制",
   "recording_delay_mode": "录制延迟方式",
@@ -212,5 +216,7 @@
   "profile_file_exists": "配置文件已存在",
   "create_profile_desc": "创建配置文件成功",
   "unsaved_macro_record": "未保存的宏记录",
-  "please_complete_save_operation": "请在宏页面保存或者取消宏更改"
+  "please_complete_save_operation": "请在宏页面保存或者取消宏更改",
+  "delete_profile_file": "删除配置文件",
+  "export_profile_file": "导出配置文件"
 }

@@ -18,7 +18,18 @@ async function initI18n() {
       },
       backend: {
         loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/common.json`,
+        // 添加缓存控制，确保每次都获取最新的翻译文件
+        requestOptions: {
+          cache: 'no-store',
+          credentials: 'same-origin'
+        }
       },
+
+      debug: true,
+
+      saveMissing: false,
+      keySeparator: false,
+      nsSeparator: false
     });
 
   return { i18n, config };
