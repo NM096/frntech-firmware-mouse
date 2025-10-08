@@ -469,6 +469,37 @@ input:focus {
 }
 .profile-game {
   flex-grow: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+  font-size: 14px;
+  color: #d4d5d6;
+}
+.profile-game .sub-title {
+  font-size: 12px;
+  margin-top: 20px;
+}
+.profile-game-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+}
+.profile-game .profile-game-item-add {
+  border: 1px solid #a3a5a6;
+  background-color: #303537;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.profile-game .profile-game-icon {
+  width: 40px;
+  height: 40px;
+}
+.profile-game .profile-game-list {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 .profile-container .profile-container-center {
   width: 230px;

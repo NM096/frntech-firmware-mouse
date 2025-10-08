@@ -52,6 +52,7 @@ const PerformanceConfig = () => {
     );
   };
   const handleChangeAltitude = (name: string, value: number | boolean) => {
+    // console.log(AdvanceSetting);
     const newAdvanceSetting = cloneDeep({ ...AdvanceSetting, [name]: value });
 
     // 立即更新profile以确保UI立即反映变化 - 这是修复响应延迟的关键
@@ -104,7 +105,7 @@ const PerformanceConfig = () => {
             max={sleepTime.length - 1}
             data={sleepTime}
             step={1}
-            initialValue={AdvanceSetting?.WLPrimarySleep || 2}
+            initialValue={AdvanceSetting?.WLPrimarySleep ?? 2}
             onChange={(value) => handleChangeAltitude('WLPrimarySleep', value)}
           />
         </div>
@@ -116,7 +117,7 @@ const PerformanceConfig = () => {
             max={deepSleepTime.length - 1}
             data={deepSleepTime}
             step={1}
-            initialValue={AdvanceSetting?.WLDeepSleep || 4}
+            initialValue={AdvanceSetting?.WLDeepSleep ?? 4}
             onChange={(value) => handleChangeAltitude('WLDeepSleep', value)}
           />
         </div>

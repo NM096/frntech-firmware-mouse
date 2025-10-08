@@ -40,6 +40,7 @@ export interface Profile {
   LEDEffect?: LEDEffect;
   USBReports?: number[];
   WLReports?: number[];
+  LinkApps?: string[];
   AdvanceSetting?: AdvanceSetting;
 }
 

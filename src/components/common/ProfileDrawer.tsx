@@ -8,6 +8,7 @@ import ic_add from '@/assets/ic_add.png';
 import ic_more from '@/assets/ic_more.png';
 import IconMenu from '../common/IconMenu';
 import ic_save from '@/assets/ic_save.png';
+import ic_addv2 from '@/assets/ic_addv2.png';
 import {
   GetProfiles,
   AddProfile,
@@ -30,6 +31,8 @@ import { useProfileStore } from '@/store/useProfile';
 import type { Profile } from '@/types/profile';
 import Portal from './Portal';
 import { cloneDeep } from 'lodash';
+
+const { dialog } = require('electron').remote;
 type ProfileDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -42,7 +45,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const { t } = useTranslation();
   const { currentModelID, currentConfigFileName, setCurrentConfigFileName, path, mode, currentDevice } =
     useBaseInfoStore();
-  const { setProfile } = useProfileStore();
+  const { profile, setProfile } = useProfileStore();
   const defaultProfile = cloneDeep(useProfileStore.getState().defaultProfile);
   const [visible, setVisible] = useState(false);
   const { openConfirm, openAlert } = useModal();
@@ -248,7 +251,19 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       setProfileList(profileList);
     });
   };
-
+  const handleAddLinkGame = () => {
+    dialog
+      .showOpenDialog({
+        title: 'Open',
+        filters: [{ name: 'Key Profile Files', extensions: ['exe'] }],
+      })
+      .then(function (result) {
+        const newProfile = cloneDeep({ ...profile, LinkApps: (profile?.LinkApps || []).concat(result.filePaths[0]) });
+        setCurrentProfile(currentModelID, currentConfigFileName, newProfile, () => {
+          setProfile(newProfile);
+        });
+      });
+  };
   const handleImportProfile = () => {
     // 创建一个隐藏的文件输入元素
     const fileInput = document.createElement('input');
@@ -332,6 +347,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     const header = document.querySelector('.header-center');
 
     if (visible) {
+      _getProfileList();
       header?.setAttribute('data-drag-disabled', 'true');
       header?.setAttribute('style', '-webkit-app-region: no-drag');
 
@@ -350,6 +366,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       drawer?.removeAttribute('style');
     }
   }, [visible]);
+
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
@@ -423,7 +440,22 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                     </div>
                   </div>
                 </div>
-                <div className="profile-game"></div>
+                <div className="profile-game">
+                  <div>将配置与游戏/应用链接</div>
+                  <div className="sub-title">已连接游戏/应用</div>
+                  <div className="profile-game-list">
+                    {(profile?.LinkApps || []).map((app, idx) => {
+                      return (
+                        <div className="profile-game-item" key={app + idx}>
+                          <img src={app} alt="" />
+                        </div>
+                      );
+                    })}
+                    <div className="profile-game-item-add" onClick={() => handleAddLinkGame()}>
+                      <img src={ic_addv2} alt="" className="profile-game-icon" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </>

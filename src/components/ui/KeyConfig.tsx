@@ -23,9 +23,8 @@ const KeyConfig = () => {
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey | null>('Mouse');
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
 
-  // 👉 新增：ref 用于检测点击是否在 KeyMouse 内
   const keyMouseRef = useRef<HTMLDivElement | null>(null);
-
+  const keyFeatureRef = useRef<HTMLDivElement | null>(null);
   const sideList: { key: sidebarKey; title: string }[] = [
     { key: 'Mouse', title: t('mouse_function') },
     { key: 'Keyboard', title: t('keyboard_function') },
@@ -90,7 +89,7 @@ const KeyConfig = () => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
       // 如果点击不在 keyMouseRef 内部
-      if (keyMouseRef.current && !keyMouseRef.current.contains(target)) {
+      if (keyMouseRef.current && !keyMouseRef.current.contains(target) && !keyFeatureRef.current?.contains(target)) {
         setActiveKey(null);
       }
     };
@@ -108,7 +107,7 @@ const KeyConfig = () => {
       </div>
 
       {activeKey !== null && activeSidebar && (
-        <div className="key-config-content">
+        <div className="key-config-content" ref={keyFeatureRef}>
           <div className="key-config-section">
             <div className="key-config-section-features">
               {sideList.map((item) => (

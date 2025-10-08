@@ -12,25 +12,26 @@ const Slider: React.FC<SliderProps> = ({ initialValue = 5, data, onChange }) => 
   // 默认 value 直接是索引
   const [value, setValue] = useState(0);
 
-  const findInitialIndex = () => {
-    const index = data.findIndex((item) => Number(item) === initialValue);
-    return index !== -1 ? index : 0;
-  };
+  // const findInitialIndex = () => {
+  //   const index = data.findIndex((item) => Number(item) === initialValue);
+  //   return index !== -1 ? index : 0;
+  // };
 
   useEffect(() => {
-    const idx = findInitialIndex();
-    if (idx !== value) {
-      setValue(idx);
-    }
+    // const idx = findInitialIndex();
+    // if (idx !== value) {
+    //   setValue(idx);
+    // }
+    setValue(initialValue !== -1 ? initialValue : 0);
   }, [initialValue, data]);
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newIndex = Number(e.target.value);
     setValue(newIndex);
-    onChange?.(Number(data[newIndex]));
+    onChange?.(Number(newIndex));
   };
 
-  const position = ((value - 0) / (data.length - 1)) * 100;
+  const position = (value / (data.length - 1)) * 100;
 
   return (
     <div className="slider2-wrapper">
