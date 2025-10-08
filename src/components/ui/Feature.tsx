@@ -111,7 +111,7 @@ const Feature = () => {
             setConfigData(path, _newConfig, () => {
               setConfigDataOnStore(_newConfig);
             });
-            setCurrentProfile(path, currentConfigFileName, _newProfile);
+            setCurrentProfile(currentModelID, currentConfigFileName, _newProfile);
             setProfile(_newProfile);
           }
         );

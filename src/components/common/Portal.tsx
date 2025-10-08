@@ -13,7 +13,7 @@ const Portal = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // 只有在客户端挂载后才创建 portal
-  return mounted ? createPortal(children, document.querySelector('body') as HTMLElement) : null;
+  return mounted ? createPortal(children, document.querySelector('#root') as HTMLElement) : null;
 };
 
 export default Portal;
