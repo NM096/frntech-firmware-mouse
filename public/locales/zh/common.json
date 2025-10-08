@@ -218,5 +218,7 @@
   "unsaved_macro_record": "未保存的宏记录",
   "please_complete_save_operation": "请在宏页面保存或者取消宏更改",
   "delete_profile_file": "删除配置文件",
-  "export_profile_file": "导出配置文件"
+  "export_profile_file": "导出配置文件",
+  "warning!": "警告！",
+  "cannot_delete_last_profile": "无法删除最后一个配置文件"
 }

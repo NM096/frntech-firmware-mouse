@@ -646,7 +646,7 @@ const MacroConfig = () => {
             />
           </div>
         )}
-        <div
+        {/* <div
           className="macro-action-btn"
           onClick={() => handleSave()}
           onMouseEnter={() => {
@@ -669,7 +669,7 @@ const MacroConfig = () => {
           }}
         >
           {t('cancel')}
-        </div>
+        </div> */}
       </div>
     </div>
   );

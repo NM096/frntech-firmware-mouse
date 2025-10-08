@@ -108,6 +108,13 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   ];
 
   const handleDeleteProfile = (value?: string) => {
+    if (profileList.length <= 1) {
+      openAlert({
+        title: t('warning!'),
+        content: t('cannot_delete_last_profile'),
+      });
+      return;
+    }
     openAlert({
       title: t('confirm_delete_profile'),
       content: t('confirm_delete_profile_desc', { profile: value || currentConfigFileName }),
@@ -319,7 +326,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       if (drawer) {
         setTimeout(() => {
           drawer.style.setProperty('-webkit-app-region', 'no-drag');
-          drawer.style.zIndex = '9999';
+          drawer.style.zIndex = '999';
 
           void drawer.offsetHeight;
           drawer.style.transform = 'translateZ(0)';

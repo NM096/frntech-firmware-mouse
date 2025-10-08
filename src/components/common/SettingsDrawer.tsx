@@ -129,7 +129,7 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
       if (drawer) {
         setTimeout(() => {
           drawer.style.setProperty('-webkit-app-region', 'no-drag');
-          drawer.style.zIndex = '9999';
+          drawer.style.zIndex = '999';
           void drawer.offsetHeight;
           drawer.style.transform = 'translateZ(0)';
           console.log('Drawer styles applied for visibility');
