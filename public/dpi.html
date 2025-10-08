@@ -96,7 +96,11 @@
           switch (message.name) {
             case 'DPIWindow':
               astilectron.sendMessage({ name: 'ShowWindow' });
-              updateDPIWidget(message.payload, 50, 'IN10');
+              updateDPIWidget(
+                message.payload.DPI,
+                (message.payload.DPI / message.payload.DPIMax) * 100,
+                message.payload.Model
+              );
               if (window.dpiCloseTimeout) {
                 clearTimeout(window.dpiCloseTimeout);
               }

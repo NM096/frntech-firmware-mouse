@@ -8,6 +8,7 @@ import btn_down_2 from '@/assets/btn_down_2.png';
 import delete_macro_action_1 from '@/assets/delete_macro_action_1.png';
 import delete_macro_action_2 from '@/assets/delete_macro_action_2.png';
 
+import ic_save2 from '@/assets/ic_save_v1.png';
 import ic_save from '@/assets/ic_save.png';
 import ic_clear from '@/assets/clear.png';
 import ic_delete from '@/assets/delete.png';
@@ -503,6 +504,23 @@ const MacroConfig = () => {
               </div>
             )}
           </div>
+          <div
+            onMouseEnter={() => {
+              setOpenRecords(false);
+            }}
+            onMouseLeave={() => {
+              setOpenRecords(true);
+            }}
+          >
+            <HoverImage
+              src={ic_save2}
+              hoverSrc={ic_save2}
+              alt="ic_save2"
+              className="back-btn-icon"
+              onClick={() => handleSave()}
+            />
+          </div>
+
           <HoverImage
             src={delete_macro_action_1}
             hoverSrc={delete_macro_action_2}

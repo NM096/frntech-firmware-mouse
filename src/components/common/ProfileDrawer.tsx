@@ -29,6 +29,7 @@ import { toast } from 'sonner';
 import { useProfileStore } from '@/store/useProfile';
 import type { Profile } from '@/types/profile';
 import Portal from './Portal';
+import { cloneDeep } from 'lodash';
 type ProfileDrawerContextType = {
   open: () => void;
   close: () => void;
@@ -41,7 +42,8 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const { t } = useTranslation();
   const { currentModelID, currentConfigFileName, setCurrentConfigFileName, path, mode, currentDevice } =
     useBaseInfoStore();
-  const { defaultProfile, setProfile, updateProfile } = useProfileStore();
+  const { setProfile } = useProfileStore();
+  const defaultProfile = cloneDeep(useProfileStore.getState().defaultProfile);
   const [visible, setVisible] = useState(false);
   const { openConfirm, openAlert } = useModal();
   const open = () => setVisible(true);
@@ -54,7 +56,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       label: t('delete_profile_file'),
       value: 'delete',
       onClick: () => {
-        handleDeleteProfile();
+        handleDeleteProfile(currentConfigFileName);
       },
     },
 
@@ -107,7 +109,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     },
   ];
 
-  const handleDeleteProfile = (value?: string) => {
+  const handleDeleteProfile = (fileName?: string) => {
     if (profileList.length <= 1) {
       openAlert({
         title: t('warning!'),
@@ -115,13 +117,16 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       });
       return;
     }
+    const delFileNameIdx = profileList.findIndex((name) => name == fileName) || 0;
+    const newSelectFileName = profileList[delFileNameIdx == 0 ? 1 : delFileNameIdx - 1];
     openAlert({
       title: t('confirm_delete_profile'),
-      content: t('confirm_delete_profile_desc', { profile: value || currentConfigFileName }),
+      content: t('confirm_delete_profile_desc', { profile: fileName || currentConfigFileName }),
       onOk: () => {
         DelProfile(currentModelID, currentConfigFileName, (success) => {
           if (success) {
             _getProfileList();
+            handleSelectProfile(newSelectFileName);
           } else {
             console.error('Delete profile failed');
           }
@@ -134,29 +139,30 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     openConfirm({
       title: t('create_profile'),
       content: '',
-      onOk: (value) => {
-        if (!value) return;
-        if (profileList.includes(value)) {
+      onOk: (fileName) => {
+        if (!fileName) return;
+        if (profileList.includes(fileName)) {
           console.error('Profile file already exists');
           return;
         }
-        AddProfile(currentModelID, value, () => {
-          setCurrentProfile(currentModelID, value, defaultProfile);
-          _getProfileList();
-          setCurrentConfigFileName(value);
+        AddProfile(currentModelID, fileName, async () => {
+          await _getProfileList();
+          setCurrentProfile(currentModelID, fileName, defaultProfile, () => {
+            handleSelectProfile(fileName);
+          });
         });
       },
     });
   };
-  const handleSelectProfile = (profile: string) => {
-    setCurrentConfigFileName(profile);
-    getProfileByName(currentModelID, profile, (data) => {
+  const handleSelectProfile = (fileName: string) => {
+    setCurrentConfigFileName(fileName);
+    getProfileByName(currentModelID, fileName, (data) => {
       if (data) {
         // 先更新本地状态
         setProfile(data);
 
         // 在setCurrentProfile的回调中应用配置到鼠标，确保配置保存成功后再同步
-        setCurrentProfile(currentModelID, profile, data, (success) => {
+        setCurrentProfile(currentModelID, fileName, data, (success) => {
           if (success) {
             // 配置保存成功后，将配置应用到鼠标设备
             handleApplyProfileToMouse(data);
@@ -314,6 +320,12 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       _getProfileList();
     }
   }, [currentModelID]);
+
+  useEffect(() => {
+    if (!currentDevice) {
+      setVisible(false);
+    }
+  }, [currentDevice]);
   const drawerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const drawer = drawerRef.current;
@@ -365,7 +377,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           className="back-btn-icon cursor-pointer"
                         />
                       </div>
-                      <div onClick={() => handleDeleteProfile()} className="flex items-center">
+                      <div onClick={() => handleDeleteProfile(currentConfigFileName)} className="flex items-center">
                         <HoverImage
                           src={ic_delete}
                           hoverSrc={ic_delete}

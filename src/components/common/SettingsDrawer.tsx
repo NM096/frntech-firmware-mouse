@@ -103,8 +103,8 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
   const handleUpgradeDevice = () => {
     setVisible(false);
     openAlert({
-      title: '固件升级',
-      content: '确认升级固件？请确保在升级过程中不要断开设备连接。',
+      title: t('firmware_upgrade'),
+      content: t('firmware_upgrade_confirmation'),
       onOk: () => {
         openUpgradeLoading({ proccess: 0 });
         setUpgradeProcess(0);
@@ -140,6 +140,21 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
       drawer?.removeAttribute('style');
     }
   }, [visible]);
+
+  useEffect(() => {
+    if (!currentDevice) {
+      setVisible(false);
+    }
+  }, [currentDevice]);
+
+  const firmwareVersion = () => {
+    const { FWVersion, FWID } = currentDevice?.Model || {};
+    if (!FWVersion || !FWID) return '';
+    const fwVersionHex = Number(FWVersion).toString(16).padStart(4, '0');
+    const fwIdHexRaw = Number(FWID).toString(16).padStart(8, '0');
+    const fwIdHex = fwIdHexRaw.slice(0, 4) + '.' + fwIdHexRaw.slice(4);
+    return `V${fwIdHex}.${fwVersionHex.toLocaleUpperCase()}`;
+  };
   return (
     <SettingsDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
@@ -159,13 +174,16 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
                 <div className="settings-section">
                   <h3 className="section-title">{t('software_version')}</h3>
                   <div className="version-content">
-                    {t('version_number')} <span className="version">{version.split('+')[0]}</span>
+                    {t('software_version_number')} <span className="version">{version.split('+')[0]}</span>
+                  </div>
+                  <div className="version-content">
+                    {t('firmware_version_number')} <span className="version">{firmwareVersion()}</span>
                     {(Info?.FWVersion ?? 0) < (Model?.FWVersion ?? 0) ? (
                       <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
-                        固件升级
+                        {t('firmware_upgrade')}
                       </p>
                     ) : (Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
-                      <p className="no-upgrade">当前已是最新版本</p>
+                      <p className="no-upgrade">{t('current_latest_version')}</p>
                     ) : null}
                   </div>
                 </div>

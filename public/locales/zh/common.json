@@ -101,6 +101,8 @@
   "back_to_home": "返回主页",
   "software_version": "软件版本",
   "version_number": "版本号",
+  "software_version_number": "软件版本号",
+  "firmware_version_number": "固件版本号",
   "language_select": "语言选择",
   "general_settings": "常规设置",
   "auto_start": "开机自启动",
@@ -220,5 +222,8 @@
   "delete_profile_file": "删除配置文件",
   "export_profile_file": "导出配置文件",
   "warning!": "警告！",
-  "cannot_delete_last_profile": "无法删除最后一个配置文件"
+  "cannot_delete_last_profile": "无法删除最后一个配置文件",
+  "firmware_upgrade": "固件升级",
+  "current_latest_version": "当前已是最新版本",
+  "firmware_upgrade_confirmation": "确认升级固件？请确保在升级过程中不要断开设备连接。"
 }
