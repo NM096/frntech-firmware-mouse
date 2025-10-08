@@ -30,6 +30,7 @@ export interface Dpi {
   DPI: number;
   Value: number;
   Color: string;
+  Select?: boolean;
 }
 export interface Profile {
   Version?: number;

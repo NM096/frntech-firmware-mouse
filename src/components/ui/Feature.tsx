@@ -93,16 +93,23 @@ const Feature = () => {
   };
   const resetPageConfig = () => {
     switch (activeSidebar) {
-      case 'DpiConfig':
+      case 'DpiConfig': {
         // Add logic to reset DPI configuration to default
+
+        const defaultDPILevels = defaultProfile?.DPIs.findIndex((dpi) => dpi.Select) || 0;
+        const newDPILevels: number[] = DPILevels?.map((_, idx) => (idx === mode ? defaultDPILevels : _)) || [];
         setDPI(
           path,
           mode,
           {
-            DPILevels: DPILevels?.map((_, idx) => (idx === mode ? 0 : _)) || [],
+            DPILevels: newDPILevels,
             DPIs: defaultProfile?.DPIs || [],
           },
           () => {
+            setCurrentDevice({
+              ...currentDevice,
+              ...{ Info: { ...currentDevice?.Info, ...{ DPILevels: newDPILevels } } },
+            } as any);
             const newDPILEDs = defaultProfile?.DPIs?.map((dpi, idx) => ({ Index: idx, Value: dpi.Color })) || [];
             const _newConfig = {
               ...(configData as Config),
@@ -119,6 +126,7 @@ const Feature = () => {
         );
 
         break;
+      }
       case 'KeyConfig': {
         const _newProfile = { ...profile, KeySet: defaultProfile?.KeySet || [[]] };
         // Add logic to reset DPI configuration to default

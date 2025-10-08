@@ -53,6 +53,9 @@ const Home: React.FC = () => {
 
       const { isReset, isUpgrade } = useProfileStore.getState();
       console.log('isUpgrade,isReset', isUpgrade, isReset);
+      if (isReset && deviceList[path!]) {
+        setCurrentDevice(deviceList[path!] as DeviceData);
+      }
       if (!isReset) {
         setConnected(hasCanSelectedDevice(deviceList));
       }
