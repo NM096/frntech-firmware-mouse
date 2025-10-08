@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useContext, useState } from 'react';
+import React, { createContext, useEffect, useContext, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ReactNode } from 'react';
 import back2 from '@/assets/back_device_2.png';
@@ -68,24 +68,24 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
               if (profileData) {
                 try {
                   console.log('Profile data retrieved successfully:', profileData);
-                  
+
                   // 转换为JSON字符串
                   const jsonString = JSON.stringify(profileData, null, 2);
                   console.log('JSON string length:', jsonString.length);
-                  
+
                   // 创建Blob对象
                   const blob = new Blob([jsonString], { type: 'application/json' });
-                  
+
                   // 创建下载链接
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement('a');
                   link.href = url;
                   link.download = currentConfigFileName || 'profile.json';
-                  
+
                   // 添加到文档并触发点击
                   document.body.appendChild(link);
                   link.click();
-                  
+
                   // 清理
                   setTimeout(() => {
                     document.body.removeChild(link);
@@ -146,7 +146,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       if (data) {
         // 先更新本地状态
         setProfile(data);
-        
+
         // 在setCurrentProfile的回调中应用配置到鼠标，确保配置保存成功后再同步
         setCurrentProfile(currentModelID, profile, data, (success) => {
           if (success) {
@@ -167,25 +167,25 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const handleApplyProfileToMouse = (profile: Profile) => {
     const { LEDEffect, DPIs, USBReports, WLReports, AdvanceSetting, KeySet } = profile;
     const { DPILevels } = currentDevice?.Info || {};
-    
+
     try {
       // 1. 先发送按键配置到设备，确保按键功能正确同步
       // 创建一个只包含KeySet的简化profile对象，专门用于按键配置同步
       const keyProfile = {
         ...profile,
-        KeySet: KeySet || [] // 确保KeySet存在
+        KeySet: KeySet || [], // 确保KeySet存在
       };
-      
+
       // 首先应用按键配置，这是最关键的一步
       apply(path, keyProfile, (success) => {
         if (success) {
           console.log('按键配置已成功发送到鼠标设备');
-          
+
           // 2. 设置灯光效果
           if (LEDEffect) {
             setLE(path, LEDEffect);
           }
-          
+
           // 3. 设置回报率
           if (USBReports || WLReports) {
             setReportRate(path, {
@@ -193,27 +193,32 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
               WLReports: WLReports || [],
             });
           }
-          
+
           // 4. 设置高级设置
           if (AdvanceSetting) {
             setAdvanceSetting(path, AdvanceSetting);
           }
-          
+
           // 5. 最后设置DPI，确保不会被其他设置覆盖
           setTimeout(() => {
-            setDPI(path, mode, {
-              DPILevels: DPILevels || [],
-              DPIs: DPIs || [],
-            }, () => {
-              console.log('DPI设置已应用到鼠标设备');
-              
-              // 6. 配置全部应用完成后，再次确认按键配置，确保切换稳定
-              setTimeout(() => {
-                apply(path, keyProfile, () => {
-                  console.log('按键配置再次确认已应用到鼠标设备');
-                });
-              }, 200);
-            });
+            setDPI(
+              path,
+              mode,
+              {
+                DPILevels: DPILevels || [],
+                DPIs: DPIs || [],
+              },
+              () => {
+                console.log('DPI设置已应用到鼠标设备');
+
+                // 6. 配置全部应用完成后，再次确认按键配置，确保切换稳定
+                setTimeout(() => {
+                  apply(path, keyProfile, () => {
+                    console.log('按键配置再次确认已应用到鼠标设备');
+                  });
+                }, 200);
+              }
+            );
           }, 100);
         } else {
           console.error('按键配置同步到鼠标设备失败');
@@ -236,31 +241,31 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     fileInput.type = 'file';
     fileInput.style.display = 'none';
     fileInput.accept = '.json'; // 限制只能选择JSON文件
-    
+
     // 设置文件选择事件处理
     fileInput.addEventListener('change', (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file && currentModelID) {
         // 创建FileReader来读取文件内容
         const reader = new FileReader();
-        
+
         reader.onload = (event) => {
           try {
             // 尝试解析文件内容
             const fileContent = event.target?.result as string;
             const profileData = JSON.parse(fileContent);
-            
+
             // 直接使用文件名作为配置名称
             const profileName = file.name.replace('.json', '');
-            
+
             console.log('Importing profile:', profileName, profileData);
-            
+
             // 首先检查配置名称是否已存在
             if (profileList.includes(profileName)) {
               console.error('Profile name already exists:', profileName);
               return;
             }
-            
+
             // 先添加配置文件
             AddProfile(currentModelID, profileName, () => {
               // 然后设置配置内容
@@ -277,20 +282,20 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
             console.error('Failed to read or parse profile file:', error);
           }
         };
-        
+
         reader.onerror = () => {
           console.error('Error reading file');
         };
-        
+
         // 以文本形式读取文件
         reader.readAsText(file);
       }
     });
-    
+
     // 添加到DOM并触发点击
     document.body.appendChild(fileInput);
     fileInput.click();
-    
+
     // 清理
     setTimeout(() => {
       document.body.removeChild(fileInput);
@@ -301,11 +306,32 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       _getProfileList();
     }
   }, [currentModelID]);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const drawer = drawerRef.current;
+    const header = document.querySelector('.header-center');
+
+    if (visible) {
+      header?.setAttribute('data-drag-disabled', 'true');
+      header?.setAttribute('style', '-webkit-app-region: no-drag');
+
+      if (drawer) {
+        drawer.style.setProperty('-webkit-app-region', 'no-drag');
+        drawer.style.zIndex = '9999';
+
+        void drawer.offsetHeight;
+        drawer.style.transform = 'translateZ(0)';
+      }
+    } else {
+      header?.setAttribute('style', '-webkit-app-region: drag');
+      drawer?.removeAttribute('style');
+    }
+  }, [visible]);
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
       <div className={`drawer-overlay ${visible ? 'show' : ''}`} onClick={close}></div>
-      <div className={`drawer drawer-profile ${visible ? 'open' : ''}`}>
+      <div className={`drawer drawer-profile ${visible ? 'open' : ''}`} ref={drawerRef}>
         <div className="profile-container">
           <div className="back-content">
             <div className="content-back-btn" onClick={close}>
@@ -318,7 +344,12 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
               <div>配置列表</div>
               <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
                 <div onClick={() => handleImportProfile()} className="flex items-center">
-                  <HoverImage src={ic_save} hoverSrc={ic_save} alt="ic_import" className="back-btn-icon cursor-pointer" />
+                  <HoverImage
+                    src={ic_save}
+                    hoverSrc={ic_save}
+                    alt="ic_import"
+                    className="back-btn-icon cursor-pointer"
+                  />
                 </div>
                 <div onClick={() => handleDeleteProfile()} className="flex items-center">
                   <HoverImage
@@ -329,12 +360,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                   />
                 </div>
                 <div onClick={() => handleCreateProfile()} className="flex items-center">
-                  <HoverImage
-                    src={ic_add}
-                    hoverSrc={ic_add}
-                    alt="ic_add"
-                    className="back-btn-icon cursor-pointer"
-                  />
+                  <HoverImage src={ic_add} hoverSrc={ic_add} alt="ic_add" className="back-btn-icon cursor-pointer" />
                 </div>
               </div>
             </div>

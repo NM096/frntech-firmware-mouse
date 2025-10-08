@@ -515,6 +515,7 @@ input:focus {
 .drawer.open {
   transform: translateX(0);
   opacity: 1;
+  -webkit-app-region: no-drag;
 }
 
 /* 遮罩层 */
