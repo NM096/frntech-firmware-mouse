@@ -250,7 +250,7 @@ const MacroConfig = () => {
     dialog
       .showSaveDialog({
         title: 'Save',
-        filters: { name: 'Key Profile Files', extensions: ['kpf'] },
+        filters: { name: 'Mouse Profile Files', extensions: ['mpf'] },
       })
       .then(function (result) {
         exportMacro(
@@ -272,7 +272,7 @@ const MacroConfig = () => {
     dialog
       .showOpenDialog({
         title: 'Open',
-        filters: [{ name: 'Key Profile Files', extensions: ['kpf'] }],
+        filters: [{ name: 'Mouse Macro Files', extensions: ['mmf'] }],
       })
       .then(function (result) {
         importMacro(result.filePaths[0]);
