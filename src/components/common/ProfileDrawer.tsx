@@ -255,7 +255,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     dialog
       .showOpenDialog({
         title: 'Open',
-        filters: [{ name: 'Key Profile Files', extensions: ['exe'] }],
+        filters: [{ name: 'Executables', extensions: ['exe'] }],
       })
       .then(function (result) {
         const newProfile = cloneDeep({ ...profile, LinkApps: (profile?.LinkApps || []).concat(result.filePaths[0]) });
