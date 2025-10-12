@@ -29,7 +29,7 @@ export const useProfileStore = create<ProfileState>()(
       upgradeProcess: 0,
       profile: cloneDeep(defaultProfile),
       defaultProfile: cloneDeep(defaultProfile),
-      setDefaultProfile: (newProfile) => set((state) => ({ defaultProfile: newProfile })),
+      setDefaultProfile: (newProfile) => set({ defaultProfile: newProfile }),
       setProfile: (newProfile) => set({ profile: newProfile }),
       updateProfile: async () => {
         try {

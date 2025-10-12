@@ -264,7 +264,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     dialog
       .showOpenDialog({
         title: 'Open',
-        filters: [{ name: 'Key Profile Files', extensions: ['exe'] }],
+        filters: [{ name: 'Executables', extensions: ['exe'] }],
       })
       .then(function (result) {
         if (!result || !result.filePaths || result.filePaths.length == 0) return;

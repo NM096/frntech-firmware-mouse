@@ -255,29 +255,31 @@ const MacroConfig = () => {
     dialog
       .showSaveDialog({
         title: 'Save',
-        filters: { name: 'Key Profile Files', extensions: ['kpf'] },
+        filters: [{ name: 'Mouse Macro Files', extensions: ['mmf'] }],
       })
       .then(function (result) {
-        exportMacro(
-          currentCategory,
-          { Content: KeyFormatter.capitalizeKeys(recordedActions) },
-          result.filePath,
-          (payload) => {
-            if (macroFiles.includes(currentMacroFile)) {
-              toast.success(t('export_success'));
-              console.log(payload);
-              setCurrentCategory(currentCategory);
-              setCurrentMacroFile(currentMacroFile);
+        if (!result.canceled) {
+          exportMacro(
+            currentCategory,
+            { Content: KeyFormatter.capitalizeKeys(recordedActions) },
+            result.filePath,
+            (payload) => {
+              if (macroFiles.includes(currentMacroFile)) {
+                toast.success(t('export_success'));
+                console.log(payload);
+                setCurrentCategory(currentCategory);
+                setCurrentMacroFile(currentMacroFile);
+              }
             }
-          }
-        );
+          );
+        }
       });
   };
   const handleImportMacroFile = () => {
     dialog
       .showOpenDialog({
         title: 'Open',
-        filters: [{ name: 'Key Profile Files', extensions: ['kpf'] }],
+        filters: [{ name: 'Mouse Macro Files', extensions: ['mmf'] }],
       })
       .then(function (result) {
         importMacro(result.filePaths[0]);
