@@ -483,12 +483,12 @@ const MacroConfig = () => {
                   stopRecording();
                 }}
                 onMouseEnter={() => {
-                  console.log('onMouseEnter', openRecords);
                   setOpenRecords(false);
+                  console.log('onMouseEnter', openRecords);
                 }}
                 onMouseLeave={() => {
-                  console.log('onMouseLeave', openRecords);
                   setOpenRecords(true);
+                  console.log('onMouseLeave', openRecords);
                 }}
               >
                 <HoverImage src={ic_stop} hoverSrc={ic_stop} className="back-btn-icon" />
@@ -511,14 +511,7 @@ const MacroConfig = () => {
               </div>
             )}
           </div>
-          <div
-            onMouseEnter={() => {
-              setOpenRecords(false);
-            }}
-            onMouseLeave={() => {
-              setOpenRecords(true);
-            }}
-          >
+          <div>
             <HoverImage
               src={ic_save2}
               hoverSrc={ic_save2}
@@ -586,15 +579,7 @@ const MacroConfig = () => {
       </div>
       <div className="macro-item-right">
         <div>{t('recording_delay_mode')}</div>
-        <ul
-          className="macro-delay-mode"
-          onMouseEnter={() => {
-            setOpenRecords(false);
-          }}
-          onMouseLeave={() => {
-            setOpenRecords(true);
-          }}
-        >
+        <ul className="macro-delay-mode">
           <li>
             <CustomRadio customSize="small" checked={delayMode === 'record'} onChange={() => setDelayMode('record')} />
             {t('recording_delay')}
