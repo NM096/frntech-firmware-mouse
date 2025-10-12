@@ -225,5 +225,11 @@
   "cannot_delete_last_profile": "无法删除最后一个配置文件",
   "firmware_upgrade": "固件升级",
   "current_latest_version": "当前已是最新版本",
-  "firmware_upgrade_confirmation": "确认升级固件？请确保在升级过程中不要断开设备连接。"
+  "firmware_upgrade_confirmation": "确认升级固件？请确保在升级过程中不要断开设备连接。",
+
+  "save": "保存",
+  "delete_selected_step": "删除选中步骤",
+  "move_selected_step_up": "上移选中步骤",
+  "move_selected_step_down": "下移选中步骤",
+  "clear_all_steps": "清除所有步骤"
 }

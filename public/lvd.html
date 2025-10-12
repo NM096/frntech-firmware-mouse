@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LVD Widget</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #2d2d2d;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+      }
+
+      .dpi-widget-container {
+        background-color: #2d2d2d;
+        border-radius: 12px;
+        padding: 20px 25px;
+
+        width: 100%;
+        /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); */
+        text-align: center;
+        color: #e0e0e0;
+      }
+
+      .dpi-display {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      #dpi-value {
+        color: #ff8c00;
+      }
+
+      .progress-bar-container {
+        width: 100%;
+        height: 8px;
+        background-color: #555;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 45px 0;
+      }
+
+      .progress-bar-inner {
+        height: 100%;
+        background-color: #aeb1b3;
+        border-radius: 4px;
+        width: 0;
+        transition: width 0.3s ease-in-out;
+      }
+
+      .info-text {
+        font-size: 18px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dpi-widget-container">
+      <div class="dpi-display">
+        <span>电池电量过低请及时充电</span>
+      </div>
+      <div id="info-text" class="info-text"></div>
+    </div>
+
+    <script>
+      const infoTextElement = document.getElementById('info-text');
+
+      function updateDPIWidget(info) {
+        infoTextElement.textContent = info;
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        updateDPIWidget('IN10');
+      });
+
+      document.addEventListener('astilectron-ready', function () {
+        astilectron.onMessage(function (message) {
+          switch (message.name) {
+            case 'LVDWindow':
+              if (message.Battery < 20) {
+                astilectron.sendMessage({ name: 'ShowWindow' });
+                updateDPIWidget(message.payload.Model);
+                if (window.dpiCloseTimeout) {
+                  clearTimeout(window.dpiCloseTimeout);
+                }
+                window.dpiCloseTimeout = setTimeout(() => {
+                  astilectron.sendMessage({ name: 'HideWindow' });
+                  window.dpiCloseTimeout = null;
+                }, 10000);
+                break;
+              }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

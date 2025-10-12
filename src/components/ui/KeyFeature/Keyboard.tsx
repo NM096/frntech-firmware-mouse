@@ -314,6 +314,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
         // onClick={startListening}
         onFocus={startListening}
         onBlur={stopListening}
+        onChange={() => {}}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', marginLeft: '20px' }}>
         {/* {keys.map((key) => (

@@ -4,7 +4,14 @@ import Power from '@/components/common/PowerIcon';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceInfo } from '@/types/device-data';
 import { useProfileStore } from '@/store/useProfile';
-import { getProfileByName, getModelProfile, setCurrentProfile, getConfigData, getModelConfig } from '@/utils/driver';
+import {
+  getProfileByName,
+  getModelProfile,
+  setCurrentProfile,
+  getConfigData,
+  getModelConfig,
+  setSelectProfile,
+} from '@/utils/driver';
 import { cloneDeep } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
 
@@ -25,7 +32,9 @@ const DeviceList = () => {
       if (!payload) {
         getModelProfile(ModelID, (profilePayload) => {
           console.log(profilePayload);
-          setCurrentProfile(ModelID, currentConfigFileName, profilePayload);
+          setCurrentProfile(ModelID, currentConfigFileName, profilePayload, () => {
+            setSelectProfile(ModelID, currentConfigFileName);
+          });
           setProfile(cloneDeep(profilePayload));
         });
       } else {

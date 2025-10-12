@@ -54,8 +54,17 @@ const driverMessageHandlers: Record<DriverMessageType, DriverMessageHandler[]> =
   DeviceListChanged: [],
   DeviceChanged: [],
   UpgradeProgress: [],
+  ProfileAppActive: [],
+  ProfileAppInactive: [],
 };
-type DriverMessageType = 'onAppReady' | 'onAppConfig' | 'DeviceListChanged' | 'DeviceChanged' | 'UpgradeProgress';
+type DriverMessageType =
+  | 'onAppReady'
+  | 'onAppConfig'
+  | 'DeviceListChanged'
+  | 'DeviceChanged'
+  | 'UpgradeProgress'
+  | 'ProfileAppActive'
+  | 'ProfileAppInactive';
 export function onDriverMessage(type: DriverMessageType, handler: DriverMessageHandler) {
   if (!driverMessageHandlers[type]) {
     driverMessageHandlers[type] = [];
@@ -714,6 +723,51 @@ export function DelProfile(modelID, name, callback?: (payload: any) => void) {
       payload: {
         ModelID: modelID,
         Name: name,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
+
+export function getSelectProfile(modelID, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetSelectProfile',
+      payload: {
+        ModelID: modelID,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
+
+export function setSelectProfile(modelID, name, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'SetSelectProfile',
+      payload: {
+        ModelID: modelID,
+        Name: name,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
+export function getExeIcon(path, callback?: (payload: any) => void) {
+  astilectron.sendMessage(
+    {
+      name: 'GetExeIcon',
+      payload: {
+        Path: path,
       },
     },
     function (message) {

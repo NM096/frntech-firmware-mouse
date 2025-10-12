@@ -99,16 +99,21 @@ const MacroConfig = () => {
     openConfirm({
       title: t('create_macro_group'),
       content: t('macro_group_name'),
-      onOk: (value) => {
-        addMacroCategory(value, (payload) => {
-          if (category.includes(value || '')) {
+      onOk: (categoryName) => {
+        addMacroCategory(categoryName, (payload) => {
+          if (category.includes(categoryName || '')) {
             toast.error(t('macro_group_exists'));
             return;
           }
           if (payload) {
-            getMacroCategorys((payload) => {
-              setCategory(payload);
-              handleSwitchCategory(value || '');
+            getMacroCategorys((categoryList) => {
+              setCategory(categoryList);
+              handleSwitchCategory(categoryName || '');
+              if (categoryList.length === 1) {
+                addMacro(categoryName, t('mouse_kf_macro'));
+                setMacroFiles([...macroFiles, t('mouse_kf_macro')]);
+                setCurrentMacroFile(t('mouse_kf_macro'));
+              }
               console.log('category', category);
               console.log('currentCategory', currentCategory);
             });
@@ -484,7 +489,7 @@ const MacroConfig = () => {
                   setOpenRecords(true);
                 }}
               >
-                <HoverImage src={ic_stop} hoverSrc={ic_stop} alt="Logo" className="back-btn-icon" />
+                <HoverImage src={ic_stop} hoverSrc={ic_stop} className="back-btn-icon" />
                 {t('stop_recording')}
               </div>
             ) : (
@@ -499,7 +504,7 @@ const MacroConfig = () => {
                   }
                 }}
               >
-                <HoverImage src={ic_play} hoverSrc={ic_play} alt="Logo" className="back-btn-icon" />
+                <HoverImage src={ic_play} hoverSrc={ic_play} className="back-btn-icon macro-group-action-icon" />
                 {t('start_recording')}
               </div>
             )}
@@ -516,7 +521,8 @@ const MacroConfig = () => {
               src={ic_save2}
               hoverSrc={ic_save2}
               alt="ic_save2"
-              className="back-btn-icon"
+              className="back-btn-icon macro-group-action-icon"
+              title={t('save')}
               onClick={() => handleSave()}
             />
           </div>
@@ -524,33 +530,33 @@ const MacroConfig = () => {
           <HoverImage
             src={delete_macro_action_1}
             hoverSrc={delete_macro_action_2}
-            alt="Logo"
-            className="back-btn-icon"
+            className="back-btn-icon macro-group-action-icon"
+            title={t('delete_selected_step')}
             onClick={() => deleteStep()}
           />
           <HoverImage
             src={btn_up_1}
             hoverSrc={btn_up_2}
-            alt="Logo"
-            className="back-btn-icon"
+            className="back-btn-icon macro-group-action-icon"
+            title={t('move_selected_step_up')}
             onClick={() => moveUpStep()}
           />
           <HoverImage
             src={btn_down_1}
             hoverSrc={btn_down_2}
-            alt="Logo"
-            className="back-btn-icon"
+            className="back-btn-icon macro-group-action-icon"
+            title={t('move_selected_step_down')}
             onClick={() => moveDownStep()}
           />
 
           <HoverImage
             src={ic_clear}
             hoverSrc={ic_clear}
-            alt="Logo"
-            className="back-btn-icon"
+            title={t('clear_all_steps')}
+            className="back-btn-icon macro-group-action-icon"
             onClick={() => clearRecords()}
           />
-          {/* <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />
+          {/* <HoverImage src={ic_move} hoverSrc={ic_move} className="back-btn-icon" />
           <div>
             X:
             <input

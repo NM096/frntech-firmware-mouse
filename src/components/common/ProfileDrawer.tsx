@@ -9,6 +9,7 @@ import ic_more from '@/assets/ic_more.png';
 import IconMenu from '../common/IconMenu';
 import ic_save from '@/assets/ic_save.png';
 import ic_addv2 from '@/assets/ic_addv2.png';
+import ic_close from '@/assets/ic_close2.png';
 import {
   GetProfiles,
   AddProfile,
@@ -22,6 +23,9 @@ import {
   setLE,
   importProfile,
   exportProfile,
+  setSelectProfile,
+  getSelectProfile,
+  getExeIcon,
 } from '@/utils/driver';
 import HoverImage from '@/components/common/HoverImage';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
@@ -52,6 +56,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const open = () => setVisible(true);
   const close = () => setVisible(false);
   const toggle = () => setVisible((v) => !v);
+  const [linksIconData, setLinksIconData] = useState<string[]>([]);
 
   const [profileList, setProfileList] = useState<string[]>([]);
   const fileMenu = [
@@ -159,6 +164,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   };
   const handleSelectProfile = (fileName: string) => {
     setCurrentConfigFileName(fileName);
+    setSelectProfile(currentModelID, fileName);
     getProfileByName(currentModelID, fileName, (data) => {
       if (data) {
         // 先更新本地状态
@@ -249,6 +255,9 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     GetProfiles(currentModelID, (profileList) => {
       console.log('Profile list:', profileList);
       setProfileList(profileList);
+      getSelectProfile(currentModelID, (profileName) => {
+        setCurrentConfigFileName(profileName);
+      });
     });
   };
   const handleAddLinkGame = () => {
@@ -258,12 +267,23 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
         filters: [{ name: 'Key Profile Files', extensions: ['exe'] }],
       })
       .then(function (result) {
+        if (!result || !result.filePaths || result.filePaths.length == 0) return;
         const newProfile = cloneDeep({ ...profile, LinkApps: (profile?.LinkApps || []).concat(result.filePaths[0]) });
         setCurrentProfile(currentModelID, currentConfigFileName, newProfile, () => {
           setProfile(newProfile);
         });
       });
   };
+
+  const handleDeleteLinkGame = (idx) => {
+    const _LinkApps = cloneDeep(profile?.LinkApps || []);
+    _LinkApps.splice(idx, 1);
+    const newProfile = cloneDeep({ ...profile, LinkApps: _LinkApps });
+    setCurrentProfile(currentModelID, currentConfigFileName, newProfile, () => {
+      setProfile(newProfile);
+    });
+  };
+
   const handleImportProfile = () => {
     // 创建一个隐藏的文件输入元素
     const fileInput = document.createElement('input');
@@ -367,6 +387,15 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     }
   }, [visible]);
 
+  useEffect(() => {
+    setLinksIconData([]);
+    (profile?.LinkApps || []).forEach((path: string) => {
+      getExeIcon(path, (iconBase64Data) => {
+        setLinksIconData((prev) => [...prev, 'data:image/png;base64,' + iconBase64Data]);
+      });
+    });
+  }, [profile]);
+
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
@@ -391,7 +420,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_save}
                           hoverSrc={ic_save}
                           alt="ic_import"
-                          className="back-btn-icon cursor-pointer"
+                          className="cursor-pointer back-btn-icon"
                         />
                       </div>
                       <div onClick={() => handleDeleteProfile(currentConfigFileName)} className="flex items-center">
@@ -399,7 +428,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_delete}
                           hoverSrc={ic_delete}
                           alt="ic_delete"
-                          className="back-btn-icon cursor-pointer"
+                          className="cursor-pointer back-btn-icon"
                         />
                       </div>
                       <div onClick={() => handleCreateProfile()} className="flex items-center">
@@ -407,7 +436,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_add}
                           hoverSrc={ic_add}
                           alt="ic_add"
-                          className="back-btn-icon cursor-pointer"
+                          className="cursor-pointer back-btn-icon"
                         />
                       </div>
                     </div>
@@ -444,10 +473,13 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                   <div>将配置与游戏/应用链接</div>
                   <div className="sub-title">已连接游戏/应用</div>
                   <div className="profile-game-list">
-                    {(profile?.LinkApps || []).map((app, idx) => {
+                    {linksIconData.map((app, idx) => {
                       return (
                         <div className="profile-game-item" key={app + idx}>
                           <img src={app} alt="" />
+                          <div className="profile-game-icon-close" onClick={() => handleDeleteLinkGame(idx)}>
+                            <img src={ic_close} alt="" />
+                          </div>
                         </div>
                       );
                     })}

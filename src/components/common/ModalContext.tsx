@@ -133,22 +133,22 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                       <div
                         className="confirm-btn"
                         onClick={() => {
-                          onCancel?.();
-                          setInputValue('');
-                          close(m.id);
-                        }}
-                      >
-                        {t('cancel')}
-                      </div>
-                      <div
-                        className="confirm-btn"
-                        onClick={() => {
                           onOk?.(inputValue);
                           setInputValue('');
                           close(m.id);
                         }}
                       >
                         {t('confirm')}
+                      </div>
+                      <div
+                        className="confirm-btn"
+                        onClick={() => {
+                          onCancel?.();
+                          setInputValue('');
+                          close(m.id);
+                        }}
+                      >
+                        {t('cancel')}
                       </div>
                     </div>
                   </div>
@@ -169,21 +169,21 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                       <div
                         className="confirm-btn"
                         onClick={() => {
-                          setInputValue('');
-                          close(m.id);
-                        }}
-                      >
-                        {t('cancel')}
-                      </div>
-                      <div
-                        className="confirm-btn"
-                        onClick={() => {
                           onOk?.();
                           setInputValue('');
                           close(m.id);
                         }}
                       >
                         {t('confirm')}
+                      </div>
+                      <div
+                        className="confirm-btn"
+                        onClick={() => {
+                          setInputValue('');
+                          close(m.id);
+                        }}
+                      >
+                        {t('cancel')}
                       </div>
                     </div>
                   </div>
@@ -193,9 +193,9 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             if (m.type === 'custom') {
               return (
                 <div key={m.id} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                  <div className="rounded-2xl bg-white p-6 shadow-xl">
+                  <div className="p-6 bg-white shadow-xl rounded-2xl">
                     {m.content}
-                    <button className="mt-4 rounded bg-gray-200 px-4 py-2" onClick={() => close(m.id)}>
+                    <button className="px-4 py-2 mt-4 bg-gray-200 rounded" onClick={() => close(m.id)}>
                       {t('close')}
                     </button>
                   </div>

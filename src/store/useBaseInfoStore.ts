@@ -5,6 +5,7 @@ import type { Config } from '@/types/data-config';
 import type { ModelConfig } from '@/types/device-data';
 interface DeviceInfoState {
   currentConfigFileName: string;
+  historyConfigFileName: string;
   isMaxWindow: boolean;
   deviceMap: DeviceData | null;
   currentModelID: string | null;
@@ -27,6 +28,7 @@ export const useBaseInfoStore = create<DeviceInfoState>()(
   persist(
     (set) => ({
       currentConfigFileName: 'profile1',
+      historyConfigFileName: '',
       isMaxWindow: false,
       deviceMap: null,
       currentDevice: null,
@@ -35,6 +37,7 @@ export const useBaseInfoStore = create<DeviceInfoState>()(
       path: null,
       configData: null,
       modelConfig: null,
+      setHistoryConfigFileName: (name) => set({ historyConfigFileName: name }),
       setCurrentConfigFileName: (name) => set({ currentConfigFileName: name }),
       setIsMaxWindow: (isMax) => set({ isMaxWindow: isMax }),
       setModelConfig: (config) => set({ modelConfig: config }),

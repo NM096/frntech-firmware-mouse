@@ -3,15 +3,27 @@ import Header from '../../components/ui/Header';
 import NoDevice from '@/components/ui/NoDevice';
 import DeviceList from '@/components/ui/DeviceList';
 import Feature from '@/components/ui/Feature';
-import { getDeviceList, listenDriverMessage, onDriverMessage, showWindow, hideWindow } from '@/utils/driver';
+import { getDeviceList, listenDriverMessage, onDriverMessage } from '@/utils/driver';
 import { useProfileStore } from '@/store/useProfile';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
+import useProfileAction from '@/hooks/useProfileAction';
 const Home: React.FC = () => {
-  const { deviceMap, setDeviceMap, currentDevice, mode, path, clearCurrentDevice, setCurrentDevice } =
-    useBaseInfoStore();
+  const {
+    deviceMap,
+    setDeviceMap,
+    currentDevice,
+    path,
+    clearCurrentDevice,
+    setCurrentDevice,
+    currentModelID,
+    currentConfigFileName,
+    setHistoryConfigFileName,
+    historyConfigFileName,
+  } = useBaseInfoStore();
   const { setUpgradeProcess } = useProfileStore();
   const [connected, setConnected] = useState(false);
+  const { handleSelectProfile } = useProfileAction();
   useEffect(() => {
     getDeviceList((deviceList: any) => {
       if (hasCanSelectedDevice(deviceList)) {
@@ -27,6 +39,8 @@ const Home: React.FC = () => {
     listenChangeDeviceInfo();
     listenUpgradeProgress();
     listenDriverMessage();
+    listenChangeProfileAppActive();
+    listenChangeProfileAppInactive();
   }, []);
   const hasCanSelectedDevice = (deviceList: any): boolean => {
     if (Object.keys(deviceList).length !== 0) {
@@ -108,6 +122,26 @@ const Home: React.FC = () => {
           console.log('Current device info updated:', deviceInfo, _newDeviceMap, hasCanSelectedDevice(_newDeviceMap));
           setConnected(hasCanSelectedDevice(_newDeviceMap));
         }
+      }
+    });
+  };
+  const listenChangeProfileAppActive = () => {
+    onDriverMessage('ProfileAppActive', (payload) => {
+      console.log('ProfileAppActive', currentConfigFileName, payload.Name);
+      if (payload.Model === currentModelID && currentConfigFileName !== payload.Name) {
+        console.log('---------SwitchFileName-----------', payload.Name);
+        console.log('---------HistoryConfigFileName-----------', currentConfigFileName);
+        setHistoryConfigFileName(currentConfigFileName);
+        handleSelectProfile(payload.Name);
+      }
+    });
+  };
+  const listenChangeProfileAppInactive = () => {
+    onDriverMessage('ProfileAppInactive', (payload) => {
+      if (payload.Model === currentModelID && historyConfigFileName !== '') {
+        console.log('---------SwitchFileName-----------', historyConfigFileName);
+        handleSelectProfile(historyConfigFileName);
+        setHistoryConfigFileName('');
       }
     });
   };

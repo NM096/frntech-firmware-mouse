@@ -10,6 +10,7 @@ interface MouseProp {
 }
 const Mouse: React.FC<MouseProp> = ({ list, onChange, keyDefine }) => {
   const { t } = useTranslation();
+  console.log(keyDefine);
   return (
     <>
       {list.map((item) => (

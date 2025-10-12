@@ -449,6 +449,8 @@ input:focus {
   display: flex;
   align-items: start;
   gap: 10px;
+  width: 130px;
+  flex: 0 0 auto;
 }
 .drawer-profile .content-back-btn {
   background: none;
@@ -480,6 +482,9 @@ input:focus {
   font-size: 12px;
   margin-top: 20px;
 }
+.profile-game-item {
+  position: relative;
+}
 .profile-game-item img {
   width: 80px;
   height: 80px;
@@ -500,6 +505,19 @@ input:focus {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  flex-wrap: wrap;
+}
+.profile-game .profile-game-icon-close {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  cursor: pointer;
+}
+.profile-game .profile-game-icon-close img {
+  width: 20px;
+  height: 20px;
 }
 .profile-container .profile-container-center {
   width: 230px;
@@ -508,6 +526,7 @@ input:focus {
   height: 90%;
   padding: 20px 10px;
   border-radius: 5px;
+  flex: 0 0 auto;
 }
 .profile-container .profile-header {
   display: flex;
@@ -1152,7 +1171,11 @@ input:focus {
 /* Custom Dropdown End */
 
 /* Macro Start */
-
+.macro-group-action-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0px;
+}
 .macro-container .macro-trigger-options {
   font-size: 12px;
 }
@@ -1388,7 +1411,7 @@ input:focus {
   align-items: center;
   flex-direction: row;
   gap: 10px;
-  padding: 0 20px;
+  padding: 0 5px;
   height: 40px;
   background-color: #14191a;
 }
