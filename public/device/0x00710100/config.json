@@ -16,5 +16,8 @@
 			{ "Level": 5, "DPI": 4800, "Value": 48 },
 			{ "Level": 6, "DPI": 12800, "Value": 128 }
 		]
+	},
+	"DPI": {
+		"FullColor": false
 	}
 }

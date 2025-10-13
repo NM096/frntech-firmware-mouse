@@ -182,7 +182,7 @@
   "page-performanceConfig": "----------------------------------------------------------------------------------------",
   "report_rate_settings": "回报率设置",
   "wired_and_wireless_mode_polling_rate": "有线和无线模式时鼠标轮询速率(蓝牙状态下设置无效)",
-  "primary_sleep_time_settings": "体眠时间设置(单位:秒)",
+  "primary_sleep_time_settings": "休眠时间设置(单位:秒)",
   "mouse_static_greater_than_set_time_enter_sleep_state": "鼠标静止大于设置时间后进入休眠状态",
   "deep_sleep_time_settings": "睡眠时间设置(单位:分钟)",
   "mouse_stop_enter_sleep_state": "鼠标停止后大于设置时间进入睡眠状态",
@@ -208,7 +208,7 @@
   "two_point_four_g_connection": "2.4G连接",
   "delay": " 延迟 ",
   "keyboard": "按键",
-  "resetCurrentPageConfig": "恢复当前页面默认配置",
+  "resetCurrentPageConfig": "恢复当前页面",
 
   "confirm_delete_profile": "确认删除配置文件",
   "confirm_delete_profile_desc": "确认删除配置文件：{{profile}}？",
