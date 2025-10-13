@@ -35,6 +35,12 @@
   "mouse_kf_mouse_back": "后退",
   "mouse_kf_mouse_wheel_up": "滚轮上滑",
   "mouse_kf_mouse_wheel_down": "滚轮下滑",
+  "mouse_kf_mouse_demo_1": "火力键",
+  "mouse_kf_mouse_demo_2": "狙击键",
+  "mouse_kf_mouse_demo_3": "向上滚动",
+  "mouse_kf_mouse_demo_4": "向下滚动",
+  "mouse_kf_mouse_demo_5": "向左滚动",
+  "mouse_kf_mouse_demo_6": "向右滚动",
   "mouse_kf_dpi_loop": "DPI循环切换",
   "mouse_kf_dpi_plus": "DPI增加",
   "mouse_kf_dpi_sub": "DPI减少",
@@ -231,5 +237,7 @@
   "delete_selected_step": "删除选中步骤",
   "move_selected_step_up": "上移选中步骤",
   "move_selected_step_down": "下移选中步骤",
-  "clear_all_steps": "清除所有步骤"
+  "clear_all_steps": "清除所有步骤",
+  "profileSettings": "配置设置",
+  "MouseMove": " 光标移动: X: {{ x }}, Y: {{ y }} "
 }

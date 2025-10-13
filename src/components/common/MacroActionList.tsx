@@ -6,6 +6,7 @@ import macro_key_down from '@/assets/macro_key_down.png';
 import macro_key_up from '@/assets/macro_key_up.png';
 import ic_mouse from '@/assets/mouse.png';
 import ic_time from '@/assets/time.png';
+import ic_move from '@/assets/ic_move.png';
 import { useEffect } from 'react';
 interface MacroActionListProps {
   events: MacroEvent[];
@@ -28,15 +29,14 @@ export default function MacroActionList({ events, delayMode, onSelectStep, selec
         return (
           <HoverImage src={keyboard_key_action} hoverSrc={keyboard_key_action} alt="Logo" className="back-btn-icon" />
         );
+      case 'MouseMove':
+        return <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />;
       case 'Delay':
         return <HoverImage src={ic_time} hoverSrc={ic_time} alt="Logo" className="back-btn-icon" />;
+
       default:
         return null;
     }
-  };
-
-  const isDown = (event: MacroEvent) => {
-    return ['MouseDown', 'KeyDown'].includes(event.type) ? true : false;
   };
 
   useEffect(() => {
@@ -62,12 +62,18 @@ export default function MacroActionList({ events, delayMode, onSelectStep, selec
                 {events[index * 2 + 1]?.code ? (Number(events[index * 2 + 1]?.code) / 1000).toFixed(3) : '0.001'}
                 {t('second')}
               </span>
-              {isDown(event) ? (
+              {['MouseDown', 'KeyDown'].includes(event.type) ? (
                 <HoverImage src={macro_key_down} hoverSrc={macro_key_down} alt="Logo" className="back-btn-icon" />
-              ) : (
+              ) : ['MouseUp', 'KeyUp'].includes(event.type) ? (
                 <HoverImage src={macro_key_up} hoverSrc={macro_key_up} alt="Logo" className="back-btn-icon" />
+              ) : (
+                <HoverImage src={ic_move} hoverSrc={ic_move} alt="Logo" className="back-btn-icon" />
               )}
-              <span>{t(event.name)}</span>
+              <span>
+                {event.type == 'MouseMove'
+                  ? t(event.name, { x: event.code.split(',')[0], y: event.code.split(',')[1] })
+                  : t(event.name)}
+              </span>
             </li>
           ))}
     </>

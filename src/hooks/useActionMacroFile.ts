@@ -111,6 +111,45 @@ const useActionMacroFile = () => {
       return newList;
     });
   };
+
+  const handleUpdateStepMouseMove = (x: number | string, y: number | string) => {
+    if (currentStepIdx === null) return;
+    setRecordList((prev) => {
+      const newList = [...prev];
+      newList[currentStepIdx] = { ...newList[currentStepIdx], code: `${x},${y}` };
+      return newList;
+    });
+  };
+
+  const handleAddMouseMoveStep = (x: number, y: number) => {
+    if (currentStepIdx === null) {
+      setRecordList((prev) => {
+        const newList = [...prev];
+        newList.splice(
+          newList.length,
+          0,
+          ...[
+            { type: 'MouseMove', name: 'MouseMove', code: `${x},${y}` },
+            { type: 'Delay', name: 'Delay', code: '100' },
+          ]
+        );
+        return newList;
+      });
+      return;
+    }
+    setRecordList((prev) => {
+      const newList = [...prev];
+      newList.splice(
+        currentStepIdx + 2,
+        0,
+        ...[
+          { type: 'MouseMove', name: 'MouseMove', code: `${x},${y}` },
+          { type: 'Delay', name: 'Delay', code: '100' },
+        ]
+      );
+      return newList;
+    });
+  };
   return {
     recordList,
     currentStepIdx,
@@ -123,6 +162,8 @@ const useActionMacroFile = () => {
     updateStepDelay,
     updateStepKeyboard,
     updateStepMouse,
+    handleAddMouseMoveStep,
+    handleUpdateStepMouseMove,
   };
 };
 

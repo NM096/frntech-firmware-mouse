@@ -15,6 +15,7 @@ import ic_delete from '@/assets/delete.png';
 import ic_add from '@/assets/ic_add.png';
 import ic_more from '@/assets/ic_more.png';
 import ic_play from '@/assets/play.png';
+import ic_move from '@/assets/ic_move.png';
 
 import ic_stop from '@/assets/stopPlay.png';
 import { useCallback, useEffect, useState } from 'react';
@@ -61,6 +62,9 @@ const MacroConfig = () => {
   const [delayMode, setDelayMode] = useState<'record' | 'default' | 'min'>('record');
   const [minDelay, setMinDelay] = useState(10);
 
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
+
   const [recording, setRecording] = useState(false);
   const [openRecords, setOpenRecords] = useState(false);
   const { records, clearRecords, setRecords, stop } = useMacroRecorder(recording, openRecords, delayMode, minDelay);
@@ -76,6 +80,8 @@ const MacroConfig = () => {
     updateStepDelay,
     updateStepKeyboard,
     updateStepMouse,
+    handleAddMouseMoveStep,
+    handleUpdateStepMouseMove,
   } = useActionMacroFile();
 
   useGlobalClickBlocker();
@@ -551,21 +557,46 @@ const MacroConfig = () => {
             className="back-btn-icon macro-group-action-icon"
             onClick={() => clearRecords()}
           />
-          {/* <HoverImage src={ic_move} hoverSrc={ic_move} className="back-btn-icon" />
+          <HoverImage
+            src={ic_move}
+            hoverSrc={ic_move}
+            className="back-btn-icon macro-group-action-icon"
+            onClick={() => {
+              if (currentMacroFile) handleAddMouseMoveStep(mouseX, mouseY);
+            }}
+          />
           <div>
             X:
             <input
-              type="text"
-              style={{ width: '50px', border: '0px', backgroundColor: 'white', color: 'black', textAlign: 'center' }}
+              type="number"
+              min={0}
+              max={999}
+              value={mouseX}
+              onChange={(e) => {
+                let val = Number(e.target.value);
+                if (val > 999) val = 999;
+                if (val < 0) val = 0;
+                setMouseX(val);
+              }}
+              className="mouse-xy-input"
             />
           </div>
           <div>
             Y:
             <input
-              type="text"
-              style={{ width: '50px', border: '0px', backgroundColor: 'white', color: 'black', textAlign: 'center' }}
+              type="number"
+              min={0}
+              max={999}
+              value={mouseY}
+              onChange={(e) => {
+                let val = Number(e.target.value);
+                if (val > 999) val = 999;
+                if (val < 0) val = 0;
+                setMouseY(val);
+              }}
+              className="mouse-xy-input"
             />
-          </div> */}
+          </div>
         </div>
         <ul className="macro-content-body">
           <MacroActionList
@@ -620,6 +651,41 @@ const MacroConfig = () => {
                 }}
                 size="small"
               />
+            ) : ['MouseMove'].includes(recordedActions[currentStepIdx]?.type) ? (
+              <div className="mouse-xy-input-group">
+                <div>
+                  X:
+                  <input
+                    type="number"
+                    min={0}
+                    max={999}
+                    value={recordedActions[currentStepIdx]?.code.split(',')[0] || 0}
+                    className="mouse-xy-input"
+                    onChange={(e) => {
+                      let val = Number(e.target.value);
+                      if (val > 999) val = 999;
+                      if (val < 0) val = 0;
+                      handleUpdateStepMouseMove(val, recordedActions[currentStepIdx]?.code.split(',')[1]);
+                    }}
+                  />
+                </div>
+                <div>
+                  Y:
+                  <input
+                    type="number"
+                    min={0}
+                    max={999}
+                    value={recordedActions[currentStepIdx]?.code.split(',')[1] || 0}
+                    onChange={(e) => {
+                      let val = Number(e.target.value);
+                      if (val > 999) val = 999;
+                      if (val < 0) val = 0;
+                      handleUpdateStepMouseMove(recordedActions[currentStepIdx]?.code.split(',')[0], val);
+                    }}
+                    className="mouse-xy-input"
+                  />
+                </div>
+              </div>
             ) : (
               <input
                 type="text"

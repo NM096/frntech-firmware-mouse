@@ -105,6 +105,9 @@ export interface ModelConfig {
   LETable?: LightEffect[];
   Advance?: Advance;
   SensorInfo?: SensorInfo;
+  DPI?: {
+    FullColor?: boolean;
+  };
 }
 
 export interface Advance {

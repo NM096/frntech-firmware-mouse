@@ -233,7 +233,9 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
     value |= 0x2000;
 
     const hexValue = '0x' + value.toString(16).padStart(4, '0').toUpperCase();
-
+    if (keyValue === 0) {
+      return;
+    }
     onChange({
       Name: show,
       Value: hexValue,

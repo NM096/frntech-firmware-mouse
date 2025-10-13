@@ -31,6 +31,9 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   const handleChangeMacro = (macroName: string) => {
     readMacro(selectedCategory, macroName, (payload) => {
       console.log('readMacro ', payload);
+      if (macroName === '' || !macroName) {
+        return;
+      }
       onChange?.({
         Name: macroName,
         Value: '0x8000',

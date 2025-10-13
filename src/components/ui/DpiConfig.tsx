@@ -33,6 +33,7 @@ const DpiConfig = () => {
     currentModelID,
     mode,
     path,
+    modelConfig,
     // setCurrentDevice: setStoreCurrentDevice,
     setCurrentDevice,
     configData,
@@ -42,7 +43,7 @@ const DpiConfig = () => {
   const { currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
-  const { DPILevels } = currentDevice?.Info || {};
+  const { DPILevels, SensorInfo } = currentDevice?.Info || {};
   const [localDPIs, setLocalDPIs] = useState<Dpi[]>(DPIs);
   const [currentDpiIdx, setCurrentDpiIdx] = useState<number>(findOpenDpiIndex(DPILevels?.[mode] || 0, DPIs) || 0);
   const handleSwitchOpenDpi = throttle((index: number, isChecked: boolean) => {
@@ -164,7 +165,12 @@ const DpiConfig = () => {
 
   useEffect(() => {
     // setCurrentDevice(currentDevice);
-    setLocalDPIs(DPIs);
+    if (SensorInfo != null && SensorInfo.DPIType != 0) {
+      setLocalDPIs(SensorInfo.DPIs || []);
+    } else {
+      setLocalDPIs(DPIs);
+    }
+
     setCurrentDpiIdx(findOpenDpiIndex(currentDevice?.Info?.DPILevels?.[mode] || 0, DPIs) || 0);
   }, [currentDevice, profile]);
 
@@ -204,11 +210,30 @@ const DpiConfig = () => {
                   handleChangeDpi(index, value);
                 }}
               />
-              <ColorPicker
-                top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
-                initialValue={DPIs[index]?.Color || ''}
-                onChange={(hex) => handleChangeDpiLed(index, hex)}
-              />
+              {!modelConfig?.DPI?.FullColor ? (
+                <ColorPicker
+                  top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
+                  initialValue={DPIs[index]?.Color || ''}
+                  onChange={(hex) => handleChangeDpiLed(index, hex)}
+                />
+              ) : (
+                <ColorPicker
+                  top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
+                  initialValue={DPIs[index]?.Color || ''}
+                  simple
+                  simpleColors={[
+                    '#aa0000',
+                    '#00ff00',
+                    '#0055ff',
+                    '#ff55ff',
+                    '#ffff00',
+                    '#00ffff',
+                    '#ffffff',
+                    '#cccccc',
+                  ]}
+                  onChange={(hex) => handleChangeDpiLed(index, hex)}
+                />
+              )}
             </div>
           );
         })}

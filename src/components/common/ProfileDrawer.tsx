@@ -74,41 +74,25 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       onClick: () => {
         if (currentModelID && currentConfigFileName) {
           try {
-            // 先获取配置文件内容
-            getProfileByName(currentModelID, currentConfigFileName, (profileData) => {
-              if (profileData) {
-                try {
-                  console.log('Profile data retrieved successfully:', profileData);
-
-                  // 转换为JSON字符串
-                  const jsonString = JSON.stringify(profileData, null, 2);
-                  console.log('JSON string length:', jsonString.length);
-
-                  // 创建Blob对象
-                  const blob = new Blob([jsonString], { type: 'application/json' });
-
-                  // 创建下载链接
-                  const url = URL.createObjectURL(blob);
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = currentConfigFileName || 'profile.json';
-
-                  // 添加到文档并触发点击
-                  document.body.appendChild(link);
-                  link.click();
-
-                  // 清理
-                  setTimeout(() => {
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                  }, 100);
-                } catch (error) {
-                  console.error('Export profile error during file creation:', error);
+            dialog
+              .showSaveDialog({
+                title: 'Save',
+                filters: [{ name: 'Mouse Profile Files', extensions: ['kpf'] }],
+              })
+              .then(function (result) {
+                if (!result.canceled) {
+                  exportProfile(currentModelID, profile, result.filePath, (payload) => {
+                    if (payload) {
+                      AddProfile(currentModelID, payload.Name ?? 'Profile', async () => {
+                        await _getProfileList();
+                        setCurrentProfile(currentModelID, payload.Name ?? 'Profile', defaultProfile, () => {
+                          handleSelectProfile(payload.Name ?? 'Profile');
+                        });
+                      });
+                    }
+                  });
                 }
-              } else {
-                console.error('Failed to get profile data');
-              }
-            });
+              });
           } catch (error) {
             console.error('Export profile error:', error);
           }
@@ -285,70 +269,14 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   };
 
   const handleImportProfile = () => {
-    // 创建一个隐藏的文件输入元素
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.style.display = 'none';
-    fileInput.accept = '.json'; // 限制只能选择JSON文件
-
-    // 设置文件选择事件处理
-    fileInput.addEventListener('change', (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file && currentModelID) {
-        // 创建FileReader来读取文件内容
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-          try {
-            // 尝试解析文件内容
-            const fileContent = event.target?.result as string;
-            const profileData = JSON.parse(fileContent);
-
-            // 直接使用文件名作为配置名称
-            const profileName = file.name.replace('.json', '');
-
-            console.log('Importing profile:', profileName, profileData);
-
-            // 首先检查配置名称是否已存在
-            if (profileList.includes(profileName)) {
-              console.error('Profile name already exists:', profileName);
-              return;
-            }
-
-            // 先添加配置文件
-            AddProfile(currentModelID, profileName, () => {
-              // 然后设置配置内容
-              setCurrentProfile(currentModelID, profileName, profileData, (success) => {
-                if (success) {
-                  _getProfileList(); // 重新获取配置列表
-                  console.log('Profile imported successfully:', profileName);
-                } else {
-                  console.error('Failed to set profile content');
-                }
-              });
-            });
-          } catch (error) {
-            console.error('Failed to read or parse profile file:', error);
-          }
-        };
-
-        reader.onerror = () => {
-          console.error('Error reading file');
-        };
-
-        // 以文本形式读取文件
-        reader.readAsText(file);
-      }
-    });
-
-    // 添加到DOM并触发点击
-    document.body.appendChild(fileInput);
-    fileInput.click();
-
-    // 清理
-    setTimeout(() => {
-      document.body.removeChild(fileInput);
-    }, 100);
+    dialog
+      .showOpenDialog({
+        title: 'Open',
+        filters: [{ name: 'Mouse Profile Files', extensions: ['kpf'] }],
+      })
+      .then(function (result) {
+        importProfile(currentModelID, result.filePaths[0]);
+      });
   };
   useEffect(() => {
     if (currentModelID) {
@@ -394,7 +322,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
         setLinksIconData((prev) => [...prev, 'data:image/png;base64,' + iconBase64Data]);
       });
     });
-  }, [profile]);
+  }, [currentModelID, profile?.LinkApps]);
 
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
@@ -420,7 +348,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_save}
                           hoverSrc={ic_save}
                           alt="ic_import"
-                          className="cursor-pointer back-btn-icon"
+                          className="back-btn-icon cursor-pointer"
                         />
                       </div>
                       <div onClick={() => handleDeleteProfile(currentConfigFileName)} className="flex items-center">
@@ -428,7 +356,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_delete}
                           hoverSrc={ic_delete}
                           alt="ic_delete"
-                          className="cursor-pointer back-btn-icon"
+                          className="back-btn-icon cursor-pointer"
                         />
                       </div>
                       <div onClick={() => handleCreateProfile()} className="flex items-center">
@@ -436,7 +364,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_add}
                           hoverSrc={ic_add}
                           alt="ic_add"
-                          className="cursor-pointer back-btn-icon"
+                          className="back-btn-icon cursor-pointer"
                         />
                       </div>
                     </div>

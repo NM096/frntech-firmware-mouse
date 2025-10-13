@@ -178,7 +178,7 @@ const Feature = () => {
         <div className="divider"></div>
         <div className="profile hover-bg" onClick={openProfileDrawer}>
           <HoverImage src={ic_profile} hoverSrc={ic_profile} alt="Profile" className="icon-7" />
-          <div className="profile-text">配置设置</div>
+          <div className="profile-text">{t('profileSettings')}</div>
         </div>
 
         {/* <div className="divider"></div>

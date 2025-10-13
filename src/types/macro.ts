@@ -11,7 +11,7 @@ export interface MacroFile {
 }
 
 export interface MacroEvent {
-  type: 'KeyDown' | 'KeyUp' | 'MouseDown' | 'MouseUp' | 'Delay';
+  type: 'KeyDown' | 'KeyUp' | 'MouseDown' | 'MouseUp' | 'Delay' | 'MouseMove';
   name: string;
   code: string;
 }

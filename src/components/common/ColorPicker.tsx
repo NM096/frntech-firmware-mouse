@@ -6,13 +6,32 @@ interface ColorPickerProps {
   initialValue?: string;
   onChange?: (color: string) => void;
   top?: number;
+  simple?: boolean; // 是否仅显示九色块
+  simpleColors?: string[]; // 九色块颜色列表
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onChange, top = 0 }) => {
+const DEFAULT_SIMPLE_COLORS = [
+  '#FF0000',
+  '#FFA500',
+  '#FFFF00',
+  '#00FF00',
+  '#00FFFF',
+  '#0000FF',
+  '#800080',
+  '#808080',
+  '#FFFFFF',
+];
+
+const ColorPicker: React.FC<ColorPickerProps> = ({
+  initialValue = '#ff0000',
+  onChange,
+  top = 0,
+  simple = false,
+  simpleColors = DEFAULT_SIMPLE_COLORS,
+}) => {
   const [color, setColor] = useState(initialValue);
   const [tempColor, setTempColor] = useState(initialValue);
   const [isOpen, setIsOpen] = useState(false);
-
   const pickerRef = useRef<HTMLDivElement>(null);
 
   const handleConfirm = () => {
@@ -34,25 +53,26 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
         setTempColor(color);
       }
     };
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, color]);
 
   return (
     <div style={{ display: 'inline-block', position: 'relative' }} ref={pickerRef}>
-      {/* 色块 */}
+      {/* 触发色块 */}
       <div
         style={{
           width: '20px',
           height: '20px',
-          borderRadius: '1px',
-          backgroundColor: initialValue || color,
+          borderRadius: '2px',
+          backgroundColor: color,
           cursor: 'pointer',
+          border: '1px solid #444',
         }}
         onClick={() => setIsOpen(!isOpen)}
       />
+
+      {/* 弹出面板 */}
       {isOpen && (
         <div
           style={{
@@ -60,40 +80,65 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
             marginTop: '8px',
             zIndex: 1000,
             right: '40px',
-            top: top + 'px',
+            top: `${top}px`,
             background: '#2c2c2c',
             boxShadow: '0 0 10px rgba(0,0,0,0.5)',
-            padding: '4px',
+            padding: '6px',
             borderRadius: '6px',
           }}
         >
-          {/* react-color 选择器 */}
-          <SketchPicker
-            color={tempColor}
-            onChange={(c: ColorResult) => setTempColor(c.hex)}
-            styles={{
-              default: {
-                picker: {
-                  width: '200px',
-                  background: '#2c2c2c', // 修改整体背景色
-                  borderRadius: '6px',
-                  boxShadow: '0',
+          {/* 简单模式：九色块 */}
+          {simple ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 24px)',
+                gap: '6px',
+                justifyContent: 'center',
+                padding: '6px',
+              }}
+            >
+              {simpleColors.map((c) => (
+                <div
+                  key={c}
+                  onClick={() => setTempColor(c)}
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: c,
+                    borderRadius: '4px',
+                    border: c === tempColor ? '2px solid #fff' : '2px solid transparent',
+                    cursor: 'pointer',
+                    transition: 'border 0.2s',
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            // 全彩模式
+            <SketchPicker
+              color={tempColor}
+              onChange={(c: ColorResult) => setTempColor(c.hex)}
+              styles={{
+                default: {
+                  picker: {
+                    width: '200px',
+                    background: '#2c2c2c',
+                    borderRadius: '6px',
+                    boxShadow: 'none',
+                  },
+                  saturation: { borderRadius: '6px' },
+                  hue: { borderRadius: '6px' },
                 },
-                saturation: {
-                  borderRadius: '6px',
-                },
-                hue: {
-                  borderRadius: '6px',
-                },
-              },
-            }}
-          />
-          {/* 按钮 */}
+              }}
+            />
+          )}
+
           <div
             style={{
               display: 'flex',
               justifyContent: 'flex-end',
-              marginBottom: '4px',
+              marginTop: '8px',
             }}
           >
             <button
@@ -119,7 +164,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ initialValue = '#ff0000', onC
                 background: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
-                marginRight: '6px',
                 borderRadius: '4px',
                 padding: '4px 6px',
                 cursor: 'pointer',
