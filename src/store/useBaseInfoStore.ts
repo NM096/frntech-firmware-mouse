@@ -21,6 +21,7 @@ interface DeviceInfoState {
   setDeviceMap: (map: DeviceData | null) => void;
   setCurrentDevice: (device: DeviceInfo | null) => void;
   clearCurrentDevice: () => void;
+  setHistoryConfigFileName: (name: string) => void,
   setCurrentConfigFileName: (name: string) => void;
 }
 
