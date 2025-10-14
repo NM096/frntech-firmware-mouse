@@ -70,12 +70,12 @@
     <script>
       const infoTextElement = document.getElementById('info-text');
 
-      function updateDPIWidget(info) {
+      function updateLVDWidget(info) {
         infoTextElement.textContent = info;
       }
 
       document.addEventListener('DOMContentLoaded', () => {
-        updateDPIWidget('IN10');
+        updateLVDWidget('IN10');
       });
 
       document.addEventListener('astilectron-ready', function () {
@@ -84,7 +84,7 @@
             case 'LVDWindow':
               if (message.Battery < 20) {
                 astilectron.sendMessage({ name: 'ShowWindow' });
-                updateDPIWidget(message.payload.Model);
+                updateLVDWidget(message.payload.Model);
                 if (window.dpiCloseTimeout) {
                   clearTimeout(window.dpiCloseTimeout);
                 }
