@@ -1,9 +1,10 @@
 import Dropdown from '@/components/common/Dropdown';
 import CustomRadio from '@/components/common/CustomRadio';
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import { getMacroCategorys, getMacros, readMacro } from '@/utils/driver';
 import type { KeyDefine, KeyItem } from '@/types/profile';
 import { useTranslation } from 'react-i18next';
+import { init } from 'i18next';
 interface MacroProps {
   onChange?: (keyDefine: KeyItem) => void;
   initialMacro?: KeyDefine;
@@ -63,6 +64,12 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
       setMacros(payload);
     });
   }, [selectedCategory]);
+  useEffect(() => {
+    setSelectedCategory(initialMacro?.Macro?.Category || '');
+    setSelectedMacro(initialMacro?.Macro?.Name || '');
+    setMacroType(initialMacro?.Macro?.Type ? Number(initialMacro?.Macro?.Type) : 1);
+    setCycles(initialMacro?.Macro?.Cycles ? Number(initialMacro?.Macro?.Cycles) : 1);
+  }, [initialMacro]);
 
   return (
     <div className="macro-container">

@@ -42,6 +42,7 @@ export interface Profile {
   WLReports?: number[];
   LinkApps?: string[];
   AdvanceSetting?: AdvanceSetting;
+  Name?: string;
 }
 
 export interface KeyItem {

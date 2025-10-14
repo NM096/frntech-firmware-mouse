@@ -79,8 +79,8 @@ const KeyMouse: React.FC<KeyMouseProps> = ({ activeKey, onKeySelect }) => {
           >
             {key?.Value === '0x8000'
               ? `${t('mouse_kf_macro')}-${key.Show}`
-              : key?.Lang?.includes('[combination_Key]')
-                ? key.Show
+              : key?.Lang?.includes('(combination_Key)')
+                ? key?.Lang?.split('(combination_Key)')[0]
                 : t(key?.Lang || '')}
           </div>
         ))}

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import Mouse from './KeyFeature/Mouse';
 import Macro from './KeyFeature/Macro';
 import Keyboard from './KeyFeature/Keyboard';
@@ -10,13 +10,23 @@ import { useProfileStore } from '@/store/useProfile';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep, debounce } from 'lodash';
 import type { KeyDefine, KeyItem } from '@/types/profile';
+import { setConfigData } from '@/utils/driver';
+import Dropdown from '@/components/common/Dropdown';
 
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 
 const KeyConfig = () => {
   const { t } = useTranslation();
   const { Mouse: mouseKeys, Quit: quitKeys, Media: mediaKeys } = Keys;
-  const { currentModelID, currentDevice, currentConfigFileName } = useBaseInfoStore();
+  const {
+    currentModelID,
+    currentDevice,
+    currentConfigFileName,
+    modelConfig,
+    path,
+    configData,
+    setConfigData: setConfigDataOnStore,
+  } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
 
   const [activeKey, setActiveKey] = useState<number | null>(null);
@@ -68,7 +78,31 @@ const KeyConfig = () => {
         useProfileStore.getState().updateProfile();
       }
     });
-  }, 1000);
+  }, 500);
+
+  const snipeDPIList = useCallback(() => {
+    const { SensorInfo } = currentDevice?.Info || {};
+    if (SensorInfo != null && SensorInfo.DPIType != 0) {
+      return SensorInfo?.DPIs || [];
+    } else {
+      return modelConfig?.SensorInfo?.DPIs || [];
+    }
+  }, [currentDevice, modelConfig]);
+
+  const handleSettingSnipeDPI = (dpi: string) => {
+    const _dpiList = snipeDPIList();
+    const currentDpiItem = _dpiList.find((item) => item.DPI === dpi);
+    const _newConfig = cloneDeep(configData);
+    // mouse_kf_advance_snipe_dpi_sub
+    if (currentKeyDefine?.Value == '0x480A') {
+      _newConfig.SnipeDPISub = currentDpiItem;
+    } else {
+      _newConfig.SnipeDPIAdd = currentDpiItem;
+    }
+    setConfigData(path, _newConfig, () => {
+      setConfigDataOnStore(_newConfig);
+    });
+  };
 
   useEffect(() => {
     if (activeKey == null) return;
@@ -81,7 +115,7 @@ const KeyConfig = () => {
       if (quitKeys.some((i) => i.Lang === keyDefine.Lang)) setActiveSidebar('Quit');
       if (mediaKeys.some((i) => i.Lang === keyDefine.Lang)) setActiveSidebar('Media');
       if ('0x8000' === keyDefine.Value) setActiveSidebar('Macro');
-      if (keyDefine.Lang.includes('[combination_Key]')) setActiveSidebar('Keyboard');
+      if (keyDefine.Lang.includes('(combination_Key)')) setActiveSidebar('Keyboard');
     }
   }, [activeKey, profile]);
 
@@ -119,6 +153,46 @@ const KeyConfig = () => {
                   {item.title}
                 </div>
               ))}
+            </div>
+            <div className="key-config-section-option">
+              {currentKeyDefine?.Value.includes('0x43') && (
+                <div className="mouse_fire_key">
+                  <div>火力值:</div>
+                  <input
+                    type="number"
+                    min={0}
+                    max={256}
+                    value={parseInt(currentKeyDefine.Value.split('0x43')[1] || '0', 16)}
+                    onChange={(e) => {
+                      const currentValue = Math.min(256, Math.max(0, Number(e.target.value))) || 0;
+                      handleKeyChange({ ...currentKeyDefine, Value: `0x43${currentValue.toString(16)}` });
+                    }}
+                    className="mouse-fire-input"
+                  />
+                </div>
+              )}
+              {['0x480A', '0x480B'].includes(currentKeyDefine?.Value || '') && (
+                <div className="advance_snipe_dpi_plus">
+                  <div>狙击DPI:</div>
+                  <Dropdown
+                    borderColor="#ff7f0e"
+                    options={snipeDPIList().map((dpi) => dpi.DPI)}
+                    defaultValue={
+                      currentKeyDefine?.Value == '0x480A'
+                        ? configData?.SnipeDPISub?.DPI !== undefined
+                          ? configData?.SnipeDPISub?.DPI.toString()
+                          : snipeDPIList()[0]?.DPI.toString()
+                        : configData?.SnipeDPIPlus?.DPI !== undefined
+                          ? configData?.SnipeDPIPlus?.DPI.toString()
+                          : snipeDPIList()[0]?.DPI.toString()
+                    }
+                    onChange={(dpi) => {
+                      handleSettingSnipeDPI(dpi);
+                    }}
+                    size="small" // 选择 'small', 'medium' 或 'large'
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className="key-config-feature-list">{sidebarComponents[activeSidebar]?.() || null}</div>

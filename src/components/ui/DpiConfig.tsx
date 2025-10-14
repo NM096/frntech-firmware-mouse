@@ -41,7 +41,6 @@ const DpiConfig = () => {
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;
   const { DPILevels, SensorInfo } = currentDevice?.Info || {};
-  const [localDPIs, setLocalDPIs] = useState<Dpi[]>(DPIs);
   const [currentDpiIdx, setCurrentDpiIdx] = useState<number>(findOpenDpiIndex(DPILevels?.[mode] || 0, DPIs) || 0);
   const handleSwitchOpenDpi = throttle((index: number, isChecked: boolean) => {
     if (index === currentDpiIdx) {
@@ -161,7 +160,6 @@ const DpiConfig = () => {
   };
 
   useEffect(() => {
-    setLocalDPIs(DPIs);
     setCurrentDpiIdx(findOpenDpiIndex(currentDevice?.Info?.DPILevels?.[mode] || 0, DPIs) || 0);
   }, [currentDevice, profile]);
 
@@ -176,9 +174,9 @@ const DpiConfig = () => {
       </div>
       <div className="dpi-container">
         <div>{t('dpi_adjustment')}</div>
-        {localDPIs.map((dpi, index) => {
+        {DPIs.map((dpi, index) => {
           return (
-            <div className="dpi-container-item" key={index}>
+            <div className="dpi-container-item" key={dpi.Level || index}>
               <Checkbox
                 checked={dpi.Open || false}
                 size={16}
@@ -207,7 +205,7 @@ const DpiConfig = () => {
                   initialValue={DPIs[index]?.Color || ''}
                   onChange={(hex) => handleChangeDpiLed(index, hex)}
                 />
-              ) : ( 
+              ) : (
                 <ColorPicker
                   top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
                   initialValue={DPIs[index]?.Color || ''}

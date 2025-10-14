@@ -1187,6 +1187,25 @@ input[type='number'] {
 /* Custom Dropdown End */
 
 /* Macro Start */
+.key-config-section-option {
+  margin: 10px 0;
+  font-size: 14px;
+  text-align: center;
+}
+.key-config-section-option .mouse_fire_key,
+.key-config-section-option .advance_snipe_dpi_plus {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.mouse_fire_key .mouse-fire-input {
+  width: 100%;
+  margin-left: 5px;
+  border: 0px;
+  background-color: white;
+  color: black;
+  text-align: center;
+}
 .macro-group-action-icon {
   width: 24px;
   height: 24px;

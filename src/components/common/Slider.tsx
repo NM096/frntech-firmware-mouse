@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useProfileStore } from '@/store/useProfile';
 import type { Dpi } from '@/types/profile';
+import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 
 interface SliderProps {
   initialValue?: number;
@@ -8,9 +8,8 @@ interface SliderProps {
 }
 
 const Slider: React.FC<SliderProps> = ({ initialValue, onChange }) => {
-  const { defaultProfile } = useProfileStore();
-  const dpiList = defaultProfile?.DPIs || [];
-
+  const { currentDevice, modelConfig } = useBaseInfoStore();
+  const [dpiList, setDpiList] = useState<Dpi[]>([]);
   const min = dpiList.length > 0 ? dpiList[0].Level : 0;
   const max = dpiList.length > 0 ? dpiList[dpiList.length - 1].Level : 0;
 
@@ -28,6 +27,14 @@ const Slider: React.FC<SliderProps> = ({ initialValue, onChange }) => {
     const dpi = dpiList.find((dpi) => dpi.Level === level) || dpiList[0];
     if (dpi) onChange(dpi);
   };
+  useEffect(() => {
+    const { SensorInfo } = currentDevice?.Info || {};
+    if (SensorInfo != null && SensorInfo.DPIType != 0) {
+      setDpiList(SensorInfo?.DPIs || []);
+    } else {
+      setDpiList((modelConfig?.SensorInfo?.DPIs as any) || []);
+    }
+  }, [currentDevice, modelConfig]);
 
   // 初始化时同步一次
   useEffect(() => {
@@ -50,7 +57,7 @@ const Slider: React.FC<SliderProps> = ({ initialValue, onChange }) => {
     window.addEventListener('resize', updateWidth);
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
-
+  useEffect(() => {});
   const showLabelValue = (level: number) => {
     const dpi = dpiList.find((dpi) => dpi.Level === level);
     return dpi ? dpi.DPI : level;

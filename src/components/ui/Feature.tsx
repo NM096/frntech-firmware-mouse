@@ -74,12 +74,13 @@ const Feature = () => {
     MacroConfig: () => <MacroConfig />,
   };
 
-  const { openAlert } = useModal();
+  const { openAlert, openConfigLoading, closeAll, close } = useModal();
   const resetMouse = () => {
     openAlert({
       title: t('tips'),
       content: t('confirm_reset_config'),
       onOk: () => {
+        const _loading = openConfigLoading({ proccess: 0 });
         setIsReset(true);
         reset(path, () => {
           setTimeout(() => {
@@ -87,6 +88,7 @@ const Feature = () => {
           }, 5000);
           setCurrentProfile(currentModelID, currentConfigFileName, defaultProfile);
           setProfile(defaultProfile);
+          close(_loading);
         });
       },
     });

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useContext, useState, useRef } from 'react';
+import React, { createContext, useEffect, useContext, useState, useRef, use } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ReactNode } from 'react';
 import back2 from '@/assets/back_device_2.png';
@@ -35,6 +35,7 @@ import { useProfileStore } from '@/store/useProfile';
 import type { Profile } from '@/types/profile';
 import Portal from './Portal';
 import { cloneDeep } from 'lodash';
+import useProfileAction from '@/hooks/useProfileAction';
 
 const { dialog } = require('electron').remote;
 type ProfileDrawerContextType = {
@@ -50,15 +51,43 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const { currentModelID, currentConfigFileName, setCurrentConfigFileName, path, mode, currentDevice } =
     useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
+  const { handleSelectProfile: hookSelectProfile } = useProfileAction();
   const defaultProfile = cloneDeep(useProfileStore.getState().defaultProfile);
   const [visible, setVisible] = useState(false);
-  const { openConfirm, openAlert } = useModal();
+  const { openConfirm, openAlert, openConfigLoading, closeAll, close: closeModal } = useModal();
   const open = () => setVisible(true);
   const close = () => setVisible(false);
   const toggle = () => setVisible((v) => !v);
   const [linksIconData, setLinksIconData] = useState<string[]>([]);
 
   const [profileList, setProfileList] = useState<string[]>([]);
+  const handleExportProfile = () => {
+    if (currentModelID && currentConfigFileName) {
+      try {
+        dialog
+          .showSaveDialog({
+            title: 'Save',
+            filters: [{ name: 'Mouse Profile Files', extensions: ['mpf'] }],
+          })
+          .then(function (result) {
+            if (!result.canceled) {
+              exportProfile(currentModelID, profile, result.filePath, (payload) => {
+                if (payload) {
+                  AddProfile(currentModelID, payload.Name ?? 'Profile', async () => {
+                    await _getProfileList();
+                    setCurrentProfile(currentModelID, payload.Name ?? 'Profile', defaultProfile, () => {
+                      handleSelectProfile(payload.Name ?? 'Profile');
+                    });
+                  });
+                }
+              });
+            }
+          });
+      } catch (error) {
+        console.error('Export profile error:', error);
+      }
+    }
+  };
   const fileMenu = [
     {
       label: t('delete_profile_file'),
@@ -71,33 +100,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     {
       label: t('export_profile_file'),
       value: 'export',
-      onClick: () => {
-        if (currentModelID && currentConfigFileName) {
-          try {
-            dialog
-              .showSaveDialog({
-                title: 'Save',
-                filters: [{ name: 'Mouse Profile Files', extensions: ['mpf'] }],
-              })
-              .then(function (result) {
-                if (!result.canceled) {
-                  exportProfile(currentModelID, profile, result.filePath, (payload) => {
-                    if (payload) {
-                      AddProfile(currentModelID, payload.Name ?? 'Profile', async () => {
-                        await _getProfileList();
-                        setCurrentProfile(currentModelID, payload.Name ?? 'Profile', defaultProfile, () => {
-                          handleSelectProfile(payload.Name ?? 'Profile');
-                        });
-                      });
-                    }
-                  });
-                }
-              });
-          } catch (error) {
-            console.error('Export profile error:', error);
-          }
-        }
-      },
+      onClick: () => handleExportProfile(),
     },
   ];
 
@@ -147,6 +150,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     });
   };
   const handleSelectProfile = (fileName: string) => {
+    const _loading = openConfigLoading({ proccess: 0 });
     setCurrentConfigFileName(fileName);
     setSelectProfile(currentModelID, fileName);
     getProfileByName(currentModelID, fileName, (data) => {
@@ -163,6 +167,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
           } else {
             console.error('配置文件同步到鼠标设备失败');
           }
+          closeModal(_loading);
         });
       } else {
         console.error('获取配置文件失败');
@@ -241,6 +246,9 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
       setProfileList(profileList);
       getSelectProfile(currentModelID, (profileName) => {
         setCurrentConfigFileName(profileName);
+        if (profile.Name !== profileName) {
+          hookSelectProfile(profileName);
+        }
       });
     });
   };
@@ -278,11 +286,6 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
         importProfile(currentModelID, result.filePaths[0]);
       });
   };
-  useEffect(() => {
-    if (currentModelID) {
-      _getProfileList();
-    }
-  }, [currentModelID]);
 
   useEffect(() => {
     if (!currentDevice) {
@@ -316,14 +319,19 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   }, [visible]);
 
   useEffect(() => {
+    if (!visible) return;
     setLinksIconData([]);
     (profile?.LinkApps || []).forEach((path: string) => {
       getExeIcon(path, (iconBase64Data) => {
         setLinksIconData((prev) => [...prev, 'data:image/png;base64,' + iconBase64Data]);
       });
     });
-  }, [currentModelID, profile?.LinkApps]);
-
+  }, [currentModelID, profile?.LinkApps, visible]);
+  useEffect(() => {
+    if (currentModelID) {
+      _getProfileList();
+    }
+  }, [currentModelID]);
   return (
     <ProfileDrawerContext.Provider value={{ open, close, toggle }}>
       {children}
@@ -348,7 +356,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_save}
                           hoverSrc={ic_save}
                           alt="ic_import"
-                          className="back-btn-icon cursor-pointer"
+                          className="cursor-pointer back-btn-icon"
                         />
                       </div>
                       <div onClick={() => handleDeleteProfile(currentConfigFileName)} className="flex items-center">
@@ -356,7 +364,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_delete}
                           hoverSrc={ic_delete}
                           alt="ic_delete"
-                          className="back-btn-icon cursor-pointer"
+                          className="cursor-pointer back-btn-icon"
                         />
                       </div>
                       <div onClick={() => handleCreateProfile()} className="flex items-center">
@@ -364,7 +372,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                           src={ic_add}
                           hoverSrc={ic_add}
                           alt="ic_add"
-                          className="back-btn-icon cursor-pointer"
+                          className="cursor-pointer back-btn-icon"
                         />
                       </div>
                     </div>

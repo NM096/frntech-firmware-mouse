@@ -81,7 +81,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
       if (modal?.type === 'loading') {
         setTimeout(() => {
           setModals((current) => current.filter((m) => m.id !== id));
-        }, 1000);
+        }, 2000);
         return prev;
       }
       return prev.filter((m) => m.id !== id);

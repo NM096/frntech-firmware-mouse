@@ -30,7 +30,10 @@ const Mouse: React.FC<MouseProp> = ({ list, onChange, keyDefine }) => {
           }}
         >
           <span>{t(item.Lang)}</span>
-          <CustomRadio checked={keyDefine?.Value === item.Value} customSize={'small'} />
+          <CustomRadio
+            checked={keyDefine?.Value === item.Value || (keyDefine?.Value.includes('0x43') && item?.Value == '0x4302')}
+            customSize={'small'}
+          />
         </div>
       ))}
     </>

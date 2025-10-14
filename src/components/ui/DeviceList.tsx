@@ -16,7 +16,14 @@ import { cloneDeep } from 'lodash';
 const baseUrl = import.meta.env.BASE_URL;
 
 const DeviceList = () => {
-  const { deviceMap, setCurrentDevice, setConfigData, setModelConfig, currentConfigFileName } = useBaseInfoStore();
+  const {
+    deviceMap,
+    setCurrentDevice,
+    setConfigData,
+    setModelConfig,
+    currentConfigFileName,
+    setCurrentConfigFileName,
+  } = useBaseInfoStore();
   const { setDefaultProfile } = useProfileStore();
   const { setProfile } = useProfileStore();
 

@@ -103,26 +103,37 @@ const KeyCodeMap = {
 };
 
 // 修饰键映射
-const ModifierKeys = {
-  Control: { code: 0x1100, name: 'Ctrl' },
-  Shift: { code: 0x1200, name: 'Shift' },
-  Alt: { code: 0x1400, name: 'Alt' },
-  Meta: { code: 0x1800, name: 'Win' },
-};
+// const ModifierKeys = {
+//   Control: { code: 0x1100, name: 'Ctrl' },
+//   Shift: { code: 0x1200, name: 'Shift' },
+//   Alt: { code: 0x1400, name: 'Alt' },
+//   Meta: { code: 0x1800, name: 'Win' },
+// };
 
+const ModifierKeys = {
+  Control: { code: 0x0100, name: 'Ctrl' }, // 使用第 8 位
+  Shift: { code: 0x0200, name: 'Shift' }, // 使用第 9 位
+  Alt: { code: 0x0400, name: 'Alt' }, // 使用第 10 位
+  Meta: { code: 0x0800, name: 'Win' }, // 使用第 11 位
+};
 // 从Value解析快捷键
 const parseShortcutValue = (value: string) => {
   const numValue = parseInt(value, 16);
   if (isNaN(numValue)) return { keyValue: 0, modifiers: { Control: false, Shift: false, Alt: false, Meta: false } };
 
   const keyValue = numValue & 0x00ff;
+  // const modifiers = {
+  //   Control: (numValue & 0x1100) !== 0,
+  //   Shift: (numValue & 0x1200) !== 0,
+  //   Alt: (numValue & 0x1400) !== 0,
+  //   Meta: (numValue & 0x1800) !== 0,
+  // };
   const modifiers = {
-    Control: (numValue & 0x1100) !== 0,
-    Shift: (numValue & 0x1200) !== 0,
-    Alt: (numValue & 0x1400) !== 0,
-    Meta: (numValue & 0x1800) !== 0,
+    Control: (numValue & ModifierKeys.Control.code) !== 0,
+    Shift: (numValue & ModifierKeys.Shift.code) !== 0,
+    Alt: (numValue & ModifierKeys.Alt.code) !== 0,
+    Meta: (numValue & ModifierKeys.Meta.code) !== 0,
   };
-
   return { keyValue, modifiers };
 };
 
@@ -150,9 +161,10 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
   });
   const [isListening, setIsListening] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [hasUserModified, setHasUserModified] = useState(false);
   useEffect(() => {
-    if (initialShortcut && initialShortcut.Lang.includes('[combination_Key]')) {
+    console.log('initialShortcut', initialShortcut);
+    if (initialShortcut && initialShortcut?.Lang.includes('(combination_Key)') && !hasUserModified) {
       const { keyValue: initialKeyValue, modifiers: initialModifiers } = parseShortcutValue(initialShortcut.Value);
       const initialKeyDisplay = parseKeyDisplay(initialShortcut.Name);
 
@@ -160,7 +172,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
       setKeyDisplay(initialKeyDisplay);
       setModifiers(initialModifiers);
     }
-  }, [initialShortcut]);
+  }, [initialShortcut, hasUserModified]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     e.preventDefault();
@@ -204,24 +216,24 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
   const stopListening = () => {
     setIsListening(false);
   };
-
-  useEffect(() => {
+  const handleMakeShortcut = (currentModifiers = modifiers) => {
+    if (!hasUserModified) return;
     let value = keyValue;
     let show = '';
 
-    if (modifiers.Control) {
+    if (currentModifiers.Control) {
       value |= ModifierKeys.Control.code;
       show += 'Ctrl+';
     }
-    if (modifiers.Shift) {
+    if (currentModifiers.Shift) {
       value |= ModifierKeys.Shift.code;
       show += 'Shift+';
     }
-    if (modifiers.Alt) {
+    if (currentModifiers.Alt) {
       value |= ModifierKeys.Alt.code;
       show += 'Alt+';
     }
-    if (modifiers.Meta) {
+    if (currentModifiers.Meta) {
       value |= ModifierKeys.Meta.code;
       show += 'Win+';
     }
@@ -233,17 +245,21 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
     value |= 0x2000;
 
     const hexValue = '0x' + value.toString(16).padStart(4, '0').toUpperCase();
-    if (keyValue === 0) {
-      return;
-    }
     onChange({
       Name: show,
       Value: hexValue,
       Show: show,
-      Lang: show,
+      Lang: show + '(combination_Key)',
     });
-  }, [keyValue, keyDisplay, modifiers]);
+  };
 
+  const handleModifierChange = (key: keyof typeof ModifierKeys, value: boolean) => {
+    setHasUserModified(true);
+    setModifiers((prev) => ({ ...prev, [key]: value }));
+  };
+  useEffect(() => {
+    handleMakeShortcut(modifiers);
+  }, [keyValue, modifiers]);
   const clearShortcut = () => {
     setKeyValue(0);
     setKeyDisplay('');
@@ -295,7 +311,6 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
     const modifierNames = Object.entries(modifiers)
       .filter(([_, isActive]) => isActive)
       .map(([code]) => ModifierKeys[code as keyof typeof ModifierKeys].name);
-
     return modifierNames.join(' + ') + (modifierNames.length > 0 && keyDisplay ? ' + ' : '') + keyDisplay;
   };
 
@@ -315,7 +330,9 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
         value={keyDisplay}
         onFocus={startListening}
         onBlur={stopListening}
-        onChange={() => {}}
+        onChange={() => {
+          setHasUserModified(true);
+        }}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', marginLeft: '20px' }}>
         {Object.entries(ModifierKeys).map(([code, key]) => (
@@ -324,7 +341,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
               size={16}
               color="var(--secondary)"
               checked={modifiers[code]}
-              onChange={() => setModifiers((prev) => ({ ...prev, [code]: !prev[code] }))}
+              onChange={() => handleModifierChange(code as keyof typeof ModifierKeys, !modifiers[code])}
             />
             <label style={{ marginLeft: '5px', cursor: 'pointer' }}>{key.name}</label>
           </div>

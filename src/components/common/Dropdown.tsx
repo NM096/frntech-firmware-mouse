@@ -57,6 +57,8 @@ const Dropdown: React.FC<DropdownProps> = ({
     border: `1px solid ${borderColor}`,
     borderTop: 'none',
     zIndex: 10,
+    maxHeight: '100px',
+    overflowY: 'auto',
   };
 
   const itemStyle: React.CSSProperties = {
