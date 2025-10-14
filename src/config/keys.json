@@ -7,12 +7,7 @@
     { "Name": "Back", "Value": "0x4188", "Lang": "mouse_kf_mouse_back", "Show": "Back" },
     { "Name": "Wheel Up", "Value": "0x4201", "Lang": "mouse_kf_mouse_wheel_up", "Show": "Wheel Up" },
     { "Name": "Wheel Down", "Value": "0x42FF", "Lang": "mouse_kf_mouse_wheel_down", "Show": "Wheel Down" },
-    { "Name": "Wheel Down", "Value": "0x42F1", "Lang": "mouse_kf_mouse_demo_1", "Show": "Wheel Down" },
-    { "Name": "Wheel Down", "Value": "0x42F2", "Lang": "mouse_kf_mouse_demo_2", "Show": "Wheel Down" },
-    { "Name": "Wheel Down", "Value": "0x42F3", "Lang": "mouse_kf_mouse_demo_3", "Show": "Wheel Down" },
-    { "Name": "Wheel Down", "Value": "0x42F4", "Lang": "mouse_kf_mouse_demo_4", "Show": "Wheel Down" },
-    { "Name": "Wheel Down", "Value": "0x42F5", "Lang": "mouse_kf_mouse_demo_5", "Show": "Wheel Down" },
-    { "Name": "Wheel Down", "Value": "0x42F6", "Lang": "mouse_kf_mouse_demo_6", "Show": "Wheel Down" }
+    { "Name": "Fire Key", "Value": "0x4302", "Lang": "mouse_kf_mouse_fire_key", "Show": "Fire Key" }
   ],
   "Quit": [
     { "Name": "Bright+", "Value": "0x506F", "Lang": "mouse_kf_shortcut_brightness_plus", "Show": "Bright+" },
