@@ -1131,7 +1131,7 @@ input[type='number'] {
   margin: 0 auto;
 }
 .key-mouse-label {
-  width: 100%;
+  width: 100px;
 }
 .key-mouse-label.active,
 .key-mouse-label:hover {
