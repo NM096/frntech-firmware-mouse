@@ -92,7 +92,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(3, 24px)',
+                gridTemplateColumns: 'repeat(4, 24px)',
                 gap: '6px',
                 justifyContent: 'center',
                 padding: '6px',

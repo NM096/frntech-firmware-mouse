@@ -210,13 +210,13 @@ const DpiConfig = () => {
                   handleChangeDpi(index, value);
                 }}
               />
-              {!modelConfig?.DPI?.FullColor ? (
+              {modelConfig?.DPI?.FullColor ? (
                 <ColorPicker
                   top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
                   initialValue={DPIs[index]?.Color || ''}
                   onChange={(hex) => handleChangeDpiLed(index, hex)}
                 />
-              ) : (
+              ) : ( 
                 <ColorPicker
                   top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
                   initialValue={DPIs[index]?.Color || ''}
@@ -229,7 +229,7 @@ const DpiConfig = () => {
                     '#ffff00',
                     '#00ffff',
                     '#ffffff',
-                    '#cccccc',
+                    '#000000',
                   ]}
                   onChange={(hex) => handleChangeDpiLed(index, hex)}
                 />
