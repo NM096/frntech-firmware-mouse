@@ -62,8 +62,8 @@ const MacroConfig = () => {
   const [delayMode, setDelayMode] = useState<'record' | 'default' | 'min'>('record');
   const [minDelay, setMinDelay] = useState(10);
 
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
+  const [mouseX, setMouseX] = useState(1);
+  const [mouseY, setMouseY] = useState(1);
 
   const [recording, setRecording] = useState(false);
   const [openRecords, setOpenRecords] = useState(false);
@@ -569,13 +569,13 @@ const MacroConfig = () => {
             X:
             <input
               type="number"
-              min={0}
+              min={-999}
               max={999}
               value={mouseX}
               onChange={(e) => {
                 let val = Number(e.target.value);
                 if (val > 999) val = 999;
-                if (val < 0) val = 0;
+                if (val < -999) val = -999;
                 setMouseX(val);
               }}
               className="mouse-xy-input"
@@ -585,13 +585,13 @@ const MacroConfig = () => {
             Y:
             <input
               type="number"
-              min={0}
+              min={-999}
               max={999}
               value={mouseY}
               onChange={(e) => {
                 let val = Number(e.target.value);
                 if (val > 999) val = 999;
-                if (val < 0) val = 0;
+                if (val < -999) val = -999;
                 setMouseY(val);
               }}
               className="mouse-xy-input"
