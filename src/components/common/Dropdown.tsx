@@ -17,22 +17,12 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState<string>('');
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const handleSelect = (option: string) => {
-    // setSelectedOption(option);
     setIsOpen(false);
     onChange(option);
   };
-  // useEffect(() => {
-  //   if (defaultValue) {
-  //     setSelectedOption(defaultValue);
-  //   } else {
-  //     console.log(defaultValue, 'defaultValue changed');
-  //     setSelectedOption('');
-  //   }
-  // }, [defaultValue]);
 
   const buttonStyle: React.CSSProperties = {
     width: `calc(100% - ${(size === 'small' ? 5 : size === 'medium' ? 10 : 15) * 2}px)`,

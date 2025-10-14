@@ -93,18 +93,6 @@ const Home: React.FC = () => {
           },
         };
         if (path == deviceInfo.Device) {
-          // const currentDpiLevel = currentDevice?.Info?.DPILevels![mode || 0] || 0;
-          // const newDpiLevel = deviceInfo.Info?.DPILevels![mode || 0] || 0;
-          // if (currentDpiLevel !== newDpiLevel) {
-          //   showWindow();
-          //   if ((window as any).dpiCloseTimeout) {
-          //     clearTimeout((window as any).dpiCloseTimeout);
-          //   }
-          //   (window as any).dpiCloseTimeout = setTimeout(() => {
-          //     hideWindow();
-          //     (window as any).dpiCloseTimeout = null;
-          //   }, 10000);
-          // }
           setCurrentDevice({
             ...currentDevice,
             Info: deviceInfo.Info,

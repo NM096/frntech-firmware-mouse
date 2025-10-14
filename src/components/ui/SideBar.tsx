@@ -2,8 +2,6 @@ import HoverImage from '@/components/common/HoverImage';
 import wireless_4k from '@/assets/wireless_4k.png';
 import back2 from '@/assets/back_device_2.png';
 import back1 from '@/assets/back_device_1.png';
-// import ic_charge from '@/assets/charging.png';
-// import PowerIcon from '@/components/common/PowerIcon';
 import ic_battery_0 from '@/assets/battery/battery_0.png';
 import ic_battery_5 from '@/assets/battery/battery_5.png';
 import ic_battery_10 from '@/assets/battery/battery_10.png';

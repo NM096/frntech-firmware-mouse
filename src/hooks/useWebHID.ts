@@ -1,4 +1,3 @@
-// src/hooks/useWebHID.ts
 import { create } from 'zustand';
 import { WebHIDTransport } from '@/utils/transports/WebHIDTransport';
 import { GenericMouseAdapter } from '@/utils/adapters/GenericMouseAdapter';
@@ -37,10 +36,6 @@ export const useGlobalHIDStore = create<HIDState>((set) => ({
         isConnected: true,
         error: null,
       });
-      // const { setBaseInfo } = useBaseInfoStore.getState();
-      // const info = await adapter.getDeviceInfo();
-      // setBaseInfo(info || {});
-      // console.log('Device Info:', info);
     } catch (err) {
       set({
         error: err as Error,
@@ -151,12 +146,3 @@ export function useBootWebHid({ filters }: UseHIDOptions = {}) {
   // 根据模式返回
   return { connect, disconnect, transport, deviceAdapter, isConnected, error };
 }
-
-// const { connect, disconnect, isConnected } = useWebHID({
-//   filters: [{ vendorId: 0x1234, productId: 0x5678 }],
-// });
-
-// const { connect, disconnect, isConnected } = useWebHID({
-//   filters: [{ vendorId: 0x1234, productId: 0x5678 }],
-//   global: true,
-// });

@@ -20,10 +20,7 @@ const PerformanceConfig = () => {
   const { currentDevice, path, mode, modelConfig, currentModelID, currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const { USBReports, AdvanceSetting } = profile;
-  // const { AdvanceSetting } = currentDevice?.Info || {};
-  // const [AdvanceSetting, setAdvanceSetting] = useState<AdvanceSetting | undefined>(AdvanceSetting);
-  // const [usbReport, setUsbReport] = useState(currentDevice?.Info?.USBReports?.[mode] || 0);
-  //
+
   const handleChangeUsbReport = (index: number) => {
     const { USBReports, WLReports } = currentDevice?.Info || {};
     const newUsbReport = USBReports ? [...USBReports] : [0, 0, 0, 0];

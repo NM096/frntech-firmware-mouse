@@ -1,4 +1,3 @@
-// src/stores/hidStore.ts
 import { create } from 'zustand';
 import { WebHIDTransport } from '@/utils/transports/WebHIDTransport';
 import { GenericMouseAdapter } from '@/utils/adapters/GenericMouseAdapter';

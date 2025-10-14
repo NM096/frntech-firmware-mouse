@@ -313,19 +313,11 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
         }}
         ref={inputRef}
         value={keyDisplay}
-        // onClick={startListening}
         onFocus={startListening}
         onBlur={stopListening}
         onChange={() => {}}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', marginLeft: '20px' }}>
-        {/* {keys.map((key) => (
-          <div key={key.code}>
-            <Checkbox size={16} color="var(--secondary)" onChange={() => {}} />
-            <label style={{ marginLeft: '5px' }}>{key.name}</label>
-          </div>
-        ))} */}
-
         {Object.entries(ModifierKeys).map(([code, key]) => (
           <div key={code} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Checkbox

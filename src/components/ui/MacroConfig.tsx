@@ -165,10 +165,6 @@ const MacroConfig = () => {
   const handleImportCategory = () => {
     importMacro(path);
   };
-  const handleExportCategory = () => {
-    if (!currentCategory) return;
-    // exportMacro(currentCategory, path);
-  };
 
   const handleRenameMacroFile = () => {
     openConfirm({
@@ -222,9 +218,6 @@ const MacroConfig = () => {
   };
 
   const handleSave = () => {
-    // setRecording(false);
-    // setOpenRecords(false);
-    // stop();
     saveMacro(
       currentCategory,
       currentMacroFile,
@@ -505,7 +498,6 @@ const MacroConfig = () => {
                 className="macro-record-btn"
                 onClick={() => {
                   if (currentMacroFile) {
-                    // setRecords(currentMacroFile || [])
                     setRecording(true);
                     setOpenRecords(true);
                     startRecording();

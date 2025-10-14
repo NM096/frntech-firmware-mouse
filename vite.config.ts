@@ -4,19 +4,11 @@ import tailwindcss from '@tailwindcss/vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 import path from 'path';
-// https://vite.dev/config/
+
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    // viteStaticCopy({
-    //   targets: [
-    //     {
-    //       src: 'src/config/TMKB-M1/*',
-    //       dest: 'config/TMKB-M1',
-    //     },
-    //   ],
-    // }),
   ],
   assetsInclude: ['**/*.bin'],
   resolve: {

@@ -83,7 +83,6 @@ export function listenDriverMessage() {
     console.log('Current handlers:', driverMessageHandlers[message.name]);
     const handlers = driverMessageHandlers[message.name];
     if (handlers && handlers.length) {
-      // handlers.forEach((handler) => handler(message.payload));
       handlers[handlers.length - 1](message.payload); // 只调用最后一个注册的处理函数
     }
   });

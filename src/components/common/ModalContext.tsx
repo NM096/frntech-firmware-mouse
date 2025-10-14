@@ -217,4 +217,3 @@ export function useModal() {
   if (!ctx) throw new Error('useModal must be used within ModalProvider');
   return ctx;
 }
-// /  const { openConfirm, openAlert, openConfigLoading } = useModal();

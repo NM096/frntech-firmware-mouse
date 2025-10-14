@@ -28,18 +28,15 @@ const findOpenDpiIndex = (num: number, DPIs: Dpi[]) => {
 const DpiConfig = () => {
   const { t } = useTranslation();
   const {
-    // currentDevice: storeCurrentDevice,
     currentDevice,
     currentModelID,
     mode,
     path,
     modelConfig,
-    // setCurrentDevice: setStoreCurrentDevice,
     setCurrentDevice,
     configData,
     setConfigData: setConfigDataOnStore,
   } = useBaseInfoStore();
-  // const [currentDevice, setCurrentDevice] = useState(storeCurrentDevice);
   const { currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const { DPIs = [] } = profile;

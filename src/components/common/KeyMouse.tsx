@@ -19,7 +19,6 @@ interface Key {
 }
 
 interface KeyMouseProps {
-  // keyDefines: KeyDefine[];
   activeKey: number | null;
   onKeySelect?: (keyIndex: number) => void;
 }
