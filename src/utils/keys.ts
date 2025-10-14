@@ -38,9 +38,3 @@ export const shortcut = [
   { Name: 'HomePage', Value: '0x5223', Lang: 'mouse_kf_shortcut_homepage', Show: 'HomePage' },
   { Name: 'Mail', Value: '0x518A', Lang: 'mouse_kf_shortcut_mail', Show: 'Mail' },
 ];
-
-export const more = [
-  { Name: 'CombinationKey', Value: 'combination', Lang: 'mouse_kf_combination', Show: 'combination' },
-  { Name: 'Disable Key', Value: '0xFFFF', Lang: 'mouse_kfs_disable', Show: 'Disable Key' },
-  { Name: 'Macro', Value: '0x8000', Lang: 'mouse_kf_macro', Show: 'Macro' },
-];
