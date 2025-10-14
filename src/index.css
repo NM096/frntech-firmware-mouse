@@ -1108,11 +1108,13 @@ input[type='number'] {
 .key-config-section-features div.active {
   border: 1px solid var(--secondary);
   border-radius: 5px;
+  background-color: var(--secondary);
 }
 .key-config-section-actions div:hover,
 .key-config-section-features div:hover {
   border: 1px solid var(--secondary);
   border-radius: 5px;
+  background-color: var(--secondary);
 }
 .key-config-section-actions {
   margin-top: 20px;
@@ -1127,6 +1129,9 @@ input[type='number'] {
 .key-config-section-actions div {
   width: 60%;
   margin: 0 auto;
+}
+.key-mouse-label {
+  width: 100%;
 }
 .key-mouse-label.active,
 .key-mouse-label:hover {
@@ -1194,7 +1199,7 @@ input[type='number'] {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 .mouse-xy-input {
   width: 30px;

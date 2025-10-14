@@ -77,7 +77,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
             dialog
               .showSaveDialog({
                 title: 'Save',
-                filters: [{ name: 'Mouse Profile Files', extensions: ['kpf'] }],
+                filters: [{ name: 'Mouse Profile Files', extensions: ['mpf'] }],
               })
               .then(function (result) {
                 if (!result.canceled) {
@@ -272,7 +272,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     dialog
       .showOpenDialog({
         title: 'Open',
-        filters: [{ name: 'Mouse Profile Files', extensions: ['kpf'] }],
+        filters: [{ name: 'Mouse Profile Files', extensions: ['mpf'] }],
       })
       .then(function (result) {
         importProfile(currentModelID, result.filePaths[0]);

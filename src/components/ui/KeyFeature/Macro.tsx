@@ -77,31 +77,33 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
         />
       </div>
       <div style={macroTitleStyle}>{t('macro_list')}</div>
-      <ul
-        style={{
-          height: '150px',
-          overflowY: 'auto',
-          marginBottom: '10px',
-          background: '#373838',
-          borderRadius: '4px',
-          overflow: 'scroll-y',
-        }}
-      >
-        {macros.map((macro, index) => (
-          <li
-            className={`macro-item ${selectedMacro === macro ? 'active' : ''}`}
-            style={{
-              padding: '8px 12px',
-              cursor: 'pointer',
-              fontSize: '12px',
-            }}
-            onClick={() => setSelectedMacro(macro)}
-            key={index}
-          >
-            {macro}
-          </li>
-        ))}
-      </ul>
+      <div style={{ width: '90%' }}>
+        <ul
+          style={{
+            height: '120px',
+            overflowY: 'auto',
+            marginBottom: '10px',
+            background: '#373838',
+            borderRadius: '4px',
+            overflow: 'scroll-y',
+          }}
+        >
+          {macros.map((macro, index) => (
+            <li
+              className={`macro-item ${selectedMacro === macro ? 'active' : ''}`}
+              style={{
+                padding: '8px 12px',
+                cursor: 'pointer',
+                fontSize: '12px',
+              }}
+              onClick={() => setSelectedMacro(macro)}
+              key={index}
+            >
+              {macro}
+            </li>
+          ))}
+        </ul>
+      </div>
       <div style={macroTitleStyle}>{t('macro_trigger_method')}</div>
       <div className="macro-trigger-options">
         <div className="macro-trigger-item">
