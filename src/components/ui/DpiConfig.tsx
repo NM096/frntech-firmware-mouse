@@ -164,13 +164,7 @@ const DpiConfig = () => {
   };
 
   useEffect(() => {
-    // setCurrentDevice(currentDevice);
-    if (SensorInfo != null && SensorInfo.DPIType != 0) {
-      setLocalDPIs(SensorInfo.DPIs || []);
-    } else {
-      setLocalDPIs(DPIs);
-    }
-
+    setLocalDPIs(DPIs);
     setCurrentDpiIdx(findOpenDpiIndex(currentDevice?.Info?.DPILevels?.[mode] || 0, DPIs) || 0);
   }, [currentDevice, profile]);
 
