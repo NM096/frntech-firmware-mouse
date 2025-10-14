@@ -121,6 +121,25 @@ const PerformanceConfig = () => {
             onChange={(value) => handleChangeAltitude('WLDeepSleep', value)}
           />
         </div>
+        {modelConfig?.Advance?.SilentAltitude && (
+          <div className="performance-item">
+            <div className="performance-item-title">{t('silent_altitude_title')}</div>
+            <div className="performance-item-description">{t('silent_altitude_desc')}</div>
+            <div className="performance-radio-group">
+              {silentAltitudes.map((i, idx) => {
+                return (
+                  <div className="performance-radio-item" key={i}>
+                    <CustomRadio
+                      checked={idx === (AdvanceSetting?.SilentAltitude || 0)}
+                      onChange={() => handleChangeAltitude('SilentAltitude', idx)}
+                    />
+                    {i}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
       <div className="performance-section">
         {modelConfig?.Advance?.UltraLowDelay && (
@@ -168,25 +187,6 @@ const PerformanceConfig = () => {
                 checked={AdvanceSetting?.MoveWakeUp || false}
                 onChange={() => handleChangeAltitude('MoveWakeUp', !AdvanceSetting?.MoveWakeUp)}
               />
-            </div>
-          </div>
-        )}
-        {modelConfig?.Advance?.SilentAltitude && (
-          <div className="performance-item">
-            <div className="performance-item-title">{t('silent_altitude_title')}</div>
-            <div className="performance-item-description">{t('silent_altitude_desc')}</div>
-            <div className="performance-radio-group">
-              {silentAltitudes.map((i, idx) => {
-                return (
-                  <div className="performance-radio-item" key={i}>
-                    <CustomRadio
-                      checked={idx === (AdvanceSetting?.SilentAltitude || 0)}
-                      onChange={() => handleChangeAltitude('SilentAltitude', idx)}
-                    />
-                    {i}
-                  </div>
-                );
-              })}
             </div>
           </div>
         )}
