@@ -136,6 +136,8 @@
   "shortcut_keys": "快捷键",
   "multimedia_control": "多媒体控制",
   "macro_command": "宏命令",
+  "firepower": "火力值",
+  "snipe_dpi": "狙击DPI",
 
   "page-lightConfig": "----------------------------------------------------------------------------------------",
   "light_effect": "模式：",

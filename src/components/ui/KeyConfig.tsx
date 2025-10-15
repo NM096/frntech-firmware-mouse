@@ -157,7 +157,7 @@ const KeyConfig = () => {
             <div className="key-config-section-option">
               {currentKeyDefine?.Value.includes('0x43') && activeSidebar === 'Mouse' && (
                 <div className="mouse_fire_key">
-                  <div>火力值:</div>
+                  <div>{t('firepower')}:</div>
                   <input
                     type="number"
                     min={0}
@@ -173,7 +173,7 @@ const KeyConfig = () => {
               )}
               {['0x480A', '0x480B'].includes(currentKeyDefine?.Value || '') && activeSidebar === 'Quit' && (
                 <div className="advance_snipe_dpi_plus">
-                  <div>狙击DPI:</div>
+                  <div>{t('snipe_dpi')}:</div>
                   {currentKeyDefine?.Value == '0x480A' && (
                     <Dropdown
                       borderColor="#ff7f0e"
