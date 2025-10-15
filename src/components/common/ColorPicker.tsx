@@ -57,6 +57,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, color]);
 
+  useEffect(() => {
+    setColor(initialValue);
+  }, [initialValue]);
   return (
     <div style={{ display: 'inline-block', position: 'relative' }} ref={pickerRef}>
       {/* 触发色块 */}

@@ -97,7 +97,7 @@ const KeyConfig = () => {
     if (currentKeyDefine?.Value == '0x480A') {
       _newConfig.SnipeDPISub = currentDpiItem;
     } else {
-      _newConfig.SnipeDPIAdd = currentDpiItem;
+      _newConfig.SnipeDPIPlus = currentDpiItem;
     }
     setConfigData(path, _newConfig, () => {
       setConfigDataOnStore(_newConfig);
@@ -155,7 +155,7 @@ const KeyConfig = () => {
               ))}
             </div>
             <div className="key-config-section-option">
-              {currentKeyDefine?.Value.includes('0x43') && (
+              {currentKeyDefine?.Value.includes('0x43') && activeSidebar === 'Mouse' && (
                 <div className="mouse_fire_key">
                   <div>火力值:</div>
                   <input
@@ -171,26 +171,31 @@ const KeyConfig = () => {
                   />
                 </div>
               )}
-              {['0x480A', '0x480B'].includes(currentKeyDefine?.Value || '') && (
+              {['0x480A', '0x480B'].includes(currentKeyDefine?.Value || '') && activeSidebar === 'Quit' && (
                 <div className="advance_snipe_dpi_plus">
                   <div>狙击DPI:</div>
-                  <Dropdown
-                    borderColor="#ff7f0e"
-                    options={snipeDPIList().map((dpi) => dpi.DPI)}
-                    defaultValue={
-                      currentKeyDefine?.Value == '0x480A'
-                        ? configData?.SnipeDPISub?.DPI !== undefined
-                          ? configData?.SnipeDPISub?.DPI.toString()
-                          : snipeDPIList()[0]?.DPI.toString()
-                        : configData?.SnipeDPIPlus?.DPI !== undefined
-                          ? configData?.SnipeDPIPlus?.DPI.toString()
-                          : snipeDPIList()[0]?.DPI.toString()
-                    }
-                    onChange={(dpi) => {
-                      handleSettingSnipeDPI(dpi);
-                    }}
-                    size="small" // 选择 'small', 'medium' 或 'large'
-                  />
+                  {currentKeyDefine?.Value == '0x480A' && (
+                    <Dropdown
+                      borderColor="#ff7f0e"
+                      options={snipeDPIList().map((dpi) => dpi.DPI)}
+                      defaultValue={configData?.SnipeDPISub?.DPI.toString() && snipeDPIList()[0]?.DPI.toString()}
+                      onChange={(dpi) => {
+                        handleSettingSnipeDPI(dpi);
+                      }}
+                      size="small"
+                    />
+                  )}{' '}
+                  {currentKeyDefine?.Value == '0x480B' && (
+                    <Dropdown
+                      borderColor="#ff7f0e"
+                      options={snipeDPIList().map((dpi) => dpi.DPI)}
+                      defaultValue={configData?.SnipeDPIPlus?.DPI.toString() || snipeDPIList()[0]?.DPI.toString()}
+                      onChange={(dpi) => {
+                        handleSettingSnipeDPI(dpi);
+                      }}
+                      size="small"
+                    />
+                  )}
                 </div>
               )}
             </div>

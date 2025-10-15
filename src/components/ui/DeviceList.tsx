@@ -42,6 +42,7 @@ const DeviceList = () => {
           setCurrentProfile(ModelID, currentConfigFileName, profilePayload, () => {
             setSelectProfile(ModelID, currentConfigFileName);
           });
+          setCurrentConfigFileName(currentConfigFileName);
           setProfile(cloneDeep(profilePayload));
         });
       } else {

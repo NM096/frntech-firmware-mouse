@@ -39,8 +39,8 @@ const DpiConfig = () => {
   } = useBaseInfoStore();
   const { currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
-  const { DPIs = [] } = profile;
-  const { DPILevels, SensorInfo } = currentDevice?.Info || {};
+  const DPIs: Dpi[] = profile?.DPIs || [];
+  const { DPILevels } = currentDevice?.Info || {};
   const [currentDpiIdx, setCurrentDpiIdx] = useState<number>(findOpenDpiIndex(DPILevels?.[mode] || 0, DPIs) || 0);
   const handleSwitchOpenDpi = throttle((index: number, isChecked: boolean) => {
     if (index === currentDpiIdx) {
