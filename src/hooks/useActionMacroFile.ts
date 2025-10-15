@@ -130,7 +130,7 @@ const useActionMacroFile = () => {
           0,
           ...[
             { type: 'MouseMove', name: 'MouseMove', code: `${x},${y}` },
-            { type: 'Delay', name: 'Delay', code: '100' },
+            { type: 'Delay', name: 'Delay', code: '10' },
           ]
         );
         return newList;
