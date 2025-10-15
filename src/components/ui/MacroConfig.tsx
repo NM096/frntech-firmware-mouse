@@ -649,14 +649,14 @@ const MacroConfig = () => {
                   X:
                   <input
                     type="number"
-                    min={0}
+                    min={-999}
                     max={999}
                     value={recordedActions[currentStepIdx]?.code.split(',')[0] || 0}
                     className="mouse-xy-input"
                     onChange={(e) => {
                       let val = Number(e.target.value);
                       if (val > 999) val = 999;
-                      if (val < 0) val = 0;
+                      if (val < -999) val = -999;
                       handleUpdateStepMouseMove(val, recordedActions[currentStepIdx]?.code.split(',')[1]);
                     }}
                   />
@@ -665,13 +665,13 @@ const MacroConfig = () => {
                   Y:
                   <input
                     type="number"
-                    min={0}
+                    min={-999}
                     max={999}
                     value={recordedActions[currentStepIdx]?.code.split(',')[1] || 0}
                     onChange={(e) => {
                       let val = Number(e.target.value);
                       if (val > 999) val = 999;
-                      if (val < 0) val = 0;
+                      if (val < -999) val = -999;
                       handleUpdateStepMouseMove(recordedActions[currentStepIdx]?.code.split(',')[0], val);
                     }}
                     className="mouse-xy-input"
