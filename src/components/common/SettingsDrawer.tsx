@@ -52,11 +52,9 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
       }
     });
   }, []);
-  useEffect(() => {
-    saveAppConfig({
-      Language: currentLang,
-    });
-  }, [currentLang]);
+  // useEffect(() => {
+  //   // saveAppConfig();
+  // }, [currentLang]);
 
   const handleChangeLanguage = (lang: string) => {
     setLang(lang);
