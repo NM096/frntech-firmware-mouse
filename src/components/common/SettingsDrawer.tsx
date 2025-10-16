@@ -46,15 +46,13 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
     });
     loadAppConfig((config) => {
       if (config) {
+        setLang(config.Language || 'en');
         setAutoStart(config.AutoRun ?? false);
         setDpiDialogOpen(config.DPIWindow ?? false);
         setLowPowerDialogOpen(config.LVDWindow ?? false);
       }
     });
   }, []);
-  // useEffect(() => {
-  //   // saveAppConfig();
-  // }, [currentLang]);
 
   const handleChangeLanguage = (lang: string) => {
     setLang(lang);
