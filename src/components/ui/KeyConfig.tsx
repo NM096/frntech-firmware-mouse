@@ -12,6 +12,7 @@ import { cloneDeep, debounce } from 'lodash';
 import type { KeyDefine, KeyItem } from '@/types/profile';
 import { setConfigData } from '@/utils/driver';
 import Dropdown from '@/components/common/Dropdown';
+import { useModal } from '../common/ModalContext';
 
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
 
@@ -32,6 +33,7 @@ const KeyConfig = () => {
   const [activeKey, setActiveKey] = useState<number | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey | null>('Mouse');
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
+  const { openAlert } = useModal();
 
   const keyMouseRef = useRef<HTMLDivElement | null>(null);
   const keyFeatureRef = useRef<HTMLDivElement | null>(null);
@@ -103,6 +105,18 @@ const KeyConfig = () => {
       setConfigDataOnStore(_newConfig);
     });
   };
+  const handleSelectCurrentKey = (keyIndex: number) => {
+    const keySet = profile.KeySet[currentDevice?.Info?.Mode || 0];
+    const leftClickLength = keySet.filter((key) => key.Value == '0x4181').length;
+    if (leftClickLength <= 1 && keySet[keyIndex].Value == '0x4181') {
+      openAlert({
+        title: t('warning'),
+        content: t('at_least_one_left_click'),
+      });
+      return;
+    }
+    setActiveKey(keyIndex);
+  };
 
   useEffect(() => {
     if (activeKey == null) return;
@@ -137,7 +151,7 @@ const KeyConfig = () => {
   return (
     <div className="key-config-container">
       <div className="key-config-mouse" ref={keyMouseRef}>
-        <KeyMouse activeKey={activeKey} onKeySelect={(keyIndex) => setActiveKey(keyIndex)} />
+        <KeyMouse activeKey={activeKey} onKeySelect={(keyIndex) => handleSelectCurrentKey(keyIndex)} />
       </div>
 
       {activeKey !== null && activeSidebar && (

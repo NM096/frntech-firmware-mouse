@@ -34,7 +34,7 @@ const GlobalLoading: React.FC<GlobalLoadingProps> = ({ id, onClose, progress, au
   return (
     <div className="global-card">
       <HoverImage src={logo} hoverSrc={logo} alt="Logo" className="logo" />
-      <div className="global-loading-text">{t('device_setting')}</div>
+      <div className="global-loading-text">{t('firmware_upgrading')}</div>
       <div className="global-progress-bar">
         <div className="global-progress" style={{ width: `${displayProgress}%` }}></div>
       </div>

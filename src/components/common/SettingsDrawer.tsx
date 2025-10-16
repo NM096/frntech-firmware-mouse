@@ -97,7 +97,6 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
   };
 
   const handleUpgradeDevice = () => {
-    setVisible(false);
     openAlert({
       title: t('firmware_upgrade'),
       content: t('firmware_upgrade_confirmation'),

@@ -236,5 +236,11 @@
   "move_selected_step_up": "上移选中步骤",
   "move_selected_step_down": "下移选中步骤",
   "clear_all_steps": "清除所有步骤",
-  "MouseMove": " 光标移动: X: {{ x }}, Y: {{ y }} "
+  "MouseMove": " 光标移动: X: {{ x }}, Y: {{ y }} ",
+  "RightDown": " 右键按下 ",
+  "RightUp": " 右键抬起 ",
+  "LeftDown": " 左键按下 ",
+  "LeftUp": " 左键抬起 ",
+  "at_least_one_left_click": "至少需要一个左键单击",
+  "firmware_upgrading": "固件升级中……"
 }
