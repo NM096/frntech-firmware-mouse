@@ -174,7 +174,7 @@ const Feature = () => {
   };
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+    <div className="feature-box">
       <div className="actions">
         <HoverImage src={ic_reset} hoverSrc={resetHover} alt="Reset" className="icon-7" onClick={resetMouse} />
         <div className="divider"></div>

@@ -174,58 +174,60 @@ const DpiConfig = () => {
       </div>
       <div className="dpi-container">
         <div>{t('dpi_adjustment')}</div>
-        {DPIs.map((dpi, index) => {
-          return (
-            <div className="dpi-container-item" key={dpi.Level || index}>
-              <Checkbox
-                checked={dpi.Open || false}
-                size={16}
-                onChange={(e) => {
-                  handleSwitchOpenDpi(index, e.target.checked);
-                }}
-              />
-              <CustomRadio
-                checked={currentDpiIdx === index}
-                onChange={() => {
-                  handleChangeCurrentDpiIdx(index);
-                }}
-              />
-              <div className="dpi-title">
-                {t('dpi_level')} {index + 1}
+        <div className="dpi-container-list">
+          {DPIs.map((dpi, index) => {
+            return (
+              <div className="dpi-container-item" key={dpi.Level || index}>
+                <Checkbox
+                  checked={dpi.Open || false}
+                  size={16}
+                  onChange={(e) => {
+                    handleSwitchOpenDpi(index, e.target.checked);
+                  }}
+                />
+                <CustomRadio
+                  checked={currentDpiIdx === index}
+                  onChange={() => {
+                    handleChangeCurrentDpiIdx(index);
+                  }}
+                />
+                <div className="dpi-title">
+                  {t('dpi_level')} {index + 1}
+                </div>
+                <Slider
+                  initialValue={dpi.Value}
+                  onChange={(value) => {
+                    handleChangeDpi(index, value);
+                  }}
+                />
+                {modelConfig?.DPI?.FullColor ? (
+                  <ColorPicker
+                    top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
+                    initialValue={DPIs[index]?.Color || ''}
+                    onChange={(hex) => handleChangeDpiLed(index, hex)}
+                  />
+                ) : (
+                  <ColorPicker
+                    top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
+                    initialValue={DPIs[index]?.Color || ''}
+                    simple
+                    simpleColors={[
+                      '#aa0000',
+                      '#00ff00',
+                      '#0055ff',
+                      '#ff55ff',
+                      '#ffff00',
+                      '#00ffff',
+                      '#ffffff',
+                      '#000000',
+                    ]}
+                    onChange={(hex) => handleChangeDpiLed(index, hex)}
+                  />
+                )}
               </div>
-              <Slider
-                initialValue={dpi.Value}
-                onChange={(value) => {
-                  handleChangeDpi(index, value);
-                }}
-              />
-              {modelConfig?.DPI?.FullColor ? (
-                <ColorPicker
-                  top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
-                  initialValue={DPIs[index]?.Color || ''}
-                  onChange={(hex) => handleChangeDpiLed(index, hex)}
-                />
-              ) : (
-                <ColorPicker
-                  top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
-                  initialValue={DPIs[index]?.Color || ''}
-                  simple
-                  simpleColors={[
-                    '#aa0000',
-                    '#00ff00',
-                    '#0055ff',
-                    '#ff55ff',
-                    '#ffff00',
-                    '#00ffff',
-                    '#ffffff',
-                    '#000000',
-                  ]}
-                  onChange={(hex) => handleChangeDpiLed(index, hex)}
-                />
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

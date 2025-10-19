@@ -108,7 +108,8 @@ const KeyConfig = () => {
   const handleSelectCurrentKey = (keyIndex: number) => {
     const keySet = profile.KeySet[currentDevice?.Info?.Mode || 0];
     const leftClickLength = keySet.filter((key) => key.Value == '0x4181').length;
-    if (leftClickLength <= 1 && keySet[keyIndex].Value == '0x4181') {
+    const currentKeySet = keySet.find((key) => key.Index == keyIndex);
+    if (leftClickLength <= 1 && currentKeySet?.Value == '0x4181') {
       openAlert({
         title: t('warning'),
         content: t('at_least_one_left_click'),
