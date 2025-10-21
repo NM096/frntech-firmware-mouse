@@ -306,7 +306,7 @@ input[type='number'] {
   width: var(--icon-size-sm);
 }
 .device-status .device-icon-connection {
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
   width: var(--icon-size-sm);
 }
 .device-status .device-item-power,
@@ -889,7 +889,6 @@ input[type='number'] {
   padding: 20px 20px;
   margin: 0;
   width: 170px;
-  height: 100%;
 }
 .sidebar-item-status {
   background-color: rgba(255, 255, 255, 0.008);
@@ -903,7 +902,7 @@ input[type='number'] {
   gap: 10px;
 }
 .sidebar-icon-power {
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
   width: var(--icon-size-sm);
 }
 .sidebar-item-power,
