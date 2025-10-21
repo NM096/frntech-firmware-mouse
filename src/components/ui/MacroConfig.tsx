@@ -549,6 +549,7 @@ const MacroConfig = () => {
             className="back-btn-icon macro-group-action-icon"
             onClick={() => clearRecords()}
           />
+          {/*
           <HoverImage
             src={ic_move}
             hoverSrc={ic_move}
@@ -589,6 +590,7 @@ const MacroConfig = () => {
               className="mouse-xy-input"
             />
           </div>
+          */}
         </div>
         <ul className="macro-content-body">
           <MacroActionList
