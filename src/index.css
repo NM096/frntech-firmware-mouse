@@ -299,8 +299,23 @@ input[type='number'] {
   align-items: center;
   gap: 8px; /* Tailwind gap-2 */
   margin-bottom: 16px; /* Tailwind mb-4 */
+  font-size: 12px;
 }
 
+.device-status .device-icon-power {
+  width: var(--icon-size-sm);
+}
+.device-status .device-icon-connection {
+  transform: rotate(-90deg);
+  width: var(--icon-size-sm);
+}
+.device-status .device-item-power,
+.device-item-connection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
 .battery-text {
   font-size: 12px; /* Tailwind text-xs */
 }

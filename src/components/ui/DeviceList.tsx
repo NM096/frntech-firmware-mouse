@@ -4,6 +4,8 @@ import Power from '@/components/common/PowerIcon';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceInfo } from '@/types/device-data';
 import { useProfileStore } from '@/store/useProfile';
+import useBatteryProgress from '@/hooks/useBatteryProgress';
+import { useTranslation } from 'react-i18next';
 import {
   getProfileByName,
   getModelProfile,
@@ -26,6 +28,8 @@ const DeviceList = () => {
   } = useBaseInfoStore();
   const { setDefaultProfile } = useProfileStore();
   const { setProfile } = useProfileStore();
+  const { getBatteryIcon } = useBatteryProgress();
+  const { t } = useTranslation();
 
   // 点击设备，设置当前设备和配置文件
   const handleSetProfile = (key: string, device: DeviceInfo) => {
@@ -41,6 +45,7 @@ const DeviceList = () => {
           console.log(profilePayload);
           setCurrentProfile(ModelID, currentConfigFileName, profilePayload, () => {
             setSelectProfile(ModelID, currentConfigFileName);
+            setCurrentConfigFileName(currentConfigFileName);
           });
           setCurrentConfigFileName(currentConfigFileName);
           setProfile(cloneDeep(profilePayload));
@@ -87,8 +92,15 @@ const DeviceList = () => {
                 <div className="device-overlay"></div>
                 <div className="device-name">{device?.Model?.Name}</div>
                 <div className="device-status">
-                  <Power className="power-small" />
-                  <span className="battery-text">100%</span>
+                  {/* <Power className="power-small" />
+                  <span className="battery-text">100%</span> */}
+                  <div className="device-item-power">
+                    <img src={getBatteryIcon(device!)} alt="battery" className="device-icon-connection" />
+                    {/* <HoverImage src={ic_charge} hoverSrc={ic_charge} alt="Logo" className="sidebar-icon-connection" /> */}
+                    {!device?.RFDevice
+                      ? t('charging')
+                      : t('used_battery', { count: device?.Info?.Mouse?.Battery || 5 })}
+                  </div>
                 </div>
                 <div className="device-container">
                   <img
