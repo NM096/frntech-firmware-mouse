@@ -97,6 +97,13 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
   };
 
   const handleUpgradeDevice = () => {
+    if (!currentDevice?.RFDevice) {
+      openAlert({
+        title: t('firmware_upgrade'),
+        content: t('firmware_upgrade_usb_required'),
+      });
+      return;
+    }
     openAlert({
       title: t('firmware_upgrade'),
       content: t('firmware_upgrade_confirmation'),

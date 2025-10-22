@@ -207,6 +207,8 @@
   "back_to_device_selection": "返回设备选择",
   "charging": "充电中",
   "used_battery": "剩余电量{{count}}%",
+  "used_battery_n": "剩余电量",
+
   "wired_connection": "有线连接",
   "two_point_four_g_connection": "2.4G连接",
   "delay": " 延迟 ",
@@ -230,6 +232,7 @@
   "firmware_upgrade": "固件升级",
   "current_latest_version": "当前已是最新版本",
   "firmware_upgrade_confirmation": "确认升级固件？请确保在升级过程中不要断开设备连接。",
+  "firmware_upgrade_usb_required": "固件升级需要USB有线连接模式",
 
   "save": "保存",
   "delete_selected_step": "删除选中步骤",
