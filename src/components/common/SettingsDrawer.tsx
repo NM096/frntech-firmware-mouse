@@ -150,7 +150,7 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
   }, [currentDevice]);
 
   const firmwareVersion = () => {
-    const { FWVersion, FWID } = currentDevice?.Model || {};
+    const { FWVersion, FWID } = currentDevice?.Info || {};
     if (!FWVersion || !FWID) return '';
     const fwVersionHex = Number(FWVersion).toString(16).padStart(4, '0');
     const fwIdHexRaw = Number(FWID).toString(16).padStart(8, '0');
@@ -181,9 +181,14 @@ export const SettingsDrawerProvider = ({ children }: { children: ReactNode }) =>
                   <div className="version-content">
                     {t('firmware_version_number')} <span className="version">{firmwareVersion()}</span>
                     {(Info?.FWVersion ?? 0) < (Model?.FWVersion ?? 0) ? (
-                      <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
-                        {t('firmware_upgrade')}
-                      </p>
+                      <>
+                        <p className="upgrade-firmware" onClick={() => handleUpgradeDevice()}>
+                          {t('firmware_upgrade')}
+                        </p>
+                        {currentDevice?.RFDevice && (
+                          <p className="upgrade-firmware-description">{t('firmware_upgrade_description')}</p>
+                        )}
+                      </>
                     ) : (Info?.FWVersion ?? 0) >= (Model?.FWVersion ?? 0) ? (
                       <p className="no-upgrade">{t('current_latest_version')}</p>
                     ) : null}

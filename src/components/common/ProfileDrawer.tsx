@@ -51,7 +51,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   const { currentModelID, currentConfigFileName, setCurrentConfigFileName, path, mode, currentDevice } =
     useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
-  const { handleSelectProfile: hookSelectProfile } = useProfileAction();
+  const { handleSelectProfile: hookSelectProfile, resetDPIsValue } = useProfileAction();
   const defaultProfile = cloneDeep(useProfileStore.getState().defaultProfile);
   const [visible, setVisible] = useState(false);
   const { openConfirm, openAlert, openConfigLoading, closeAll, close: closeModal } = useModal();
@@ -218,7 +218,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
               mode,
               {
                 DPILevels: DPILevels || [],
-                DPIs: DPIs || [],
+                DPIs: resetDPIsValue(DPIs || []),
               },
               () => {
                 console.log('DPI设置已应用到鼠标设备');

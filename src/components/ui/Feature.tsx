@@ -22,7 +22,7 @@ import type { Config } from '@/types/data-config';
 import HoverImage from '@/components/common/HoverImage';
 import { useSettingsDrawer } from '@/components/common/SettingsDrawer';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-import { useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 export type sidebarKey = 'DpiConfig' | 'KeyConfig' | 'LightConfig' | 'PerformanceConfig' | 'MacroConfig';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '@/components/common/ModalContext';
@@ -40,19 +40,13 @@ import {
   reset,
 } from '@/utils/driver';
 import { useProfileStore } from '@/store/useProfile';
+import useProfileAction from '@/hooks/useProfileAction';
 
 const Feature = () => {
   const { t } = useTranslation();
   const { open } = useSettingsDrawer();
   const { open: openProfileDrawer } = useProfileDrawer();
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey>('DpiConfig');
-  const sideList: { key: sidebarKey; title: string; icon: string }[] = [
-    { key: 'DpiConfig', title: t('DpiConfig'), icon: ic_dpi },
-    { key: 'KeyConfig', title: t('KeyConfig'), icon: ic_key },
-    { key: 'LightConfig', title: t('LightConfig'), icon: ic_light },
-    { key: 'PerformanceConfig', title: t('PerformanceConfig'), icon: ic_performance },
-    { key: 'MacroConfig', title: t('MacroConfig'), icon: ic_macro },
-  ];
   const {
     currentDevice,
     currentModelID,
@@ -62,7 +56,24 @@ const Feature = () => {
     configData,
     setConfigData: setConfigDataOnStore,
     currentConfigFileName,
+    modelConfig,
   } = useBaseInfoStore();
+  const isShowLight = useCallback(() => {
+    console.log('modelConfig in isShowLight:', modelConfig);
+    return (modelConfig?.LETable?.length ?? 0) > 0;
+  }, [modelConfig]);
+  const sideList = useMemo(
+    () =>
+      [
+        { key: 'DpiConfig', title: t('DpiConfig'), icon: ic_dpi },
+        { key: 'KeyConfig', title: t('KeyConfig'), icon: ic_key },
+        isShowLight() ? { key: 'LightConfig', title: t('LightConfig'), icon: ic_light } : null,
+        { key: 'PerformanceConfig', title: t('PerformanceConfig'), icon: ic_performance },
+        { key: 'MacroConfig', title: t('MacroConfig'), icon: ic_macro },
+      ].filter(Boolean),
+    [isShowLight, t]
+  );
+  const { resetDPIsValue } = useProfileAction();
   const DPILevels = cloneDeep(currentDevice?.Info?.DPILevels || {});
   const { profile, setProfile, setIsReset } = useProfileStore();
   const defaultProfile = cloneDeep(useProfileStore.getState().defaultProfile);
@@ -105,7 +116,7 @@ const Feature = () => {
           mode,
           {
             DPILevels: newDPILevels,
-            DPIs: defaultProfile?.DPIs || [],
+            DPIs: resetDPIsValue(defaultProfile?.DPIs || []),
           },
           () => {
             setCurrentDevice({

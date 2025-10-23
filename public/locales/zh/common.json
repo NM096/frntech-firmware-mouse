@@ -245,5 +245,6 @@
   "LeftDown": " 左键按下 ",
   "LeftUp": " 左键抬起 ",
   "at_least_one_left_click": "至少需要一个左键单击",
-  "firmware_upgrading": "固件升级中……"
+  "firmware_upgrading": "固件升级中……",
+  "firmware_upgrade_description": "切换有线模式升级固件"
 }

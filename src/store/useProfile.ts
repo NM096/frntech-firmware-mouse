@@ -1,11 +1,10 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Profile } from '@/types/profile';
+import type { Profile, Dpi } from '@/types/profile';
 import { cloneDeep } from 'lodash';
 import defaultProfile from '@/config/profile.json';
 import { apply, setDPI } from '@/utils/driver';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-
 interface ProfileState {
   isUpgrade: boolean;
   isReset: boolean;
@@ -33,16 +32,29 @@ export const useProfileStore = create<ProfileState>()(
       setProfile: (newProfile) => set({ profile: newProfile }),
       updateProfile: async () => {
         try {
-          const { path, mode, currentDevice } = useBaseInfoStore.getState();
+          const { path, mode, currentDevice, modelConfig } = useBaseInfoStore.getState();
           // 在zustand store中，我们可以通过set函数的回调参数获取当前状态
           set((state) => {
             if (path && state.profile) {
-              const { LEDEffect, DPIs, USBReports, WLReports, AdvanceSetting } = state.profile;
+              const { DPIs } = state.profile;
               const { DPILevels } = currentDevice?.Info || {};
 
+              let _DPIs: Dpi[] = [];
+              const { SensorInfo } = currentDevice?.Info || {};
+              if (SensorInfo != null && SensorInfo.DPIType != 0) {
+                _DPIs = cloneDeep(SensorInfo?.DPIs || []);
+              } else {
+                _DPIs = cloneDeep((modelConfig?.SensorInfo?.DPIs as any) || []);
+              }
+              const _newDPIs = (DPIs || []).map((dpi) => {
+                const found = _DPIs.find((item) => dpi.DPI == item.DPI);
+                return {
+                  ...dpi,
+                  Value: found ? found.Value : 0,
+                };
+              });
               // 先应用其他设置
               apply(path, state.profile);
-
               // 最后设置DPI，确保不会被其他设置覆盖
               setTimeout(() => {
                 setDPI(
@@ -50,7 +62,7 @@ export const useProfileStore = create<ProfileState>()(
                   mode,
                   {
                     DPILevels: DPILevels || [],
-                    DPIs: DPIs || [],
+                    DPIs: _newDPIs,
                   },
                   () => {
                     console.log('DPI设置已应用到鼠标设备');

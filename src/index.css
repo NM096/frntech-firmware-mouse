@@ -57,6 +57,10 @@ li {
   font-weight: 400;
   font-style: normal;
 }
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   font-family: NotoSansSC, sans-serif;
@@ -263,7 +267,7 @@ input[type='number'] {
 
 .device-card {
   position: relative;
-  width: 200px;
+  width: 290px;
   padding: 20px 50px 40px;
   border-radius: 8px;
   cursor: pointer;
@@ -398,7 +402,7 @@ input[type='number'] {
 
 .confirm-card,
 .global-card {
-  width: 280px;
+  width: 340px;
   padding: 20px;
   border-radius: 10px;
   background: linear-gradient(to bottom right, #212b30, #202423);
@@ -431,7 +435,7 @@ input[type='number'] {
   font-size: 16px;
 }
 .custom-confirm-container .confirm-card .confirm-btn {
-  padding: 10px 40px;
+  padding: 10px 20px;
   border-radius: 5px;
   border: 1px solid transparent;
   width: fit-content;
@@ -630,6 +634,9 @@ input[type='number'] {
   border-radius: 5px;
   margin-left: 10px;
 }
+.settings-section .upgrade-firmware-description {
+  font-size: 10px;
+}
 .settings-section .upgrade-firmware:hover {
   color: var(--secondary);
 }
@@ -657,8 +664,8 @@ input[type='number'] {
   min-width: 0;
 }
 .back-btn-icon {
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   margin-right: 8px;
   cursor: pointer;
   padding: 5px;
@@ -886,9 +893,15 @@ input[type='number'] {
   background-color: rgba(255, 255, 255, 0.008);
   width: fit-content;
   border-radius: 5px;
-  padding: 20px 20px;
-  margin: 0;
-  width: 170px;
+  padding: 20px 5px;
+  width: 190px;
+  flex: 1;
+  margin: 0 0 20px;
+}
+.sidebar-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar-item-status {
   background-color: rgba(255, 255, 255, 0.008);
@@ -896,7 +909,7 @@ input[type='number'] {
   border-radius: 5px;
   padding: 10px 20px;
   margin: 10px 0;
-  width: 170px;
+  width: 190px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -945,6 +958,7 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
 }
 .reset-default-tips {
   font-size: 14px;
@@ -1233,8 +1247,8 @@ input[type='number'] {
   text-align: center;
 }
 .macro-group-action-icon {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   margin-right: 0px;
 }
 .macro-container .macro-trigger-options {
@@ -1366,12 +1380,13 @@ input[type='number'] {
 }
 .performance-item .performance-item-title {
   font-size: 14px;
+  margin: 15px 0;
 }
 
 .performance-item .performance-item-description {
   font-size: 12px;
   color: #acacac;
-  margin: 5px 0 30px;
+  margin: 5px 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1427,9 +1442,11 @@ input[type='number'] {
   padding: 10px;
   flex-grow: 3;
   border-radius: 5px;
-  height: calc(100% - 20px);
+  height: calc(100%);
   display: flex;
   flex-direction: column;
+  align-self: stretch;
+  overflow-y: auto;
 }
 
 .macro-item-left .macro-btn-group {
@@ -1531,8 +1548,8 @@ input[type='number'] {
 }
 
 .macro-content-body .back-btn-icon {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 /* Icon Menu Start */

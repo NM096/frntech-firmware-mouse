@@ -11,6 +11,7 @@ import type { Config } from '@/types/data-config';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { throttle } from 'lodash';
+import useProfileAction from '@/hooks/useProfileAction';
 const baseUrl = import.meta.env.BASE_URL;
 const findOpenDpiIndex = (num: number, DPIs: Dpi[]) => {
   let count = 0;
@@ -37,6 +38,7 @@ const DpiConfig = () => {
     configData,
     setConfigData: setConfigDataOnStore,
   } = useBaseInfoStore();
+  const { resetDPIsValue } = useProfileAction();
   const { currentConfigFileName } = useBaseInfoStore();
   const { profile, setProfile } = useProfileStore();
   const DPIs: Dpi[] = profile?.DPIs || [];
@@ -65,7 +67,7 @@ const DpiConfig = () => {
       mode,
       {
         DPILevels: newDPILevels,
-        DPIs: newDPIs.filter((dpi) => dpi.Open),
+        DPIs: resetDPIsValue(newDPIs.filter((dpi) => dpi.Open)),
       },
       () => {
         setCurrentDevice({
@@ -105,7 +107,7 @@ const DpiConfig = () => {
       mode,
       {
         DPILevels: currentDevice?.Info?.DPILevels,
-        DPIs: newDPIs.filter((dpi) => dpi.Open),
+        DPIs: resetDPIsValue(newDPIs.filter((dpi) => dpi.Open)),
       },
       () => {
         setCurrentProfile(currentModelID, currentConfigFileName, { ...profile, DPIs: newDPIs }, (payload) => {
@@ -133,7 +135,7 @@ const DpiConfig = () => {
       mode,
       {
         DPILevels: newDPILevels,
-        DPIs: newDPIs,
+        DPIs: resetDPIsValue(newDPIs),
       },
       (result) => {
         if (result) {
@@ -195,7 +197,7 @@ const DpiConfig = () => {
                   {t('dpi_level')} {index + 1}
                 </div>
                 <Slider
-                  initialValue={dpi.Value}
+                  initialValue={dpi.DPI}
                   onChange={(value) => {
                     handleChangeDpi(index, value);
                   }}

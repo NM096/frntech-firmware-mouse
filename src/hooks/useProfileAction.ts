@@ -1,5 +1,5 @@
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
-
+import { cloneDeep } from 'lodash';
 import {
   getProfileByName,
   setCurrentProfile,
@@ -10,10 +10,10 @@ import {
   setLE,
   setSelectProfile,
 } from '@/utils/driver';
-import type { Profile } from '@/types/profile';
+import type { Dpi, Profile } from '@/types/profile';
 import { useProfileStore } from '@/store/useProfile';
 const useProfileAction = () => {
-  const { currentModelID, setCurrentConfigFileName, path, mode, currentDevice } = useBaseInfoStore();
+  const { currentModelID, setCurrentConfigFileName, path, mode, currentDevice, modelConfig } = useBaseInfoStore();
 
   const { setProfile } = useProfileStore();
 
@@ -84,7 +84,7 @@ const useProfileAction = () => {
               mode,
               {
                 DPILevels: DPILevels || [],
-                DPIs: DPIs || [],
+                DPIs: resetDPIsValue(DPIs || []),
               },
               () => {
                 console.log('DPI设置已应用到鼠标设备');
@@ -106,8 +106,26 @@ const useProfileAction = () => {
       console.error('应用配置到鼠标设备时发生错误:', error);
     }
   };
+
+  const resetDPIsValue = (DPIs: Dpi[]) => {
+    let _DPIs: Dpi[] = [];
+    const { SensorInfo } = currentDevice?.Info || {};
+    if (SensorInfo != null && SensorInfo.DPIType != 0) {
+      _DPIs = cloneDeep(SensorInfo?.DPIs || []);
+    } else {
+      _DPIs = cloneDeep((modelConfig?.SensorInfo?.DPIs as any) || []);
+    }
+    return DPIs.map((dpi) => {
+      const found = _DPIs.find((item) => dpi.DPI == item.DPI);
+      return {
+        ...dpi,
+        Value: found ? found.Value : 0,
+      };
+    });
+  };
   return {
     handleSelectProfile,
+    resetDPIsValue,
   };
 };
 
