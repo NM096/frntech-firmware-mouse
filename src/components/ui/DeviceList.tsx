@@ -95,7 +95,7 @@ const DeviceList = () => {
                   {/* <Power className="power-small" />
                   <span className="battery-text">100%</span> */}
                   <div className="device-item-power">
-                    <img src={getBatteryIcon(device!)} alt="battery" className="device-icon-connection" />
+                    <img src={getBatteryIcon(device!)} alt="battery" className="device-icon-power" />
                     {/* <HoverImage src={ic_charge} hoverSrc={ic_charge} alt="Logo" className="sidebar-icon-connection" /> */}
                     {!device?.RFDevice ? t('charging') : t('used_battery_n')}
                     {/* : t('used_battery', { count: device?.Info?.Mouse?.Battery || 5 })} */}

@@ -37,13 +37,13 @@ const SideBar: React.FC<SideBarProps> = ({ sideList = [], activeSidebar, onSideb
           {/* connection info */}
           <div className="sidebar-item-status">
             <div className="sidebar-item-power">
-              <img src={getBatteryIcon(currentDevice!)} alt="battery" className="sidebar-icon-connection" />
+              <img src={getBatteryIcon(currentDevice!)} alt="battery" className="sidebar-icon-power" />
               {/* <HoverImage src={ic_charge} hoverSrc={ic_charge} alt="Logo" className="sidebar-icon-connection" /> */}
               {!RFDevice ? t('charging') : t('used_battery_n')}
               {/* t('used_battery', { count: currentDevice?.Info?.Mouse?.Battery || 5 }) */}
             </div>
             <div className="sidebar-item-connection">
-              <HoverImage src={wireless_4k} hoverSrc={wireless_4k} alt="Logo" className="sidebar-icon-connection" />
+              <HoverImage src={wireless_4k} hoverSrc={wireless_4k} alt="connection" className="sidebar-icon-connection" />
               {!RFDevice ? t('wired_connection') : t('two_point_four_g_connection')}
             </div>
           </div>
