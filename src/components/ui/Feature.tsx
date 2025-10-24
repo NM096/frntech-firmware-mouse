@@ -210,7 +210,7 @@ const Feature = () => {
       </div>
       <div className="feature-container">
         <SideBar
-          sideList={sideList}
+          sideList={sideList as { key: sidebarKey; title: string; icon: string }[]}
           activeSidebar={activeSidebar}
           onSidebarChange={(key: sidebarKey) => setActiveSidebar(key)}
         />
