@@ -24,12 +24,14 @@ const PerformanceConfig = () => {
   const handleChangeUsbReport = (index: number) => {
     const { USBReports, WLReports } = currentDevice?.Info || {};
     const newUsbReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
+    const newWLReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
     newUsbReport[mode] = index;
-
+    newWLReport[mode] = index;
+  
     // 立即更新profile以反映UI变化 - 这是修复响应延迟的关键
     const updatedProfile = {
       ...profile,
-      ...{ USBReports: newUsbReport },
+      ...{ USBReports: newUsbReport, WLReports: newWLReport },
     };
     setProfile(updatedProfile);
 
@@ -38,7 +40,7 @@ const PerformanceConfig = () => {
       path,
       {
         USBReports: newUsbReport,
-        WLReports: WLReports || [0, 0, 0, 0],
+        WLReports: newWLReport,
       },
       (payload) => {
         if (payload) {
