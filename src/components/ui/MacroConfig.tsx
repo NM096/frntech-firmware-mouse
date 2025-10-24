@@ -61,6 +61,7 @@ const MacroConfig = () => {
   const [macroFiles, setMacroFiles] = useState<string[]>([]);
   const [delayMode, setDelayMode] = useState<'record' | 'default' | 'min'>('record');
   const [minDelay, setMinDelay] = useState(10);
+  const [listHeight, setListHeight] = useState(450);
 
   const [mouseX, setMouseX] = useState(1);
   const [mouseY, setMouseY] = useState(1);
@@ -387,6 +388,16 @@ const MacroConfig = () => {
     console.log('recordList', recordList);
     console.log('currentStepIdx', currentStepIdx);
   }, [recordList, currentStepIdx]);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const height = window.innerHeight;
+      setListHeight(height-250);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+  }, []);
+
   return (
     <div className="macro-config">
       <div className="macro-item-left">
@@ -467,7 +478,7 @@ const MacroConfig = () => {
           </ul>
         </div>
       </div>
-      <div className="macro-item-content">
+      <div id="macro-content" className="macro-item-content">
         <div className="macro-content-header">
           <div className="macro-record-btn-group">
             {recording ? (
@@ -592,7 +603,7 @@ const MacroConfig = () => {
           </div>
           */}
         </div>
-        <ul className="macro-content-body">
+        <ul className="macro-content-body" style={{ height: listHeight + 'px' }}>
           <MacroActionList
             events={recordedActions}
             delayMode={delayMode}
