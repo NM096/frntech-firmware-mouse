@@ -1520,6 +1520,10 @@ input[type='number'] {
   height: 450px;
   overflow-y: auto;
 }
+.macro-content-body .macro-content-max-info {
+  text-align: center;
+  padding: 10px 0;
+}
 .macro-content-body .macro-content-item {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr 1fr 3fr;

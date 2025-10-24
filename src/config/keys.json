@@ -19,8 +19,8 @@
     { "Name": "DPI Loop", "Value": "0x4802", "Lang": "mouse_kf_dpi_loop", "Show": "DPI Loop" },
     { "Name": "DPI+", "Value": "0x4801", "Lang": "mouse_kf_dpi_plus", "Show": "DPI+" },
     { "Name": "DPI-", "Value": "0x4800", "Lang": "mouse_kf_dpi_sub", "Show": "DPI-" },
-    { "Name": "Snipe DPI-", "Value": "0x480A", "Lang": "mouse_kf_advance_snipe_dpi_sub", "Show": "Snipe DPI-" },
-    { "Name": "Snipe DPI+", "Value": "0x480B", "Lang": "mouse_kf_advance_snipe_dpi_plus", "Show": "Snipe DPI+" }
+    { "Name": "Snipe DPI-", "Value": "0x480B", "Lang": "mouse_kf_advance_snipe_dpi_sub", "Show": "Snipe DPI-" },
+    { "Name": "Snipe DPI+", "Value": "0x480A", "Lang": "mouse_kf_advance_snipe_dpi_plus", "Show": "Snipe DPI+" }
   ],
   "Media": [
     { "Name": "Volume+", "Value": "0x50E9", "Lang": "mouse_kf_media_volume_plus", "Show": "Volume+" },

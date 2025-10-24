@@ -33,14 +33,12 @@ import {
 } from '@/utils/driver';
 import IconMenu from '../common/IconMenu';
 import { useModal } from '../common/ModalContext';
-import Keys from '@/config/keys.json';
 import { toast } from 'sonner';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { useMacroRecorder } from '@/hooks/useMacroRecorder';
 import MacroActionList from '../common/MacroActionList';
 import { KeyFormatter } from '@/utils/common';
 import { useTranslation } from 'react-i18next';
-import { useAllowClick } from '@/hooks/useAllowClick';
 import { useMacroStore } from '@/store/macroStore';
 import useActionMacroFile from '@/hooks/useActionMacroFile';
 const { dialog } = require('electron').remote;
@@ -50,7 +48,7 @@ export interface MacroEvent {
   name: string;
   code: string;
 }
-
+export const supportRecordMaxCount = 200;
 const MacroConfig = () => {
   const { t } = useTranslation();
   const { openConfirm, openAlert } = useModal();
@@ -68,7 +66,13 @@ const MacroConfig = () => {
 
   const [recording, setRecording] = useState(false);
   const [openRecords, setOpenRecords] = useState(false);
-  const { records, clearRecords, setRecords, stop } = useMacroRecorder(recording, openRecords, delayMode, minDelay);
+  const { records, clearRecords, setRecords, stop } = useMacroRecorder(
+    recording,
+    openRecords,
+    delayMode,
+    minDelay,
+    supportRecordMaxCount
+  );
   const [recordedActions, setRecordedActions] = useState<MacroEvent[]>([]);
   const {
     recordList,
@@ -139,9 +143,9 @@ const MacroConfig = () => {
           if (payload) {
             getMacroCategorys((payload) => {
               setCategory(payload);
-              setCurrentCategory('');
-              setCurrentMacroFile('');
-              setMacroFiles([]);
+              setCurrentCategory(payload[0] ?? '');
+              // setCurrentMacroFile('');
+              // setMacroFiles([]);
             });
           }
         });
@@ -341,6 +345,12 @@ const MacroConfig = () => {
   useEffect(() => {
     setActionMacroRecord(recordList);
     setRecordedActions(recordList);
+    if (openRecords && recording) {
+      const element = document.querySelector('.macro-content-body');
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
+    }
     console.log('recordList changed', recordList);
   }, [recordList]);
 
@@ -392,7 +402,7 @@ const MacroConfig = () => {
   useEffect(() => {
     const updateHeight = () => {
       const height = window.innerHeight;
-      setListHeight(height-250);
+      setListHeight(height - 250);
     };
     updateHeight();
     window.addEventListener('resize', updateHeight);
@@ -611,6 +621,9 @@ const MacroConfig = () => {
             onSelectStep={selectStep}
             selectIndex={currentStepIdx}
           />
+          {recordedActions.length >= supportRecordMaxCount * 2 && (
+            <div className="macro-content-max-info">最大支持{supportRecordMaxCount}条宏记录</div>
+          )}
         </ul>
       </div>
       <div className="macro-item-right">

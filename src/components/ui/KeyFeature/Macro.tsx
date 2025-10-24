@@ -79,7 +79,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
           borderColor="#ff7f0e"
           options={categorys}
           defaultValue={selectedCategory}
-          onChange={() => setSelectedCategory(selectedCategory)}
+          onChange={(e) => setSelectedCategory(e)}
           size="small" // 选择 'small', 'medium' 或 'large'
         />
       </div>

@@ -36,14 +36,21 @@ export function useMacroRecorder(
   enabled: boolean,
   writeRecord: boolean,
   delayMode: 'record' | 'default' | 'min',
-  minDelay: number
+  minDelay: number,
+  maxRecords?: number
 ) {
   const [records, setRecords] = useState<MacroEvent[]>([]);
   const lastEventTime = useRef<number | null>(null); // 记录上一次事件的时间戳
 
-  const addRecord = useCallback((event: MacroEvent) => {
-    setRecords((prev) => [...prev, event]);
-  }, []);
+  const addRecord = useCallback(
+    (event: MacroEvent) => {
+      setRecords((prev) => {
+        if (maxRecords && prev.length >= maxRecords * 2) return prev; // 超出上限，不再添加
+        return [...prev, event];
+      });
+    },
+    [maxRecords]
+  );
 
   // 包装，插入事件间隔
   const addWithInterval = useCallback(
@@ -109,7 +116,7 @@ export function useMacroRecorder(
       document.removeEventListener('mousedown', handleMouse);
       document.removeEventListener('mouseup', handleMouse);
     };
-  }, [enabled, writeRecord, addWithInterval]);
+  }, [enabled, writeRecord, addWithInterval, maxRecords]);
 
   const clearRecords = () => {
     setRecords([]);
@@ -118,12 +125,12 @@ export function useMacroRecorder(
 
   const stop = useCallback(() => {
     lastEventTime.current = null;
-
-    if (records.length > 0 && records[records.length - 1].type !== 'Delay') {
-      setRecords((prev) => [...prev, { type: 'Delay', name: '10', code: '10' }]);
+    let finalRecords = records;
+    if (finalRecords.length > 0 && finalRecords[finalRecords.length - 1].type !== 'Delay') {
+      finalRecords = [...finalRecords, { type: 'Delay', name: '10', code: '10' }];
+      setRecords(finalRecords);
     }
-    return records;
+    return finalRecords;
   }, [records]);
-
   return { records, stop, clearRecords, setRecords };
 }
