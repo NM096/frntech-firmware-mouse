@@ -214,10 +214,10 @@ const DpiConfig = () => {
                     initialValue={DPIs[index]?.Color || ''}
                     simple
                     simpleColors={[
-                      '#aa0000',
+                      '#ff0000',
                       '#00ff00',
-                      '#0055ff',
-                      '#ff55ff',
+                      '#0000ff',
+                      '#ff00ff',
                       '#ffff00',
                       '#00ffff',
                       '#ffffff',
