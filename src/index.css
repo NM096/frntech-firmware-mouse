@@ -1116,7 +1116,7 @@ input[type='number'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60vh;
+  height: 80vh;
 }
 .key-config-container .key-config-mouse {
   width: 50%;
