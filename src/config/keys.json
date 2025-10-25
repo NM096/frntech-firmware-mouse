@@ -9,7 +9,7 @@
     { "Name": "Wheel Down", "Value": "0x42FF", "Lang": "mouse_kf_mouse_wheel_down", "Show": "Wheel Down" },
     { "Name": "Fire Key", "Value": "0x4302", "Lang": "mouse_kf_mouse_fire_key", "Show": "Fire Key" }
   ],
-  "Quit": [
+  "Shortcut": [
     { "Name": "Bright+", "Value": "0x506F", "Lang": "mouse_kf_shortcut_brightness_plus", "Show": "Bright+" },
     { "Name": "Bright-", "Value": "0x5070", "Lang": "mouse_kf_shortcut_brightness_sub", "Show": "Bright-" },
     { "Name": "Calculator", "Value": "0x5192", "Lang": "mouse_kf_shortcut_calculator", "Show": "Calculator" },
