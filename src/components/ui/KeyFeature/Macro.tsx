@@ -67,7 +67,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   useEffect(() => {
     setSelectedCategory(initialMacro?.Macro?.Category || '');
     setSelectedMacro(initialMacro?.Macro?.Name || '');
-    setMacroType(initialMacro?.Macro?.Type ? Number(initialMacro?.Macro?.Type) : 1);
+    setMacroType(initialMacro?.Macro?.Type ? Number(initialMacro?.Macro?.Type) : 0);
     setCycles(initialMacro?.Macro?.Cycles ? Number(initialMacro?.Macro?.Cycles) : 1);
   }, [initialMacro]);
 
