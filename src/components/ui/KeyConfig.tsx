@@ -35,6 +35,8 @@ const KeyConfig = () => {
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
   const { openAlert } = useModal();
 
+  const [fireCount, setFireCount] = useState(0);
+
   const keyMouseRef = useRef<HTMLDivElement | null>(null);
   const keyFeatureRef = useRef<HTMLDivElement | null>(null);
   const sideList: { key: sidebarKey; title: string }[] = [
@@ -48,7 +50,9 @@ const KeyConfig = () => {
   const sidebarComponents = {
     Mouse: () => <Mouse list={mouseKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
     Keyboard: () => <Keyboard onChange={(define) => handleKeyChange(define)} initialShortcut={currentKeyDefine} />,
-    Shortcut: () => <Mouse list={shortcutKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
+    Shortcut: () => (
+      <Mouse list={shortcutKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />
+    ),
     Media: () => <Mouse list={mediaKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
     Macro: () => (
       <Macro onChange={(value) => handleKeyChange(value)} confirm={handleSettingKey} initialMacro={currentKeyDefine} />
@@ -132,6 +136,11 @@ const KeyConfig = () => {
       if (keyDefine.Lang.includes('(combination_Key)')) setActiveSidebar('Keyboard');
     }
   }, [activeKey, profile]);
+  useEffect(() => {
+    if (currentKeyDefine?.Value.includes('0x43') && activeSidebar === 'Mouse') {
+      setFireCount(parseInt(currentKeyDefine?.Value.split('0x43')[1] || '0', 16));
+    }
+  }, [currentKeyDefine?.Value, activeSidebar]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -173,12 +182,20 @@ const KeyConfig = () => {
                 <div className="mouse_fire_key">
                   <div>{t('firepower')}:</div>
                   <input
+                    key={currentKeyDefine?.Value}
                     type="number"
                     min={0}
                     max={200}
-                    value={parseInt(currentKeyDefine.Value.split('0x43')[1] || '0', 16)}
+                    // defaultValue={parseInt(currentKeyDefine?.Value.split('0x43')[1] || '0', 16)}
+                    value={fireCount}
                     onChange={(e) => {
+                      setFireCount(Math.min(200, Math.max(0, Number(e.target.value))) || 0);
+                    }}
+                    onBlur={(e) => {
                       const currentValue = Math.min(200, Math.max(0, Number(e.target.value))) || 0;
+                      if (currentValue === parseInt(currentKeyDefine?.Value.split('0x43')[1] || '0', 16)) {
+                        return;
+                      }
                       handleKeyChange({
                         ...currentKeyDefine,
                         Value: `0x43${currentValue.toString(16).padStart(2, '0')}`,
