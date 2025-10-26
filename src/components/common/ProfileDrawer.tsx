@@ -350,7 +350,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                 <div className="profile-container-center">
                   <div className="profile-header">
                     <div>配置列表</div>
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
                       <div onClick={() => handleImportProfile()} className="flex items-center">
                         <HoverImage
                           src={ic_save}

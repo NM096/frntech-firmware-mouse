@@ -488,7 +488,7 @@ input[type='number'] {
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding-top: 20px;
   -webkit-app-region: no-drag;
 }
 .profile-container {
@@ -646,8 +646,7 @@ input[type='number'] {
 }
 .settings-header {
   flex-shrink: 0;
-  width: 100px;
-  margin: 0 20px;
+  width: 150px;
 }
 .back-btn {
   background: none;
