@@ -14,11 +14,11 @@ import { setConfigData } from '@/utils/driver';
 import Dropdown from '@/components/common/Dropdown';
 import { useModal } from '../common/ModalContext';
 
-type sidebarKey = 'Mouse' | 'Keyboard' | 'Quit' | 'Media' | 'Macro';
+type sidebarKey = 'Mouse' | 'Keyboard' | 'Shortcut' | 'Media' | 'Macro';
 
 const KeyConfig = () => {
   const { t } = useTranslation();
-  const { Mouse: mouseKeys, Quit: quitKeys, Media: mediaKeys } = Keys;
+  const { Mouse: mouseKeys, Shortcut: shortcutKeys, Media: mediaKeys } = Keys;
   const {
     currentModelID,
     currentDevice,
@@ -40,7 +40,7 @@ const KeyConfig = () => {
   const sideList: { key: sidebarKey; title: string }[] = [
     { key: 'Mouse', title: t('mouse_function') },
     { key: 'Keyboard', title: t('keyboard_function') },
-    { key: 'Quit', title: t('shortcut_keys') },
+    { key: 'Shortcut', title: t('shortcut_keys') },
     { key: 'Media', title: t('multimedia_control') },
     { key: 'Macro', title: t('macro_command') },
   ];
@@ -48,7 +48,7 @@ const KeyConfig = () => {
   const sidebarComponents = {
     Mouse: () => <Mouse list={mouseKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
     Keyboard: () => <Keyboard onChange={(define) => handleKeyChange(define)} initialShortcut={currentKeyDefine} />,
-    Quit: () => <Mouse list={quitKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
+    Shortcut: () => <Mouse list={shortcutKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
     Media: () => <Mouse list={mediaKeys} onChange={(value) => handleKeyChange(value)} keyDefine={currentKeyDefine} />,
     Macro: () => (
       <Macro onChange={(value) => handleKeyChange(value)} confirm={handleSettingKey} initialMacro={currentKeyDefine} />
@@ -95,11 +95,10 @@ const KeyConfig = () => {
     const _dpiList = snipeDPIList();
     const currentDpiItem = _dpiList.find((item) => item.DPI === dpi);
     const _newConfig = cloneDeep(configData);
-    // mouse_kf_advance_snipe_dpi_sub
     if (currentKeyDefine?.Value == '0x480A') {
-      _newConfig.SnipeDPISub = currentDpiItem;
-    } else {
       _newConfig.SnipeDPIPlus = currentDpiItem;
+    } else {
+      _newConfig.SnipeDPISub = currentDpiItem;
     }
     setConfigData(path, _newConfig, () => {
       setConfigDataOnStore(_newConfig);
@@ -127,7 +126,7 @@ const KeyConfig = () => {
 
     if (keyDefine?.Value) {
       if (mouseKeys.some((i) => i.Lang === keyDefine.Lang)) setActiveSidebar('Mouse');
-      if (quitKeys.some((i) => i.Lang === keyDefine.Lang)) setActiveSidebar('Quit');
+      if (shortcutKeys.some((i) => i.Lang === keyDefine.Lang)) setActiveSidebar('Shortcut');
       if (mediaKeys.some((i) => i.Lang === keyDefine.Lang)) setActiveSidebar('Media');
       if ('0x8000' === keyDefine.Value) setActiveSidebar('Macro');
       if (keyDefine.Lang.includes('(combination_Key)')) setActiveSidebar('Keyboard');
@@ -189,14 +188,14 @@ const KeyConfig = () => {
                   />
                 </div>
               )}
-              {['0x480A', '0x480B'].includes(currentKeyDefine?.Value || '') && activeSidebar === 'Quit' && (
+              {['0x480A', '0x480B'].includes(currentKeyDefine?.Value || '') && activeSidebar === 'Shortcut' && (
                 <div className="advance_snipe_dpi_plus">
                   <div>{t('snipe_dpi')}:</div>
                   {currentKeyDefine?.Value == '0x480A' && (
                     <Dropdown
                       borderColor="#ff7f0e"
                       options={snipeDPIList().map((dpi) => dpi.DPI)}
-                      defaultValue={configData?.SnipeDPISub?.DPI.toString() && snipeDPIList()[0]?.DPI.toString()}
+                      defaultValue={configData?.SnipeDPIPlus?.DPI.toString() && snipeDPIList()[0]?.DPI.toString()}
                       onChange={(dpi) => {
                         handleSettingSnipeDPI(dpi);
                       }}
@@ -207,7 +206,7 @@ const KeyConfig = () => {
                     <Dropdown
                       borderColor="#ff7f0e"
                       options={snipeDPIList().map((dpi) => dpi.DPI)}
-                      defaultValue={configData?.SnipeDPIPlus?.DPI.toString() || snipeDPIList()[0]?.DPI.toString()}
+                      defaultValue={configData?.SnipeDPISub?.DPI.toString() || snipeDPIList()[0]?.DPI.toString()}
                       onChange={(dpi) => {
                         handleSettingSnipeDPI(dpi);
                       }}

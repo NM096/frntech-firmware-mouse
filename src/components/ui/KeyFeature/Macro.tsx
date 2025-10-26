@@ -17,7 +17,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   const [macros, setMacros] = React.useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = React.useState<string>('');
   const [selectedMacro, setSelectedMacro] = React.useState<string>('');
-  const [macroType, setMacroType] = React.useState<number>(1);
+  const [macroType, setMacroType] = React.useState<number>(0);
   const [cycles, setCycles] = React.useState<number>(1);
   const macroTitleStyle: React.CSSProperties = {
     fontSize: '14px',
@@ -67,7 +67,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   useEffect(() => {
     setSelectedCategory(initialMacro?.Macro?.Category || '');
     setSelectedMacro(initialMacro?.Macro?.Name || '');
-    setMacroType(initialMacro?.Macro?.Type ? Number(initialMacro?.Macro?.Type) : 1);
+    setMacroType(initialMacro?.Macro?.Type ? Number(initialMacro?.Macro?.Type) : 0);
     setCycles(initialMacro?.Macro?.Cycles ? Number(initialMacro?.Macro?.Cycles) : 1);
   }, [initialMacro]);
 
@@ -116,9 +116,9 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
         <div className="macro-trigger-item">
           <CustomRadio
             customSize="small"
-            checked={macroType === 1}
+            checked={macroType === 0}
             onChange={() => {
-              setMacroType(1);
+              setMacroType(0);
             }}
           />
           <input
@@ -134,9 +134,9 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
         <div className="macro-trigger-item">
           <CustomRadio
             customSize="small"
-            checked={macroType === 2}
+            checked={macroType === 1}
             onChange={() => {
-              setMacroType(2);
+              setMacroType(1);
             }}
           />
           {t('macro_play_once')}
@@ -144,27 +144,13 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
         <div className="macro-trigger-item">
           <CustomRadio
             customSize="small"
-            checked={macroType === 3}
+            checked={macroType === 2}
             onChange={() => {
-              setMacroType(3);
+              setMacroType(2);
             }}
           />
           {t('macro_play_until_stop')}
         </div>
-        {/* <div className="macro-trigger-item">
-          <CustomRadio
-            customSize="small"
-            checked={macroType === 4}
-            onChange={() => {
-              setMacroType(4);
-            }}
-          />
-          当前宏键按下停止播放
-        </div> */}
-        {/* <div className="macro-trigger-item">
-          <Checkbox size={15} onChange={() => {}} />
-          左键宏
-        </div> */}
       </div>
     </div>
   );
