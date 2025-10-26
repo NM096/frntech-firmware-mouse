@@ -176,11 +176,14 @@ const KeyConfig = () => {
                   <input
                     type="number"
                     min={0}
-                    max={256}
+                    max={200}
                     value={parseInt(currentKeyDefine.Value.split('0x43')[1] || '0', 16)}
                     onChange={(e) => {
-                      const currentValue = Math.min(256, Math.max(0, Number(e.target.value))) || 0;
-                      handleKeyChange({ ...currentKeyDefine, Value: `0x43${currentValue.toString(16)}` });
+                      const currentValue = Math.min(200, Math.max(0, Number(e.target.value))) || 0;
+                      handleKeyChange({
+                        ...currentKeyDefine,
+                        Value: `0x43${currentValue.toString(16).padStart(2, '0')}`,
+                      });
                     }}
                     className="mouse-fire-input"
                   />

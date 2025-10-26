@@ -30,6 +30,7 @@ import {
   readMacro,
   saveMacro,
   addMacro,
+  delMacroCategory,
 } from '@/utils/driver';
 import IconMenu from '../common/IconMenu';
 import { useModal } from '../common/ModalContext';
@@ -139,7 +140,7 @@ const MacroConfig = () => {
       title: t('warning'),
       content: t('confirm_delete_macro_group'),
       onOk: () => {
-        delMacro(currentCategory, currentMacroFile, (payload) => {
+        delMacroCategory(currentCategory, (payload) => {
           if (payload) {
             getMacroCategorys((payload) => {
               setCategory(payload);
@@ -187,6 +188,7 @@ const MacroConfig = () => {
     });
   };
   const handleCreateMacroFile = () => {
+    if (!currentCategory) return;
     openConfirm({
       title: t('create_macro_file'),
       content: t('macro_file_name'),
@@ -414,10 +416,10 @@ const MacroConfig = () => {
         <div className="macro-btn-group">
           <span>{t('macro_group')}</span>
           <div className="macro-btn-group">
-            <IconMenu
+            {/* <IconMenu
               icon={<HoverImage src={ic_save} hoverSrc={ic_save} alt="ic_save" className="back-btn-icon" />}
               menu={categoryMenu}
-            />
+            /> */}
             <HoverImage
               src={ic_delete}
               hoverSrc={ic_delete}
@@ -446,13 +448,13 @@ const MacroConfig = () => {
         <div className="macro-btn-group">
           <span>{t('macro_name')}</span>
           <div className="macro-btn-group">
-            <HoverImage
+            {/* <HoverImage
               src={ic_save}
               hoverSrc={ic_save}
               alt="ic_save"
               className="back-btn-icon"
               onClick={() => handleImportCategory()}
-            />
+            /> */}
             <HoverImage
               src={ic_delete}
               hoverSrc={ic_delete}
