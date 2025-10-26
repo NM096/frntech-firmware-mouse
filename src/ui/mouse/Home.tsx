@@ -95,8 +95,8 @@ const Home: React.FC = () => {
         if (path == deviceInfo.Device) {
           setCurrentDevice({
             ...currentDevice,
-            // Info: deviceInfo.Info || {},
-            Info: TestInfo,
+            Info: deviceInfo.Info || {},
+            // Info: TestInfo,
           });
         }
         setConnected(hasCanSelectedDevice(_newDeviceMap));
