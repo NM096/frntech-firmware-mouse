@@ -8,7 +8,7 @@ import { useProfileStore } from '@/store/useProfile';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import type { DeviceData } from '@/types/device-data';
 import { useListenMouse } from '@/hooks/useListenMouse';
-
+import { TestInfo } from './TestInfo';
 import useProfileAction from '@/hooks/useProfileAction';
 const Home: React.FC = () => {
   const { deviceMap, setDeviceMap, currentDevice, currentModelID, path, clearCurrentDevice, setCurrentDevice } =
@@ -95,7 +95,8 @@ const Home: React.FC = () => {
         if (path == deviceInfo.Device) {
           setCurrentDevice({
             ...currentDevice,
-            Info: deviceInfo.Info,
+            // Info: deviceInfo.Info || {},
+            Info: TestInfo,
           });
         }
         setConnected(hasCanSelectedDevice(_newDeviceMap));
