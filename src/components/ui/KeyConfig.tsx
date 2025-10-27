@@ -189,11 +189,11 @@ const KeyConfig = () => {
                     // defaultValue={parseInt(currentKeyDefine?.Value.split('0x43')[1] || '0', 16)}
                     value={fireCount}
                     onChange={(e) => {
-                      setFireCount(Math.min(200, Math.max(0, Number(e.target.value))) || 0);
+                      setFireCount(Math.min(200, Math.max(2, Number(e.target.value))) || 2);
                     }}
                     onBlur={(e) => {
-                      const currentValue = Math.min(200, Math.max(0, Number(e.target.value))) || 0;
-                      if (currentValue === parseInt(currentKeyDefine?.Value.split('0x43')[1] || '0', 16)) {
+                      const currentValue = Math.min(200, Math.max(2, Number(e.target.value))) || 2;
+                      if (currentValue === parseInt(currentKeyDefine?.Value.split('0x43')[1] || '2', 16)) {
                         return;
                       }
                       handleKeyChange({
