@@ -21,15 +21,15 @@ async function initI18n() {
         // 添加缓存控制，确保每次都获取最新的翻译文件
         requestOptions: {
           cache: 'no-store',
-          credentials: 'same-origin'
-        }
+          credentials: 'same-origin',
+        },
       },
 
-      debug: true,
+      debug: false,
 
       saveMissing: false,
       keySeparator: false,
-      nsSeparator: false
+      nsSeparator: false,
     });
 
   return { i18n, config };

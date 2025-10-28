@@ -10,6 +10,7 @@ import { useProfileStore } from '@/store/useProfile';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 import { setReportRate, setAdvanceSetting, openMouseProperties, setCurrentProfile } from '@/utils/driver';
+import type { Profile } from '@/types/profile';
 const PerformanceConfig = () => {
   const { t } = useTranslation();
   const sleepTime = ['10', '30', '60', '120', '180', '300', '600'];
@@ -21,17 +22,17 @@ const PerformanceConfig = () => {
   const { profile, setProfile } = useProfileStore();
   const { USBReports, AdvanceSetting } = profile;
 
-  const handleChangeUsbReport = (index: number) => {
-    const { USBReports, WLReports } = currentDevice?.Info || {};
+  const handleChangeUsbReport = (index: number, updateProfile?: Profile) => {
+    const { USBReports, WLReports, AdvanceSetting } = updateProfile || profile || {};
     const newUsbReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
     const newWLReport = USBReports ? [...USBReports] : [0, 0, 0, 0];
     newUsbReport[mode] = index;
     newWLReport[mode] = index;
-  
+
     // 立即更新profile以反映UI变化 - 这是修复响应延迟的关键
     const updatedProfile = {
       ...profile,
-      ...{ USBReports: newUsbReport, WLReports: newWLReport },
+      ...{ AdvanceSetting: AdvanceSetting, USBReports: newUsbReport, WLReports: newWLReport },
     };
     setProfile(updatedProfile);
 
@@ -50,7 +51,7 @@ const PerformanceConfig = () => {
       }
     );
   };
-  const handleChangeAltitude = (name: string, value: number | boolean) => {
+  const handleChangeAltitude = async (name: string, value: number | boolean) => {
     // console.log(AdvanceSetting);
     const newAdvanceSetting = cloneDeep({ ...AdvanceSetting, [name]: value });
 
@@ -59,8 +60,13 @@ const PerformanceConfig = () => {
       ...profile,
       ...{ AdvanceSetting: newAdvanceSetting },
     };
-    setProfile(updatedProfile);
 
+    setProfile(updatedProfile);
+    // 超低功耗动态更新报告率
+    if (name === 'UltraLowPower' && value === true) {
+      // TODO 优化 调用2次setProfile问题
+      await handleChangeUsbReport(0, updatedProfile);
+    }
     // 然后异步发送配置到设备
     setAdvanceSetting(path, newAdvanceSetting, (payload) => {
       if (payload) {
@@ -79,12 +85,18 @@ const PerformanceConfig = () => {
       <div className="performance-section">
         <div className="performance-item">
           <div className="performance-item-title">{t('report_rate_settings')}</div>
-          <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
+          <div className="performance-item-description">
+            <div>{t('wired_and_wireless_mode_polling_rate')}</div>
+          </div>
+          <div className="performance-item-description">
+            <div> {t('ultralow_power_rate_tips')}</div>
+          </div>
           <div className="performance-radio-group">
             {rateList.map((rate, index) => (
               <div className="performance-radio-item" key={index}>
                 <CustomRadio
-                  checked={(modelConfig?.Advance?.UltraLowPower && AdvanceSetting?.UltraLowPower) ? index == 0 : (USBReports ? USBReports[mode] === index : false)}
+                  disabled={AdvanceSetting?.UltraLowPower}
+                  checked={USBReports ? USBReports[mode] === index : false}
                   onChange={() => handleChangeUsbReport(index)}
                 />
                 {rate}

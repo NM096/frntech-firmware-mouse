@@ -6,6 +6,7 @@ interface CustomRadioProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   customSize?: Size;
   color?: string;
   label?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const sizeMap = {
@@ -20,6 +21,7 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
     color = 'var(--secondary)',
     checked: checkedProp,
     defaultChecked,
+    disabled = false,
     onChange,
     label,
     style,
@@ -61,6 +63,7 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
         type="radio"
         checked={checked}
         onChange={handleChange}
+        disabled={disabled}
         onMouseEnter={(e) => (e.currentTarget.style.borderColor = color)}
         onMouseLeave={(e) => {
           e.currentTarget.style.borderColor = '#96999a';

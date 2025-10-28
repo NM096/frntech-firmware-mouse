@@ -33,6 +33,7 @@ const KeyConfig = () => {
   const [activeKey, setActiveKey] = useState<number | null>(null);
   const [activeSidebar, setActiveSidebar] = useState<sidebarKey | null>('Mouse');
   const [currentKeyDefine, setCurrentKeyDefine] = useState<KeyDefine>();
+
   const { openAlert } = useModal();
 
   const [fireCount, setFireCount] = useState(0);
@@ -62,7 +63,12 @@ const KeyConfig = () => {
   const handleKeyChange = (key: KeyItem) => {
     setCurrentKeyDefine((prev) => {
       const newKeyDefine = prev ? { ...prev, ...key } : undefined;
-      if (key?.Value !== '0x8000' && key?.Value !== '0x2000') {
+      if (key?.Value === '0x480A' || key?.Value === '0x480B') {
+        if (prev?.Value !== key.Value) {
+          handleSettingSnipeDPI(snipeDPIList()[0]?.DPI.toString() || '');
+        }
+        handleSettingKey(newKeyDefine);
+      } else if (key?.Value !== '0x8000' && key?.Value !== '0x2000') {
         handleSettingKey(newKeyDefine);
       } else if (key?.Value === '0x8000' && key?.Macro?.Name && key?.Macro?.Category) {
         handleSettingKey(newKeyDefine);
@@ -94,10 +100,18 @@ const KeyConfig = () => {
       return modelConfig?.SensorInfo?.DPIs || [];
     }
   }, [currentDevice, modelConfig]);
+  const findDPIByValue = useCallback(
+    (value: string) => {
+      const _dpiList = snipeDPIList();
+      const dpiItem = _dpiList.find((item) => item.Value.toString() == value);
+      return dpiItem?.DPI || _dpiList[0]?.DPI;
+    },
+    [snipeDPIList]
+  );
 
-  const handleSettingSnipeDPI = (dpi: string) => {
-    const _dpiList = snipeDPIList();
-    const currentDpiItem = _dpiList.find((item) => item.DPI === dpi);
+  const handleSettingSnipeDPI = async (dpi: string) => {
+    const _dpiList = await snipeDPIList();
+    const currentDpiItem = _dpiList.find((item) => item.DPI == dpi);
     const _newConfig = cloneDeep(configData);
     if (currentKeyDefine?.Value == '0x480A') {
       _newConfig.SnipeDPIPlus = currentDpiItem;
@@ -212,18 +226,22 @@ const KeyConfig = () => {
                     <Dropdown
                       borderColor="#ff7f0e"
                       options={snipeDPIList().map((dpi) => dpi.DPI)}
-                      defaultValue={configData?.SnipeDPIPlus?.DPI.toString() || snipeDPIList()[0]?.DPI.toString()}
+                      defaultValue={findDPIByValue(
+                        configData?.SnipeDPIPlus?.Value.toString() || snipeDPIList()[0]?.Value.toString()
+                      )}
                       onChange={(dpi) => {
                         handleSettingSnipeDPI(dpi);
                       }}
                       size="small"
                     />
-                  )}{' '}
+                  )}
                   {currentKeyDefine?.Value == '0x480B' && (
                     <Dropdown
                       borderColor="#ff7f0e"
                       options={snipeDPIList().map((dpi) => dpi.DPI)}
-                      defaultValue={configData?.SnipeDPISub?.DPI.toString() || snipeDPIList()[0]?.DPI.toString()}
+                      defaultValue={findDPIByValue(
+                        configData?.SnipeDPISub?.Value.toString() || snipeDPIList()[0]?.Value.toString()
+                      )}
                       onChange={(dpi) => {
                         handleSettingSnipeDPI(dpi);
                       }}

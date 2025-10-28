@@ -194,6 +194,7 @@
   "ultralow_delay_desc": "开启超低延迟之后鼠标画线更及时",
   "ultralow_power_title": "超低功耗",
   "ultralow_power_desc": "开启超低功耗之后鼠标更省电",
+  "ultralow_power_rate_tips": "开启超低功耗后,回报率将被设置为125Hz",
   "ripple_control_title": "波纹控制",
   "ripple_control_desc": "开启波纹控制之后鼠标会在高速情况下进行算法修正消除波浪形的抖动",
   "move_wakeup_title": "移动唤醒",

@@ -187,7 +187,6 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
       const keyCode = KeyCodeMap[e.code];
       setKeyValue(keyCode);
 
-
       const keyName = getKeyName(e);
       setKeyDisplay(keyName);
     }
@@ -201,15 +200,13 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
 
   const startListening = () => {
     setIsListening(true);
+    setHasUserModified(true);
     if (inputRef.current) {
       inputRef.current.focus();
     }
   };
   const stopListening = () => {
     setIsListening(false);
-  };
-  const handleChange = () => {
-    setHasUserModified(true);
   };
 
   const handleMakeShortcut = (currentModifiers = modifiers) => {
@@ -326,7 +323,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
         value={keyDisplay}
         onFocus={startListening}
         onBlur={stopListening}
-        onChange={handleChange}
+        onChange={() => {}}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', marginLeft: '20px' }}>
         {Object.entries(ModifierKeys).map(([code, key]) => (
