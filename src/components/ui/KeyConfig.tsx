@@ -212,7 +212,7 @@ const KeyConfig = () => {
                     <Dropdown
                       borderColor="#ff7f0e"
                       options={snipeDPIList().map((dpi) => dpi.DPI)}
-                      defaultValue={configData?.SnipeDPIPlus?.DPI.toString() && snipeDPIList()[0]?.DPI.toString()}
+                      defaultValue={configData?.SnipeDPIPlus?.DPI.toString() || snipeDPIList()[0]?.DPI.toString()}
                       onChange={(dpi) => {
                         handleSettingSnipeDPI(dpi);
                       }}
