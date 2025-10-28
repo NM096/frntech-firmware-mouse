@@ -150,6 +150,10 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     });
   };
   const handleSelectProfile = (fileName: string) => {
+    if (fileName === currentConfigFileName) {
+      return
+    }
+
     const _loading = openConfigLoading({ proccess: 0 });
     setCurrentConfigFileName(fileName);
     setSelectProfile(currentModelID, fileName);
