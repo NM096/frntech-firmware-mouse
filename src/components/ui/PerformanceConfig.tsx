@@ -77,23 +77,21 @@ const PerformanceConfig = () => {
   return (
     <div className="performance-config">
       <div className="performance-section">
-        {modelConfig?.Advance?.RippleControl && (
-          <div className="performance-item">
-            <div className="performance-item-title">{t('report_rate_settings')}</div>
-            <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
-            <div className="performance-radio-group">
-              {rateList.map((rate, index) => (
-                <div className="performance-radio-item" key={index}>
-                  <CustomRadio
-                    checked={USBReports ? USBReports[mode] === index : false}
-                    onChange={() => handleChangeUsbReport(index)}
-                  />
-                  {rate}
-                </div>
-              ))}
-            </div>
+        <div className="performance-item">
+          <div className="performance-item-title">{t('report_rate_settings')}</div>
+          <div className="performance-item-description">{t('wired_and_wireless_mode_polling_rate')}</div>
+          <div className="performance-radio-group">
+            {rateList.map((rate, index) => (
+              <div className="performance-radio-item" key={index}>
+                <CustomRadio
+                  checked={(modelConfig?.Advance?.UltraLowPower && AdvanceSetting?.UltraLowPower) ? index == 0 : (USBReports ? USBReports[mode] === index : false)}
+                  onChange={() => handleChangeUsbReport(index)}
+                />
+                {rate}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
         <div className="performance-item">
           <div className="performance-item-title">{t('primary_sleep_time_settings')}</div>
           <div className="performance-item-description">
