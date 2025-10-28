@@ -62,11 +62,7 @@ const PerformanceConfig = () => {
     };
 
     setProfile(updatedProfile);
-    // 超低功耗动态更新报告率
-    if (name === 'UltraLowPower' && value === true) {
-      // TODO 优化 调用2次setProfile问题
-      await handleChangeUsbReport(0, updatedProfile);
-    }
+
     // 然后异步发送配置到设备
     setAdvanceSetting(path, newAdvanceSetting, (payload) => {
       if (payload) {
@@ -88,15 +84,23 @@ const PerformanceConfig = () => {
           <div className="performance-item-description">
             <div>{t('wired_and_wireless_mode_polling_rate')}</div>
           </div>
-          <div className="performance-item-description">
-            <div> {t('ultralow_power_rate_tips')}</div>
-          </div>
+          {AdvanceSetting?.UltraLowPower && (
+            <div className="performance-item-description">
+              <div> {t('ultralow_power_rate_tips')}</div>
+            </div>
+          )}
           <div className="performance-radio-group">
             {rateList.map((rate, index) => (
               <div className="performance-radio-item" key={index}>
                 <CustomRadio
-                  disabled={AdvanceSetting?.UltraLowPower}
-                  checked={USBReports ? USBReports[mode] === index : false}
+                  disabled={modelConfig?.Advance?.UltraLowPower && AdvanceSetting?.UltraLowPower}
+                  checked={
+                    modelConfig?.Advance?.UltraLowPower && AdvanceSetting?.UltraLowPower
+                      ? index == 0
+                      : USBReports
+                        ? USBReports[mode] === index
+                        : false
+                  }
                   onChange={() => handleChangeUsbReport(index)}
                 />
                 {rate}
