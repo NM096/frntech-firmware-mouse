@@ -15,6 +15,10 @@ export function getKeyName(event: KeyboardEvent) {
   } else if (name === 'Meta') {
     if (event.code === 'MetaLeft') name = 'Left Win';
     else if (event.code === 'MetaRight') name = 'Right Win';
+  } else if (name === ' ') {
+    name = 'Space';
+  } else if (name.length === 1) {
+    name = name.toUpperCase();
   }
   return name;
 }

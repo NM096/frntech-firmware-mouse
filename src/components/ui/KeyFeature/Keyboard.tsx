@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import Checkbox from '@/components/common/Checkbox';
 import type { KeyItem } from '@/types/profile';
+import { getKeyName } from '@/hooks/useMacroRecorder';
 
 // 键盘按键映射表
 const KeyCodeMap = {
@@ -186,17 +187,9 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
       const keyCode = KeyCodeMap[e.code];
       setKeyValue(keyCode);
 
-      let keyName = e.key;
-      if (e.key.length > 1) {
-        keyName = e.code.replace('Key', '').replace('Digit', '').replace('Arrow', '');
-        if (e.code === 'Space') keyName = 'Space';
-        if (e.code === 'Enter') keyName = 'Enter';
-        if (e.code === 'Escape') keyName = 'Esc';
-        if (e.code === 'Backspace') keyName = 'Backspace';
-        if (e.code === 'Tab') keyName = 'Tab';
-      }
 
-      setKeyDisplay(keyName.toUpperCase());
+      const keyName = getKeyName(e);
+      setKeyDisplay(keyName);
     }
   }, []);
 
@@ -212,10 +205,13 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
       inputRef.current.focus();
     }
   };
-
   const stopListening = () => {
     setIsListening(false);
   };
+  const handleChange = () => {
+    setHasUserModified(true);
+  };
+
   const handleMakeShortcut = (currentModifiers = modifiers) => {
     if (!hasUserModified) return;
     let value = keyValue;
@@ -330,9 +326,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onChange, initialShortcut }) => {
         value={keyDisplay}
         onFocus={startListening}
         onBlur={stopListening}
-        onChange={() => {
-          setHasUserModified(true);
-        }}
+        onChange={handleChange}
       />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', marginLeft: '20px' }}>
         {Object.entries(ModifierKeys).map(([code, key]) => (
