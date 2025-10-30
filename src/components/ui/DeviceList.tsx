@@ -15,6 +15,8 @@ import {
   setSelectProfile,
 } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
+import useProfileAction from '@/hooks/useProfileAction';
+
 const baseUrl = import.meta.env.BASE_URL;
 
 const DeviceList = () => {
@@ -29,6 +31,7 @@ const DeviceList = () => {
   const { setDefaultProfile } = useProfileStore();
   const { setProfile } = useProfileStore();
   const { getBatteryIcon } = useBatteryProgress();
+  const { handleSelectProfile } = useProfileAction();
   const { t } = useTranslation();
 
   // 点击设备，设置当前设备和配置文件
@@ -44,14 +47,15 @@ const DeviceList = () => {
         getModelProfile(ModelID, (profilePayload) => {
           console.log(profilePayload);
           setCurrentProfile(ModelID, currentConfigFileName, profilePayload, () => {
-            setSelectProfile(ModelID, currentConfigFileName);
-            setCurrentConfigFileName(currentConfigFileName);
+            // setSelectProfile(ModelID, currentConfigFileName);
+            // setCurrentConfigFileName(currentConfigFileName);
+            handleSelectProfile(currentConfigFileName, device);
           });
-          setCurrentConfigFileName(currentConfigFileName);
           setProfile(cloneDeep(profilePayload));
         });
       } else {
         setProfile(cloneDeep(payload));
+        handleSelectProfile(payload.Name, device);
       }
     });
     // 获取默认配置
