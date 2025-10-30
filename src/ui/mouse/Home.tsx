@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import Header from '../../components/ui/Header';
 import NoDevice from '@/components/ui/NoDevice';
 import DeviceList from '@/components/ui/DeviceList';
@@ -11,12 +11,20 @@ import { useListenMouse } from '@/hooks/useListenMouse';
 import { TestInfo } from './TestInfo';
 import useProfileAction from '@/hooks/useProfileAction';
 const Home: React.FC = () => {
-  const { deviceMap, setDeviceMap, currentDevice, currentModelID, path, clearCurrentDevice, setCurrentDevice } =
-    useBaseInfoStore();
+  const {
+    deviceMap,
+    setDeviceMap,
+    currentDevice,
+    currentModelID,
+    path,
+    clearCurrentDevice,
+    setCurrentDevice,
+    currentConfigFileName,
+  } = useBaseInfoStore();
   const { setUpgradeProcess } = useProfileStore();
   const [connected, setConnected] = useState(false);
   const { listenChangeProfileAppActive, listenChangeProfileAppInactive } = useListenMouse();
-
+  const { handleSelectProfile } = useProfileAction();
   useEffect(() => {
     getDeviceList((deviceList: any) => {
       if (hasCanSelectedDevice(deviceList)) {
@@ -64,6 +72,7 @@ const Home: React.FC = () => {
       console.log('isUpgrade,isReset', isUpgrade, isReset);
       if (isReset && deviceList[path!]) {
         setCurrentDevice(deviceList[path!] as DeviceData);
+        handleSelectProfile(currentConfigFileName);
       }
       if (!isReset) {
         setConnected(hasCanSelectedDevice(deviceList));

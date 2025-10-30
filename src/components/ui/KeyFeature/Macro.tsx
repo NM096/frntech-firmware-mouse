@@ -4,7 +4,7 @@ import React, { use, useEffect } from 'react';
 import { getMacroCategorys, getMacros, readMacro } from '@/utils/driver';
 import type { KeyDefine, KeyItem } from '@/types/profile';
 import { useTranslation } from 'react-i18next';
-import { init } from 'i18next';
+import InputWithEnter from '@/components/common/InputWithEnter';
 interface MacroProps {
   onChange?: (keyDefine: KeyItem) => void;
   initialMacro?: KeyDefine;
@@ -27,7 +27,7 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
   useEffect(() => {
     handleChangeMacro(selectedMacro);
     console.log('selectedMacro', initialMacro);
-  }, [selectedMacro, macroType, cycles]);
+  }, [selectedMacro, macroType]);
 
   const handleChangeMacro = (macroName: string) => {
     readMacro(selectedCategory, macroName, (payload) => {
@@ -121,12 +121,14 @@ const Macro: React.FC<MacroProps> = ({ onChange, initialMacro }) => {
               setMacroType(0);
             }}
           />
-          <input
+          <InputWithEnter
             type="number"
             max={1000}
             min={1}
             value={cycles}
             onChange={(e) => setCycles(Number(e.target.value))}
+            onBlur={() => handleChangeMacro(selectedMacro)}
+            onEnter={() => handleChangeMacro(selectedMacro)}
             style={{ width: '50px', marginLeft: '8px', background: 'white', color: '#000', textAlign: 'center' }}
           />
           {t('macro_play_times')}

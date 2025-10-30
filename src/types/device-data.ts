@@ -107,6 +107,8 @@ export interface ModelConfig {
   SensorInfo?: SensorInfo;
   DPI?: {
     FullColor?: boolean;
+    DPILEDEnable?: boolean;
+    DPILEDEditable?: boolean;
   };
 }
 

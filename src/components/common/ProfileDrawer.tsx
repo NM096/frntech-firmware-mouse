@@ -71,16 +71,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
           })
           .then(function (result) {
             if (!result.canceled) {
-              exportProfile(currentModelID, profile, result.filePath, (payload) => {
-                if (payload) {
-                  AddProfile(currentModelID, payload.Name ?? 'Profile', async () => {
-                    await _getProfileList();
-                    setCurrentProfile(currentModelID, payload.Name ?? 'Profile', defaultProfile, () => {
-                      handleSelectProfile(payload.Name ?? 'Profile');
-                    });
-                  });
-                }
-              });
+              exportProfile(currentModelID, profile, result.filePath, () => {});
             }
           });
       } catch (error) {
@@ -151,7 +142,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
   };
   const handleSelectProfile = (fileName: string) => {
     if (fileName === currentConfigFileName) {
-      return
+      return;
     }
 
     const _loading = openConfigLoading({ proccess: 0 });
@@ -287,7 +278,14 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
         filters: [{ name: 'Mouse Profile Files', extensions: ['mpf'] }],
       })
       .then(function (result) {
-        importProfile(currentModelID, result.filePaths[0]);
+        importProfile(currentModelID, result.filePaths[0], (payload) => {
+          AddProfile(currentModelID, payload.Name ?? 'Profile', async () => {
+            await _getProfileList();
+            setCurrentProfile(currentModelID, payload.Name ?? 'Profile', defaultProfile, () => {
+              handleSelectProfile(payload.Name ?? 'Profile');
+            });
+          });
+        });
       });
   };
 

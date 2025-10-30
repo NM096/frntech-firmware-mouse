@@ -13,6 +13,7 @@ import type { KeyDefine, KeyItem } from '@/types/profile';
 import { setConfigData } from '@/utils/driver';
 import Dropdown from '@/components/common/Dropdown';
 import { useModal } from '../common/ModalContext';
+import InputWithEnter from '@/components/common/InputWithEnter';
 
 type sidebarKey = 'Mouse' | 'Keyboard' | 'Shortcut' | 'Media' | 'Macro';
 
@@ -135,6 +136,16 @@ const KeyConfig = () => {
     }
     setActiveKey(keyIndex);
   };
+  const handleSetFireCount = (value) => {
+    const currentValue = Math.min(200, Math.max(2, Number(value))) || 2;
+    if (currentValue === parseInt(currentKeyDefine?.Value.split('0x43')[1] || '2', 16)) {
+      return;
+    }
+    handleKeyChange({
+      ...currentKeyDefine,
+      Value: `0x43${currentValue.toString(16).padStart(2, '0')}`,
+    } as KeyItem);
+  };
 
   useEffect(() => {
     if (activeKey == null) return;
@@ -195,7 +206,7 @@ const KeyConfig = () => {
               {currentKeyDefine?.Value.includes('0x43') && activeSidebar === 'Mouse' && (
                 <div className="mouse_fire_key">
                   <div>{t('firepower')}:</div>
-                  <input
+                  <InputWithEnter
                     key={currentKeyDefine?.Value}
                     type="number"
                     min={0}
@@ -205,16 +216,8 @@ const KeyConfig = () => {
                     onChange={(e) => {
                       setFireCount(Math.min(200, Math.max(2, Number(e.target.value))) || 2);
                     }}
-                    onBlur={(e) => {
-                      const currentValue = Math.min(200, Math.max(2, Number(e.target.value))) || 2;
-                      if (currentValue === parseInt(currentKeyDefine?.Value.split('0x43')[1] || '2', 16)) {
-                        return;
-                      }
-                      handleKeyChange({
-                        ...currentKeyDefine,
-                        Value: `0x43${currentValue.toString(16).padStart(2, '0')}`,
-                      });
-                    }}
+                    onBlur={(e) => handleSetFireCount(e.target.value)}
+                    onEnter={() => handleSetFireCount(fireCount)}
                     className="mouse-fire-input"
                   />
                 </div>

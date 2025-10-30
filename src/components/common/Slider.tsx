@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
 import type { Dpi } from '@/types/profile';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
+import InputWithEnter from '@/components/common/InputWithEnter';
 
 interface SliderProps {
   initialValue?: number;
@@ -28,8 +29,8 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
     const dpi = dpiList.find((dpi) => dpi.Level === level) || dpiList[0];
     if (dpi) onChange(dpi);
   };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = Number(e.target.value);
+  const handleInputChange = (e) => {
+    const inputValue = Number(e);
     if (isNaN(inputValue)) {
       setInputValue(initialValue!);
       return;
@@ -101,7 +102,7 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
           }}
         >
           {/* {showLabelValue(value)} */}
-          <input
+          <InputWithEnter
             type="number"
             style={{
               width: '36px',
@@ -110,10 +111,9 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
               fontSize: '10px',
             }}
             value={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            onBlur={(e) => handleInputChange(e)}
+            onChange={(e) => setInputValue(e.target.value)}
+            onBlur={(e) => handleInputChange(e.target.value)}
+            onEnter={() => handleInputChange(inputValue)}
           />
         </div>
         <input

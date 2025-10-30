@@ -8,6 +8,7 @@ interface ColorPickerProps {
   top?: number;
   simple?: boolean; // 是否仅显示九色块
   simpleColors?: string[]; // 九色块颜色列表
+  disable?: boolean; // 是否禁用颜色选择
 }
 
 const DEFAULT_SIMPLE_COLORS = [
@@ -28,6 +29,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   top = 0,
   simple = false,
   simpleColors = DEFAULT_SIMPLE_COLORS,
+  disable = false,
 }) => {
   const [color, setColor] = useState(initialValue);
   const [tempColor, setTempColor] = useState(initialValue);
@@ -72,7 +74,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           cursor: 'pointer',
           border: '1px solid #444',
         }}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (!disable) setIsOpen(!isOpen);
+        }}
       />
 
       {/* 弹出面板 */}

@@ -202,30 +202,33 @@ const DpiConfig = () => {
                     handleChangeDpi(index, value);
                   }}
                 />
-                {modelConfig?.DPI?.FullColor ? (
-                  <ColorPicker
-                    top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
-                    initialValue={DPIs[index]?.Color || ''}
-                    onChange={(hex) => handleChangeDpiLed(index, hex)}
-                  />
-                ) : (
-                  <ColorPicker
-                    top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
-                    initialValue={DPIs[index]?.Color || ''}
-                    simple
-                    simpleColors={[
-                      '#ff0000',
-                      '#00ff00',
-                      '#0000ff',
-                      '#ff00ff',
-                      '#ffff00',
-                      '#00ffff',
-                      '#ffffff',
-                      '#000000',
-                    ]}
-                    onChange={(hex) => handleChangeDpiLed(index, hex)}
-                  />
-                )}
+                {modelConfig?.DPI?.DPILEDEnable &&
+                  (modelConfig?.DPI?.FullColor ? (
+                    <ColorPicker
+                      top={index == 0 ? -50 : index == DPIs.length - 1 ? -300 : -200}
+                      initialValue={DPIs[index]?.Color || ''}
+                      disable={!modelConfig?.DPI?.DPILEDEditable}
+                      onChange={(hex) => handleChangeDpiLed(index, hex)}
+                    />
+                  ) : (
+                    <ColorPicker
+                      top={index == 0 ? -50 : index == DPIs.length - 1 ? -100 : -50}
+                      initialValue={DPIs[index]?.Color || ''}
+                      simple
+                      disable={!modelConfig?.DPI?.DPILEDEditable}
+                      simpleColors={[
+                        '#ff0000',
+                        '#00ff00',
+                        '#0000ff',
+                        '#ff00ff',
+                        '#ffff00',
+                        '#00ffff',
+                        '#ffffff',
+                        '#000000',
+                      ]}
+                      onChange={(hex) => handleChangeDpiLed(index, hex)}
+                    />
+                  ))}
               </div>
             );
           })}
