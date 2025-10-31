@@ -224,12 +224,13 @@ export function importProfile(modelID, path, callback?: (payload: any) => void) 
   );
 }
 
-export function exportProfile(modelID, profile, path, callback?: (payload: any) => void) {
+export function exportProfile(modelID, name, profile, path, callback?: (payload: any) => void) {
   astilectron.sendMessage(
     {
       name: 'ExportProfile',
       payload: {
         ModelID: modelID,
+        Name: name,
         Profile: profile,
         Path: path,
       },

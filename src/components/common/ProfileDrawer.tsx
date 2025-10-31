@@ -71,7 +71,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
           })
           .then(function (result) {
             if (!result.canceled) {
-              exportProfile(currentModelID, profile, result.filePath, () => {});
+              exportProfile(currentModelID, currentConfigFileName, profile, result.filePath, () => {});
             }
           });
       } catch (error) {
@@ -162,11 +162,11 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
           } else {
             console.error('配置文件同步到鼠标设备失败');
           }
-          closeModal(_loading);
         });
       } else {
         console.error('获取配置文件失败');
       }
+      closeModal(_loading);
     });
   };
 
