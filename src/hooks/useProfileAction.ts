@@ -94,7 +94,7 @@ const useProfileAction = () => {
               mode,
               {
                 DPILevels: DPILevels || [],
-                DPIs: resetDPIsValue(DPIs || []),
+                DPIs: resetDPIsValue(DPIs || [], device),
               },
               () => {
                 console.log('DPI设置已应用到鼠标设备');
@@ -117,9 +117,9 @@ const useProfileAction = () => {
     }
   };
 
-  const resetDPIsValue = (DPIs: Dpi[]) => {
+  const resetDPIsValue = (DPIs: Dpi[], device?: DeviceInfo) => {
     let _DPIs: Dpi[] = [];
-    const { SensorInfo } = currentDevice?.Info || {};
+    const { SensorInfo } = device?.Info || currentDevice?.Info || {};
     if (SensorInfo != null && SensorInfo.DPIType != 0) {
       _DPIs = cloneDeep(SensorInfo?.DPIs || []);
     } else {
