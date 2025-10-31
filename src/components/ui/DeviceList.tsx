@@ -12,6 +12,7 @@ import {
   setCurrentProfile,
   getConfigData,
   getModelConfig,
+  getSelectProfile,
   setSelectProfile,
 } from '@/utils/driver';
 import { cloneDeep } from 'lodash';
@@ -42,21 +43,24 @@ const DeviceList = () => {
     }
     const ModelID = device.Model?.ModelID;
     setCurrentDevice(device);
-    getProfileByName(ModelID, currentConfigFileName, (payload) => {
-      if (!payload) {
-        getModelProfile(ModelID, (profilePayload) => {
-          console.log(profilePayload);
-          setCurrentProfile(ModelID, currentConfigFileName, profilePayload, () => {
-            // setSelectProfile(ModelID, currentConfigFileName);
-            // setCurrentConfigFileName(currentConfigFileName);
-            handleSelectProfile(currentConfigFileName, device);
+    getSelectProfile(currentModelID, (profileName) => {
+      const currentFileName = profileName || currentConfigFileName;
+      getProfileByName(ModelID, currentFileName, (payload) => {
+        if (!payload) {
+          getModelProfile(ModelID, (profilePayload) => {
+            console.log(profilePayload);
+            setCurrentProfile(ModelID, currentFileName, profilePayload, () => {
+              // setSelectProfile(ModelID, currentConfigFileName);
+              // setCurrentConfigFileName(currentConfigFileName);
+              handleSelectProfile(currentFileName, device);
+            });
+            setProfile(cloneDeep(profilePayload));
           });
-          setProfile(cloneDeep(profilePayload));
-        });
-      } else {
-        setProfile(cloneDeep(payload));
-        handleSelectProfile(payload.Name, device);
-      }
+        } else {
+          setProfile(cloneDeep(payload));
+          handleSelectProfile(currentFileName, device);
+        }
+      });
     });
     // 获取默认配置
     getModelProfile(currentModelID, (payload) => {
