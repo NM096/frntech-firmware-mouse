@@ -26,6 +26,7 @@ import {
   setSelectProfile,
   getSelectProfile,
   getExeIcon,
+  RenameProfile,
 } from '@/utils/driver';
 import HoverImage from '@/components/common/HoverImage';
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
@@ -89,12 +90,34 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
     },
 
     {
+      label: t('rename_profile_file'),
+      value: 'delete',
+      onClick: () => {
+        handleRenameProfile(currentConfigFileName);
+      },
+    },
+
+    {
       label: t('export_profile_file'),
       value: 'export',
       onClick: () => handleExportProfile(),
     },
   ];
-
+  const handleRenameProfile = (oldFileName?: string) => {
+    openConfirm({
+      title: t('rename_profile_file'),
+      content: '',
+      onOk: (newFileName) => {
+        if (newFileName && profileList.includes(newFileName.trim())) {
+          toast.error(t('profile_file_already_exists'));
+          return;
+        }
+        RenameProfile(currentModelID, oldFileName, newFileName, () => {
+          _getProfileList();
+        });
+      },
+    });
+  };
   const handleDeleteProfile = (fileName?: string) => {
     if (profileList.length <= 1) {
       openAlert({
@@ -278,11 +301,24 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
         filters: [{ name: 'Mouse Profile Files', extensions: ['mpf'] }],
       })
       .then(function (result) {
+        if (!result || result.canceled || !result.filePaths || result.filePaths.length === 0) return;
+        const filePath = result.filePaths[0];
         importProfile(currentModelID, result.filePaths[0], (payload) => {
-          AddProfile(currentModelID, payload.Name ?? 'Profile', async () => {
+          if (!payload) {
+            toast.error(t('import_profile_failed'));
+            console.error('importProfile returned empty payload for', filePath);
+            return;
+          }
+          let currentProfileName = (payload.Name || 'profile').trim() || 'profile';
+          let idx = 1;
+          while (profileList.includes(currentProfileName)) {
+            currentProfileName = `${payload.Name}_${idx}`;
+            idx++;
+          }
+          AddProfile(currentModelID, currentProfileName, async () => {
             await _getProfileList();
-            setCurrentProfile(currentModelID, payload.Name ?? 'Profile', defaultProfile, () => {
-              handleSelectProfile(payload.Name ?? 'Profile');
+            setCurrentProfile(currentModelID, currentProfileName, payload, () => {
+              handleSelectProfile(currentProfileName);
             });
           });
         });
@@ -351,7 +387,7 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                 </div>
                 <div className="profile-container-center">
                   <div className="profile-header">
-                    <div>配置列表</div>
+                    <div>{t('profile_configuration_list')}</div>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                       <div onClick={() => handleImportProfile()} className="flex items-center">
                         <HoverImage
@@ -408,8 +444,8 @@ export const ProfileDrawerProvider = ({ children }: { children: ReactNode }) => 
                   </div>
                 </div>
                 <div className="profile-game">
-                  <div>将配置与游戏/应用链接</div>
-                  <div className="sub-title">已连接游戏/应用</div>
+                  <div>{t('link_profile_with_game')}</div>
+                  <div className="sub-title">{t('link_profile_game_list')}</div>
                   <div className="profile-game-list">
                     {linksIconData.map((app, idx) => {
                       return (

@@ -31,6 +31,7 @@ import {
   saveMacro,
   addMacro,
   delMacroCategory,
+  renameMacro,
 } from '@/utils/driver';
 import IconMenu from '../common/IconMenu';
 import { useModal } from '../common/ModalContext';
@@ -53,14 +54,13 @@ export const supportRecordMaxCount = 200;
 const MacroConfig = () => {
   const { t } = useTranslation();
   const { openConfirm, openAlert } = useModal();
-  const { path } = useBaseInfoStore();
+  const { path, currentModelID } = useBaseInfoStore();
   const [category, setCategory] = useState<string[]>([]);
   const [currentCategory, setCurrentCategory] = useState<string>('');
   const [currentMacroFile, setCurrentMacroFile] = useState<string>('');
   const [macroFiles, setMacroFiles] = useState<string[]>([]);
   const [delayMode, setDelayMode] = useState<'record' | 'default' | 'min'>('record');
   const [minDelay, setMinDelay] = useState(10);
-  const [listHeight, setListHeight] = useState(450);
 
   const [mouseX, setMouseX] = useState(1);
   const [mouseY, setMouseY] = useState(1);
@@ -172,17 +172,19 @@ const MacroConfig = () => {
     importMacro(path);
   };
 
-  const handleRenameMacroFile = () => {
+  const handleRenameMacroFile = (oldFileName?: string) => {
     openConfirm({
       title: t('rename_macro_file'),
       content: t('macro_file_name'),
-      onOk: (value) => {
-        addMacroCategory(value, (payload) => {
-          if (payload) {
-            getMacros(currentCategory, (payload) => {
-              setMacroFiles(payload);
-            });
-          }
+      onOk: (newFileName) => {
+        if (newFileName && macroFiles.includes(newFileName.trim())) {
+          toast.error(t('profile_file_already_exists'));
+          return;
+        }
+        renameMacro(currentCategory, oldFileName, newFileName, () => {
+          getMacros(currentCategory, (payload) => {
+            setMacroFiles(payload);
+          });
         });
       },
     });
@@ -288,7 +290,27 @@ const MacroConfig = () => {
         filters: [{ name: 'Mouse Macro Files', extensions: ['mmf'] }],
       })
       .then(function (result) {
-        importMacro(result.filePaths[0]);
+        importMacro(result.filePaths[0], (macroFile) => {
+          if (!macroFile) {
+            toast.error(t('import_profile_failed'));
+            console.error('importMacro returned empty payload for', result.filePaths[0]);
+            return;
+          }
+          let currentMacroFile = (macroFile.Name || 'macro').trim() || 'macro';
+          let idx = 1;
+          while (macroFiles.includes(currentMacroFile)) {
+            currentMacroFile = `${macroFile.Name}_${idx}`;
+            idx++;
+          }
+          addMacro(currentCategory, currentMacroFile, (payload) => {
+            if (payload) {
+              saveMacro(currentCategory, currentMacroFile, { Content: macroFile.Content }, () => {
+                setMacroFiles([...macroFiles, currentMacroFile]);
+                setCurrentMacroFile(currentMacroFile);
+              });
+            }
+          });
+        });
       });
   };
 
@@ -374,21 +396,21 @@ const MacroConfig = () => {
     // },
   ];
   const macroMenu = [
-    // {
-    //   label: '重命名宏文件',
-    //   value: 'rename',
-    //   onClick: handleRenameMacroFile,
-    // },
     {
       label: t('delete_macro_file'),
       value: 'delete',
       onClick: handleDeleteMacroFile,
     },
     {
-      label: t('import_macro_file'),
-      value: 'import',
-      onClick: handleImportMacroFile,
+      label: t('rename_macro_file'),
+      value: 'rename',
+      onClick: () => handleRenameMacroFile(currentMacroFile),
     },
+    // {
+    //   label: t('import_macro_file'),
+    //   value: 'import',
+    //   onClick: handleImportMacroFile,
+    // },
     {
       label: t('export_macro_file'),
       value: 'export',
@@ -400,15 +422,6 @@ const MacroConfig = () => {
     console.log('recordList', recordList);
     console.log('currentStepIdx', currentStepIdx);
   }, [recordList, currentStepIdx]);
-
-  useEffect(() => {
-    const updateHeight = () => {
-      const height = window.innerHeight;
-      setListHeight(height - 250);
-    };
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-  }, []);
 
   return (
     <div className="macro-config">
@@ -448,13 +461,13 @@ const MacroConfig = () => {
         <div className="macro-btn-group">
           <span>{t('macro_name')}</span>
           <div className="macro-btn-group">
-            {/* <HoverImage
+            <HoverImage
               src={ic_save}
               hoverSrc={ic_save}
               alt="ic_save"
               className="back-btn-icon"
-              onClick={() => handleImportCategory()}
-            /> */}
+              onClick={() => handleImportMacroFile()}
+            />
             <HoverImage
               src={ic_delete}
               hoverSrc={ic_delete}
@@ -482,7 +495,7 @@ const MacroConfig = () => {
                 >
                   <span>{macro}</span>
                   <IconMenu
-                    icon={<HoverImage src={ic_more} hoverSrc={ic_more} alt="ic_more" className="back-btn-icon" />}
+                    icon={<HoverImage src={ic_more} hoverSrc={ic_more} alt="ic_more" className="more-btn-icon" />}
                     menu={macroMenu}
                   />
                 </li>
@@ -615,7 +628,7 @@ const MacroConfig = () => {
           </div>
           */}
         </div>
-        <ul className="macro-content-body" style={{ height: listHeight + 'px' }}>
+        <ul className="macro-content-body">
           <MacroActionList
             events={recordedActions}
             delayMode={delayMode}

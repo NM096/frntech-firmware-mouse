@@ -181,6 +181,7 @@
   "no_device_connected": "请连接您的",
   "device!": "设备！",
   "macro_name": "宏名称",
+  "import_profile_failed": "导入文件失败",
 
   "page-performanceConfig": "----------------------------------------------------------------------------------------",
   "report_rate_settings": "回报率设置",
@@ -217,6 +218,10 @@
   "profileSettings": "配置设置",
   "resetCurrentPageConfig": "恢复当前页面",
 
+  "profile_configuration_list": "配置文件",
+  "link_profile_with_game": "将配置与游戏/应用链接",
+  "link_profile_game_list": "已连接游戏/应用",
+
   "confirm_delete_profile": "确认删除配置文件",
   "confirm_delete_profile_desc": "确认删除配置文件：{{profile}}？",
   "delete_profile": "删除配置文件",
@@ -228,6 +233,8 @@
   "please_complete_save_operation": "请在宏页面保存或者取消宏更改",
   "delete_profile_file": "删除配置文件",
   "export_profile_file": "导出配置文件",
+  "rename_profile_file": "重命名配置",
+  "profile_file_already_exists": "名称已存在",
   "warning!": "警告！",
   "cannot_delete_last_profile": "无法删除最后一个配置文件",
   "firmware_upgrade": "固件升级",

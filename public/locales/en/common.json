@@ -216,6 +216,10 @@
   "profileSettings": "Profile Settings",
   "resetCurrentPageConfig": "Reset Current Page",
 
+  "profile_configuration_list": "Profile Configuration List",
+  "link_profile_with_game": "Link Profile with Game/Application",
+  "link_profile_game_list": "Linked Games/Applications",
+
   "confirm_delete_profile": "Confirm Delete Profile",
   "confirm_delete_profile_desc": "Are you sure you want to delete profile: {{profile}}?",
   "delete_profile": "Delete Profile",

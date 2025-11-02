@@ -459,6 +459,7 @@ export function getMacroCategorys(callback?: (payload: any) => void) {
 }
 
 export function addMacroCategory(category, callback?: (payload: any) => void) {
+  console.log('addMacroCategory', category);
   astilectron.sendMessage(
     {
       name: 'AddMacroCategory',
@@ -472,8 +473,26 @@ export function addMacroCategory(category, callback?: (payload: any) => void) {
     }
   );
 }
+export function renameMacro(category, name, newName, callback?: (payload: any) => void) {
+  console.log('renameMacro', category, name, newName);
+  astilectron.sendMessage(
+    {
+      name: 'RenameMacro',
+      payload: {
+        Category: category,
+        Name: name,
+        NewName: newName,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
 
 export function delMacroCategory(category, callback?: (payload: any) => void) {
+  console.log('delMacroCategory', category);
   astilectron.sendMessage(
     {
       name: 'DelMacroCategory',
@@ -489,6 +508,7 @@ export function delMacroCategory(category, callback?: (payload: any) => void) {
 }
 
 export function getMacros(category, callback?: (payload: any) => void) {
+  console.log('getMacros', category);
   astilectron.sendMessage(
     {
       name: 'GetMacros',
@@ -504,6 +524,7 @@ export function getMacros(category, callback?: (payload: any) => void) {
 }
 
 export function addMacro(category, name, callback?: (payload: any) => void) {
+  console.log('addMacro', category, name);
   astilectron.sendMessage(
     {
       name: 'AddMacro',
@@ -520,6 +541,7 @@ export function addMacro(category, name, callback?: (payload: any) => void) {
 }
 
 export function delMacro(category, name, callback?: (payload: any) => void) {
+  console.log('delMacro', category, name);
   astilectron.sendMessage(
     {
       name: 'DelMacro',
@@ -536,6 +558,7 @@ export function delMacro(category, name, callback?: (payload: any) => void) {
 }
 
 export function readMacro(category, name, callback?: (payload: any) => void) {
+  console.log('readMacro', category, name);
   astilectron.sendMessage(
     {
       name: 'ReadMacro',
@@ -552,6 +575,7 @@ export function readMacro(category, name, callback?: (payload: any) => void) {
 }
 
 export function saveMacro(category, name, macrofile, callback?: (payload: any) => void) {
+  console.log('saveMacro', category, name);
   astilectron.sendMessage(
     {
       name: 'SaveMacro',
@@ -569,6 +593,8 @@ export function saveMacro(category, name, macrofile, callback?: (payload: any) =
 }
 
 export function importMacro(path, callback?: (payload: any) => void) {
+  console.log('importMacro', path);
+
   astilectron.sendMessage(
     {
       name: 'ImportMacro',
@@ -584,14 +610,8 @@ export function importMacro(path, callback?: (payload: any) => void) {
 }
 
 export function exportMacro(name, macrofile, path, callback?: (payload: any) => void) {
-  console.log({
-    name: 'ExportMacro',
-    payload: {
-      Name: name,
-      Macrofile: macrofile,
-      Path: path,
-    },
-  });
+  console.log('exportMacro', name, macrofile, path);
+
   astilectron.sendMessage(
     {
       name: 'ExportMacro',
@@ -609,13 +629,7 @@ export function exportMacro(name, macrofile, path, callback?: (payload: any) => 
 }
 
 export function upgradeFireware(device, modelID, callback?: (payload: any) => void) {
-  console.log({
-    name: 'UpgradeFireware',
-    payload: {
-      Device: device,
-      ModelID: modelID,
-    },
-  });
+  console.log('upgradeFireware', device, modelID);
   astilectron.sendMessage(
     {
       name: 'UpgradeFireware',
@@ -632,6 +646,7 @@ export function upgradeFireware(device, modelID, callback?: (payload: any) => vo
 }
 
 export function loadAppConfig(callback?: (payload: any) => void) {
+  console.log('loadAppConfig');
   astilectron.sendMessage(
     {
       name: 'LoadAppConfig',
@@ -660,6 +675,8 @@ export function saveAppConfig(config, callback?: (payload: any) => void) {
 }
 
 export function getSystemConfig(callback?: (payload: any) => void) {
+  console.log('getSystemConfig');
+
   astilectron.sendMessage(
     {
       name: 'GetSystemConfig',
@@ -672,6 +689,8 @@ export function getSystemConfig(callback?: (payload: any) => void) {
 }
 
 export function setSystemConfig(config, callback?: (payload: any) => void) {
+  console.log('setSystemConfig', config);
+
   astilectron.sendMessage(
     {
       name: 'SetSystemConfig',
@@ -687,6 +706,8 @@ export function setSystemConfig(config, callback?: (payload: any) => void) {
 }
 
 export function GetProfiles(modelID, callback?: (payload: any) => void) {
+  console.log('GetProfiles', modelID);
+
   astilectron.sendMessage(
     {
       name: 'GetProfiles',
@@ -701,6 +722,7 @@ export function GetProfiles(modelID, callback?: (payload: any) => void) {
   );
 }
 export function AddProfile(modelID, name, callback?: (payload: any) => void) {
+  console.log('AddProfile', modelID, name);
   astilectron.sendMessage(
     {
       name: 'AddProfile',
@@ -715,8 +737,27 @@ export function AddProfile(modelID, name, callback?: (payload: any) => void) {
     }
   );
 }
+export function RenameProfile(modelID, name, newName, callback?: (payload: any) => void) {
+  console.log('RenameProfile', modelID, name, newName);
+
+  astilectron.sendMessage(
+    {
+      name: 'RenameProfile',
+      payload: {
+        ModelID: modelID,
+        Name: name,
+        NewName: newName,
+      },
+    },
+    function (message) {
+      console.log(`-------${message?.name}-------`, message?.payload);
+      callback?.(message?.payload);
+    }
+  );
+}
 
 export function DelProfile(modelID, name, callback?: (payload: any) => void) {
+  console.log('DelProfile', modelID, name);
   astilectron.sendMessage(
     {
       name: 'DelProfile',
@@ -733,6 +774,7 @@ export function DelProfile(modelID, name, callback?: (payload: any) => void) {
 }
 
 export function getSelectProfile(modelID, callback?: (payload: any) => void) {
+  console.log('getSelectProfile', modelID);
   astilectron.sendMessage(
     {
       name: 'GetSelectProfile',
@@ -748,6 +790,7 @@ export function getSelectProfile(modelID, callback?: (payload: any) => void) {
 }
 
 export function setSelectProfile(modelID, name, callback?: (payload: any) => void) {
+  console.log('setSelectProfile', modelID, name);
   astilectron.sendMessage(
     {
       name: 'SetSelectProfile',
@@ -763,6 +806,8 @@ export function setSelectProfile(modelID, name, callback?: (payload: any) => voi
   );
 }
 export function getExeIcon(path, callback?: (payload: any) => void) {
+  console.log('getExeIcon', path);
+
   astilectron.sendMessage(
     {
       name: 'GetExeIcon',
