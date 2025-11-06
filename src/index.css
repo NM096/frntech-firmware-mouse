@@ -113,6 +113,7 @@ input[type='number'] {
   width: 100%;
   z-index: 2;
   border-radius: 8px 8px 0 0;
+  flex-shrink: 0;
   /* -webkit-app-region: drag; */
 }
 
@@ -162,6 +163,7 @@ input[type='number'] {
   gap: 16px;
   margin-right: 20px;
   justify-content: flex-end;
+  height: 25px;
 }
 .actions > img {
   -webkit-app-region: no-drag;
@@ -671,6 +673,13 @@ input[type='number'] {
   display: inline-block;
   pointer-events: auto;
 }
+.more-btn-icon {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  display: inline-block;
+  pointer-events: auto;
+}
 
 /* 确保.back-btn-icon内的图片也能响应点击事件 */
 .back-btn-icon img {
@@ -879,13 +888,15 @@ input[type='number'] {
 /* Switch Style End */
 
 /* SideBar Start */
-.sidebar-content {
-  height: 100%;
+.sidebar {
+  display: flex;
+  flex-direction: column;
 }
 .sidebar-back {
   display: flex;
   align-items: center;
   gap: 10px;
+  height: 25px;
 }
 
 .sidebar-item {
@@ -895,12 +906,12 @@ input[type='number'] {
   padding: 20px 5px;
   width: 190px;
   flex: 1;
-  margin: 0 0 20px;
 }
 .sidebar-content {
-  height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 .sidebar-item-status {
   background-color: rgba(255, 255, 255, 0.008);
@@ -957,7 +968,7 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   flex: 1;
-  height: 100%;
+  min-height: 0;
 }
 .reset-default-tips {
   font-size: 14px;
@@ -970,7 +981,8 @@ input[type='number'] {
 }
 .feature-container {
   display: flex;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 .feature-content {
   flex-grow: 1;
@@ -982,7 +994,7 @@ input[type='number'] {
 
 .light-config,
 .dpi-config {
-  height: 96%;
+  height: 100%;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -1427,13 +1439,16 @@ input[type='number'] {
   gap: 10px;
   height: calc(100% - 35px);
   font-size: 14px;
-  margin: 35px 20px 0;
+  margin: 35px 0px 0 10px;
 }
 .macro-item-left,
 .macro-item-right {
   flex-grow: 1;
   background-color: rgba(255, 255, 255, 0.008);
   padding: 10px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .macro-item-content {
@@ -1444,20 +1459,26 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  min-height: 0px;
 }
 
 .macro-item-left .macro-btn-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0;
+  margin: 5px 0 10px 0;
+}
+.macro-file-group {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 .macro-file-group .macro-file-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
-  margin: 10px 0;
+  padding: 10px 10px;
+  margin: 10px 10px;
 }
 .macro-file-group .macro-file-item:hover,
 .macro-file-group .macro-file-item.active {
@@ -1516,7 +1537,7 @@ input[type='number'] {
   background-color: #14191a;
   margin: 5px 0;
   padding: 0 10px;
-  height: 450px;
+  flex: 1;
   overflow-y: auto;
 }
 .macro-content-body .macro-content-max-info {

@@ -10,6 +10,16 @@
     { "Name": "Fire Key", "Value": "0x4302", "Lang": "mouse_kf_mouse_fire_key", "Show": "Fire Key" }
   ],
   "Shortcut": [
+    { "Name": "Cut", "Value": "0x311B", "Lang": "mouse_kf_shortcut_cut", "Show": "Cut" },
+    { "Name": "Copy", "Value": "0x3106", "Lang": "mouse_kf_shortcut_copy", "Show": "Copy" },
+    { "Name": "Paste", "Value": "0x3119", "Lang": "mouse_kf_shortcut_paste", "Show": "Paste" },
+    { "Name": "Open", "Value": "0x3112", "Lang": "mouse_kf_shortcut_open", "Show": "Open" },
+    { "Name": "Save", "Value": "0x3116", "Lang": "mouse_kf_shortcut_save", "Show": "Save" },
+    { "Name": "Find", "Value": "0x3109", "Lang": "mouse_kf_shortcut_find", "Show": "Find" },
+    { "Name": "Redo", "Value": "0x311C", "Lang": "mouse_kf_shortcut_redo", "Show": "Redo" },
+    { "Name": "Undo", "Value": "0x311D", "Lang": "mouse_kf_shortcut_undo", "Show": "Undo" },
+    { "Name": "Select All", "Value": "0x3104", "Lang": "mouse_kf_shortcut_select_all", "Show": "Select All" },
+    { "Name": "Print", "Value": "0x3113", "Lang": "mouse_kf_shortcut_print", "Show": "Print" },
     { "Name": "Bright+", "Value": "0x506F", "Lang": "mouse_kf_shortcut_brightness_plus", "Show": "Bright+" },
     { "Name": "Bright-", "Value": "0x5070", "Lang": "mouse_kf_shortcut_brightness_sub", "Show": "Bright-" },
     { "Name": "Calculator", "Value": "0x5192", "Lang": "mouse_kf_shortcut_calculator", "Show": "Calculator" },
