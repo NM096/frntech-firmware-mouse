@@ -43,25 +43,7 @@ const DeviceList = () => {
     }
     const ModelID = device.Model?.ModelID;
     setCurrentDevice(device);
-    getSelectProfile(currentModelID, (profileName) => {
-      const currentFileName = profileName || currentConfigFileName;
-      getProfileByName(ModelID, currentFileName, (payload) => {
-        if (!payload) {
-          getModelProfile(ModelID, (profilePayload) => {
-            console.log(profilePayload);
-            setCurrentProfile(ModelID, currentFileName, profilePayload, () => {
-              // setSelectProfile(ModelID, currentConfigFileName);
-              // setCurrentConfigFileName(currentConfigFileName);
-              handleSelectProfile(currentFileName, device);
-            });
-            setProfile(cloneDeep(profilePayload));
-          });
-        } else {
-          setProfile(cloneDeep(payload));
-          handleSelectProfile(currentFileName, device);
-        }
-      });
-    });
+
     // 获取默认配置
     getModelProfile(currentModelID, (payload) => {
       setDefaultProfile(payload);
@@ -70,8 +52,27 @@ const DeviceList = () => {
     getConfigData(key, (payload) => {
       setConfigData(payload);
     });
-    getModelConfig(currentModelID, (payload) => {
-      setModelConfig(payload);
+    getModelConfig(currentModelID, (modelConfig) => {
+      setModelConfig(modelConfig);
+      getSelectProfile(currentModelID, (profileName) => {
+        const currentFileName = profileName || currentConfigFileName;
+        getProfileByName(ModelID, currentFileName, (payload) => {
+          if (!payload) {
+            getModelProfile(ModelID, (profilePayload) => {
+              console.log(profilePayload);
+              setCurrentProfile(ModelID, currentFileName, profilePayload, () => {
+                // setSelectProfile(ModelID, currentConfigFileName);
+                // setCurrentConfigFileName(currentConfigFileName);
+                handleSelectProfile(currentFileName, device, modelConfig);
+              });
+              setProfile(cloneDeep(profilePayload));
+            });
+          } else {
+            setProfile(cloneDeep(payload));
+            handleSelectProfile(currentFileName, device, modelConfig);
+          }
+        });
+      });
     });
   };
   return (

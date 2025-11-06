@@ -1,6 +1,6 @@
 import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import { cloneDeep } from 'lodash';
-import type { DeviceInfo } from '@/types/device-data';
+import type { DeviceInfo, ModelConfig } from '@/types/device-data';
 import {
   getProfileByName,
   setCurrentProfile,
@@ -14,11 +14,18 @@ import {
 import type { Dpi, Profile } from '@/types/profile';
 import { useProfileStore } from '@/store/useProfile';
 const useProfileAction = () => {
-  const { currentModelID, setCurrentConfigFileName, path, mode, currentDevice, modelConfig } = useBaseInfoStore();
+  const {
+    currentModelID,
+    setCurrentConfigFileName,
+    path,
+    mode,
+    currentDevice,
+    modelConfig: storeModelConfig,
+  } = useBaseInfoStore();
 
   const { setProfile } = useProfileStore();
 
-  const handleSelectProfile = (fileName: string, device?: DeviceInfo) => {
+  const handleSelectProfile = (fileName: string, device?: DeviceInfo, modelConfig?: ModelConfig) => {
     const targetModelID = device?.Model?.ModelID || currentModelID;
     if (!targetModelID) {
       console.error('handleSelectProfile 缺少 ModelID');
@@ -39,7 +46,7 @@ const useProfileAction = () => {
         setCurrentProfile(targetModelID, fileName, data, (success) => {
           if (success) {
             // 配置保存成功后，将配置应用到鼠标设备
-            handleApplyProfileToMouse(data, device);
+            handleApplyProfileToMouse(data, device, modelConfig);
             console.log('配置文件已成功同步到鼠标设备');
           } else {
             console.error('配置文件同步到鼠标设备失败');
@@ -52,7 +59,7 @@ const useProfileAction = () => {
   };
 
   // 增强handleApplyProfileToMouse函数，确保设置按正确顺序应用，特别是按键配置
-  const handleApplyProfileToMouse = (profile: Profile, device?: DeviceInfo) => {
+  const handleApplyProfileToMouse = (profile: Profile, device?: DeviceInfo, modelConfig?: ModelConfig) => {
     const { LEDEffect, DPIs, USBReports, WLReports, AdvanceSetting, KeySet } = profile;
     const { DPILevels } = device?.Info || currentDevice?.Info || {};
     const targetPath = device?.HID?.Path || path;
@@ -94,7 +101,7 @@ const useProfileAction = () => {
               mode,
               {
                 DPILevels: DPILevels || [],
-                DPIs: resetDPIsValue(DPIs || [], device),
+                DPIs: resetDPIsValue(DPIs || [], device, modelConfig),
               },
               () => {
                 console.log('DPI设置已应用到鼠标设备');
@@ -117,13 +124,14 @@ const useProfileAction = () => {
     }
   };
 
-  const resetDPIsValue = (DPIs: Dpi[], device?: DeviceInfo) => {
+  const resetDPIsValue = (DPIs: Dpi[], device?: DeviceInfo, modelConfig?: ModelConfig) => {
     let _DPIs: Dpi[] = [];
     const { SensorInfo } = device?.Info || currentDevice?.Info || {};
+    const { SensorInfo: modelSensorInfo } = modelConfig || storeModelConfig || {};
     if (SensorInfo != null && SensorInfo.DPIType != 0) {
       _DPIs = cloneDeep(SensorInfo?.DPIs || []);
     } else {
-      _DPIs = cloneDeep((modelConfig?.SensorInfo?.DPIs as any) || []);
+      _DPIs = cloneDeep((modelSensorInfo?.DPIs as any) || []);
     }
     return DPIs.map((dpi) => {
       const found = _DPIs.find((item) => dpi.DPI == item.DPI);
