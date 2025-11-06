@@ -107,11 +107,11 @@ const useProfileAction = () => {
                 console.log('DPI设置已应用到鼠标设备');
 
                 // 6. 配置全部应用完成后，再次确认按键配置，确保切换稳定
-                setTimeout(() => {
-                  apply(targetPath, keyProfile, () => {
-                    console.log('按键配置再次确认已应用到鼠标设备');
-                  });
-                }, 200);
+                // setTimeout(() => {
+                //   apply(targetPath, keyProfile, () => {
+                //     console.log('按键配置再次确认已应用到鼠标设备');
+                //   });
+                // }, 200);
               }
             );
           }, 100);
