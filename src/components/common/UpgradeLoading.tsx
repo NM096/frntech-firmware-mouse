@@ -6,6 +6,8 @@ import { useProfileStore } from '@/store/useProfile';
 interface GlobalLoadingProps {
   id: string;
   onClose: (id: string) => void;
+  onOk?: () => void;
+  onCancel?: () => void;
   progress?: number;
   autoClose?: boolean;
 }

@@ -96,8 +96,6 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
           className="slider-value"
           style={{
             width: '36px',
-            left: `${(sliderWidth * clampedPosition) / 100 - 18}px`,
-            top: '-30px',
             borderRadius: '4px',
           }}
         >
@@ -129,10 +127,6 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
             background: `linear-gradient(to right, #d4d6d6 ${clampedPosition}%, #3c4041 ${clampedPosition}%)`,
           }}
         />
-      </div>
-      <div className="slider-labels">
-        <span className="slider-min">{dpiList[0]?.DPI ?? 0}</span>
-        <span className="slider-max">{dpiList[dpiList.length - 1]?.DPI ?? 0}</span>
       </div>
     </div>
   );

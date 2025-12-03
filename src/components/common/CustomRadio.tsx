@@ -10,7 +10,7 @@ interface CustomRadioProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
 }
 
 const sizeMap = {
-  small: 16,
+  small: 12,
   medium: 20,
   large: 28,
 } as const;
@@ -18,7 +18,7 @@ const sizeMap = {
 const CustomRadio: React.FC<CustomRadioProps> = (props) => {
   const {
     customSize = 'medium',
-    color = 'var(--secondary)',
+    color = '#eb3d29',
     checked: checkedProp,
     defaultChecked,
     disabled = false,
@@ -66,7 +66,7 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
         disabled={disabled}
         onMouseEnter={(e) => (e.currentTarget.style.borderColor = color)}
         onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = '#96999a';
+          e.currentTarget.style.borderColor = '#7f8684';
         }}
         style={{
           appearance: 'none',
@@ -75,8 +75,8 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
           width: outer,
           height: outer,
           borderRadius: '50%',
-          border: '2px solid #96999a',
-          background: '#4c5151',
+          border: '2px solid #7f8684',
+          background: '#5d1308',
           cursor: 'pointer',
           position: 'relative', // 让 label 内的绝对定位 span 参照此定位
           padding: 0,
@@ -94,7 +94,6 @@ const CustomRadio: React.FC<CustomRadioProps> = (props) => {
           height: inner,
           position: 'absolute',
           borderRadius: '50%',
-
           transform: 'translateY(-50%)',
           top: '50%',
           left: 0,

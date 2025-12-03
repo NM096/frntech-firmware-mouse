@@ -4,37 +4,82 @@ import { createPortal } from 'react-dom';
 import GlobalLoading from './GlobalLoading';
 import { useTranslation } from 'react-i18next';
 import UpgradeLoading from './UpgradeLoading';
+import ResetWarn from '../alert/ResetWarn';
+import LastLeftClickWarn from '../alert/LastLeftClickWarn';
+import GameConfiguration from '../alert/GameConfiguration';
+import MacroProductionModifionProhibited from '../alert/MacroProductionModifionProhibited';
+import MacroMaximumWarn from '../alert/MacroMaximumWarn';
+import MacroNameDuplicateWarn from '../alert/MacroNameDuplicateWarn';
+import StartProgram from '../alert/StartProgram';
+import MacroManager from '../alert/MacroManager';
 type LoadingOptions = {
   proccess?: number;
   onOk?: () => void;
 };
 
 type ConfirmOptions = {
-  title: string;
-  content: ReactNode;
-  onOk?: (value?: string) => void;
+  onOk?: () => void;
   onCancel?: () => void;
 };
-
 type AlertOptions = {
-  title: string;
-  content: ReactNode;
   onOk?: () => void;
+  onCancel?: () => void;
 };
 
 type ModalItem =
   | { type: 'loading'; id: string; options: LoadingOptions }
-  | { type: 'upgradeLoading'; id: string; options: LoadingOptions }
-  | { type: 'confirm'; id: string; options: ConfirmOptions }
-  | { type: 'alert'; id: string; options: AlertOptions }
-  | { type: 'custom'; id: string; content: ReactNode };
+  | {
+      type: 'lastLeftClickWarn';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'resetWarn';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'macroMaximumWarn';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'macroNameDuplicateWarn';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'macroProductionModifionProhibited';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'startProgram';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'gameConfiguration';
+      id: string;
+      options: ConfirmOptions;
+    }
+  | {
+      type: 'macroManager';
+      id: string;
+      options: ConfirmOptions;
+    };
 
 type ModalContextType = {
   openConfigLoading: (options: LoadingOptions) => string;
-  openUpgradeLoading: (options: LoadingOptions) => string;
-  openConfirm: (options: ConfirmOptions) => string;
-  openAlert: (options: AlertOptions) => string;
-  openCustom: (content: ReactNode) => string;
+  openResetWarn: (options: ConfirmOptions) => string;
+  openLastLeftClickWarn: (options: ConfirmOptions) => string;
+  openMacroMaximumWarn: (options: ConfirmOptions) => string;
+  openMacroNameDuplicateWarn: (options: ConfirmOptions) => string;
+  openMacroProductionModifionProhibited: (options: ConfirmOptions) => string;
+  openStartProgram: (options: ConfirmOptions) => string;
+  openGameConfiguration: (options: ConfirmOptions) => string;
+  openMacroManager: (options: ConfirmOptions) => string;
+
   close: (id: string) => void;
   closeAll: () => void;
 };
@@ -43,8 +88,7 @@ const ModalContext = createContext<ModalContextType | null>(null);
 
 export function ModalProvider({ children }: { children: ReactNode }) {
   const [modals, setModals] = useState<ModalItem[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const { t } = useTranslation();
+
   const genId = () => Math.random().toString(36).slice(2);
 
   const openConfigLoading = (options: LoadingOptions) => {
@@ -52,38 +96,50 @@ export function ModalProvider({ children }: { children: ReactNode }) {
     setModals((prev) => [...prev, { type: 'loading', id, options }]);
     return id;
   };
-  const openUpgradeLoading = (options: LoadingOptions) => {
+
+  const openResetWarn = (options: ConfirmOptions) => {
     const id = genId();
-    setModals((prev) => [...prev, { type: 'upgradeLoading', id, options }]);
+    setModals((prev) => [...prev, { type: 'resetWarn', id, options }]);
     return id;
   };
-  const openConfirm = (options: ConfirmOptions) => {
+  const openLastLeftClickWarn = (options: ConfirmOptions) => {
     const id = genId();
-    setModals((prev) => [...prev, { type: 'confirm', id, options }]);
+    setModals((prev) => [...prev, { type: 'lastLeftClickWarn', id, options }]);
     return id;
   };
 
-  const openAlert = (options: AlertOptions) => {
+  const openMacroMaximumWarn = (options: ConfirmOptions) => {
     const id = genId();
-    setModals((prev) => [...prev, { type: 'alert', id, options }]);
+    setModals((prev) => [...prev, { type: 'macroMaximumWarn', id, options }]);
     return id;
   };
-
-  const openCustom = (content: ReactNode) => {
+  const openMacroNameDuplicateWarn = (options: ConfirmOptions) => {
     const id = genId();
-    setModals((prev) => [...prev, { type: 'custom', id, content }]);
+    setModals((prev) => [...prev, { type: 'macroNameDuplicateWarn', id, options }]);
     return id;
   };
-
+  const openMacroProductionModifionProhibited = (options: ConfirmOptions) => {
+    const id = genId();
+    setModals((prev) => [...prev, { type: 'macroProductionModifionProhibited', id, options }]);
+    return id;
+  };
+  const openStartProgram = (options: ConfirmOptions) => {
+    const id = genId();
+    setModals((prev) => [...prev, { type: 'startProgram', id, options }]);
+    return id;
+  };
+  const openGameConfiguration = (options: ConfirmOptions) => {
+    const id = genId();
+    setModals((prev) => [...prev, { type: 'gameConfiguration', id, options }]);
+    return id;
+  };
+  const openMacroManager = (options: ConfirmOptions) => {
+    const id = genId();
+    setModals((prev) => [...prev, { type: 'macroManager', id, options }]);
+    return id;
+  };
   const close = (id: string) => {
     setModals((prev) => {
-      const modal = prev.find((m) => m.id === id);
-      if (modal?.type === 'loading') {
-        setTimeout(() => {
-          setModals((current) => current.filter((m) => m.id !== id));
-        }, 2000);
-        return prev;
-      }
       return prev.filter((m) => m.id !== id);
     });
   };
@@ -92,7 +148,19 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 
   return (
     <ModalContext.Provider
-      value={{ openConfigLoading, openConfirm, openAlert, openCustom, close, closeAll, openUpgradeLoading }}
+      value={{
+        openConfigLoading,
+        close,
+        closeAll,
+        openResetWarn,
+        openLastLeftClickWarn,
+        openMacroNameDuplicateWarn,
+        openMacroMaximumWarn,
+        openMacroProductionModifionProhibited,
+        openStartProgram,
+        openMacroManager,
+        openGameConfiguration,
+      }}
     >
       {children}
       {createPortal(
@@ -105,103 +173,65 @@ export function ModalProvider({ children }: { children: ReactNode }) {
                 </div>
               );
             }
-            if (m.type === 'upgradeLoading') {
+            if (m.type === 'resetWarn') {
               return (
                 <div className="global-loading-container" key={m.id}>
-                  <UpgradeLoading id={m.id} onClose={close} autoClose={false} />
+                  <ResetWarn id={m.id} onClose={close} />
                 </div>
               );
             }
-            if (m.type === 'confirm') {
-              const { title, content, onOk, onCancel } = m.options;
-
+            if (m.type === 'lastLeftClickWarn') {
               return (
-                <div key={m.id} className="custom-confirm-container">
-                  <div className="confirm-card">
-                    <div className="confirm-title">{title}</div>
-                    <div className="confirm-content">
-                      <div>{content}</div>
-                      <input
-                        style={{ textAlign: 'center' }}
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="confirm-btn-group">
-                      <div
-                        className="confirm-btn"
-                        onClick={() => {
-                          onOk?.(inputValue);
-                          setInputValue('');
-                          close(m.id);
-                        }}
-                      >
-                        {t('confirm')}
-                      </div>
-                      <div
-                        className="confirm-btn"
-                        onClick={() => {
-                          onCancel?.();
-                          setInputValue('');
-                          close(m.id);
-                        }}
-                      >
-                        {t('cancel')}
-                      </div>
-                    </div>
-                  </div>
+                <div className="global-loading-container" key={m.id}>
+                  <LastLeftClickWarn id={m.id} onClose={close} />
                 </div>
               );
             }
-            if (m.type === 'alert') {
-              const { title, content, onOk } = m.options;
+            if (m.type === 'macroNameDuplicateWarn') {
               return (
-                <div key={m.id} className="custom-confirm-container">
-                  <div className="confirm-card">
-                    <div className="confirm-title">{title}</div>
-                    <div className="confirm-content">
-                      <div>{content}</div>
-                    </div>
+                <div className="global-loading-container" key={m.id}>
+                  <MacroNameDuplicateWarn id={m.id} onClose={close} />
+                </div>
+              );
+            }
 
-                    <div className="confirm-btn-group">
-                      <div
-                        className="confirm-btn"
-                        onClick={() => {
-                          onOk?.();
-                          setInputValue('');
-                          close(m.id);
-                        }}
-                      >
-                        {t('confirm')}
-                      </div>
-                      <div
-                        className="confirm-btn"
-                        onClick={() => {
-                          setInputValue('');
-                          close(m.id);
-                        }}
-                      >
-                        {t('cancel')}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-            if (m.type === 'custom') {
+            if (m.type === 'macroMaximumWarn') {
               return (
-                <div key={m.id} className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                  <div className="p-6 bg-white shadow-xl rounded-2xl">
-                    {m.content}
-                    <button className="px-4 py-2 mt-4 bg-gray-200 rounded" onClick={() => close(m.id)}>
-                      {t('close')}
-                    </button>
-                  </div>
+                <div className="global-loading-container" key={m.id}>
+                  <MacroMaximumWarn id={m.id} onClose={close} />
                 </div>
               );
             }
+
+            if (m.type === 'macroProductionModifionProhibited') {
+              return (
+                <div className="global-loading-container" key={m.id}>
+                  <MacroProductionModifionProhibited id={m.id} onClose={close} />
+                </div>
+              );
+            }
+            if (m.type === 'startProgram') {
+              return (
+                <div className="global-loading-container" key={m.id}>
+                  <StartProgram id={m.id} onClose={close} onOk={m.options.onOk} onCancel={m.options.onCancel} />
+                </div>
+              );
+            }
+            if (m.type === 'gameConfiguration') {
+              return (
+                <div className="global-loading-container" key={m.id}>
+                  <GameConfiguration id={m.id} onClose={close} onOk={m.options.onOk} onCancel={m.options.onCancel} />
+                </div>
+              );
+            }
+            if (m.type === 'macroManager') {
+              return (
+                <div className="global-loading-container">
+                  <MacroManager id={m.id} onClose={close} onOk={m.options.onOk} onCancel={m.options.onCancel} />
+                </div>
+              );
+            }
+
             return null;
           })}
         </div>,

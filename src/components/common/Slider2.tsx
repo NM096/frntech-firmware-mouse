@@ -5,7 +5,7 @@ interface SliderProps {
   max?: number;
   step?: number;
   initialValue?: number;
-  data: string[];
+  data: (string | number)[];
   onChange?: (value: number) => void;
 }
 const Slider: React.FC<SliderProps> = ({ initialValue = 5, data, onChange }) => {
@@ -35,12 +35,17 @@ const Slider: React.FC<SliderProps> = ({ initialValue = 5, data, onChange }) => 
         max={data.length - 1}
         step={1}
         style={{
-          background: `linear-gradient(to right, #d4d6d6 ${position}%, #3c4041 ${position}%)`,
+          background: `linear-gradient(to right, #2a2a2a ${position}%, #2a2a2a ${position}%)`,
         }}
       />
-      <div className="slider2-thumb-value" style={{ left: `${position}%` }}>
-        {data[value]}
+      <div className="slider2-marks">
+        {data.map((item, index) => (
+          <div key={index} className="slider2-mark" style={{ left: `${(index / (data.length - 1)) * 100}%` }}>
+            {item}
+          </div>
+        ))}
       </div>
+      <div className="slider2-thumb-value" style={{ left: `${position}%` }}></div>
     </div>
   );
 };
