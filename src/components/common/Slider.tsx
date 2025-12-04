@@ -1,23 +1,22 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
 import type { Dpi } from '@/types/profile';
-import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 import InputWithEnter from '@/components/common/InputWithEnter';
-
+import { useMouse } from '@/hooks/useMouse';
+import type { SmurfsDPI } from '@/lib/smurfs/smurfs.min';
 interface SliderProps {
   initialValue?: number;
-  onChange: (value: Dpi) => void;
+  onChange: (value: SmurfsDPI) => void;
 }
 
 const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
-  const { currentDevice, modelConfig } = useBaseInfoStore();
-  const [dpiList, setDpiList] = useState<Dpi[]>([]);
+  const { deviceSensorInfo } = useMouse();
+  const [dpiList, setDpiList] = useState<SmurfsDPI[]>([]);
   const min = dpiList.length > 0 ? dpiList[0].Level : 0;
   const max = dpiList.length > 0 ? dpiList[dpiList.length - 1].Level : 0;
 
   // state 统一保存 level
   const [value, setValue] = useState(min);
   const [inputValue, setInputValue] = useState<number | string>(initialValue || '');
-  const [sliderWidth, setSliderWidth] = useState(0);
   const slider = useRef<HTMLInputElement | null>(null);
 
   // 计算 thumb 位置
@@ -48,13 +47,8 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
     }
   };
   useEffect(() => {
-    const { SensorInfo } = currentDevice?.Info || {};
-    if (SensorInfo != null && SensorInfo.DPIType != 0) {
-      setDpiList(SensorInfo?.DPIs || []);
-    } else {
-      setDpiList((modelConfig?.SensorInfo?.DPIs as any) || []);
-    }
-  }, [currentDevice, modelConfig]);
+    setDpiList(deviceSensorInfo?.DPIs ?? []);
+  }, [deviceSensorInfo]);
 
   // 初始化时同步一次
   useEffect(() => {
@@ -70,23 +64,6 @@ const Slider: React.FC<SliderProps> = memo(({ initialValue, onChange }) => {
       setInputValue(initialValue);
     }
   }, [initialValue, dpiList]);
-
-  // 监听窗口大小变化，更新 slider 宽度
-  useEffect(() => {
-    const updateWidth = () => {
-      if (slider.current) {
-        setSliderWidth(slider.current.offsetWidth);
-      }
-    };
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
-  useEffect(() => {});
-  const showLabelValue = (level: number) => {
-    const dpi = dpiList.find((dpi) => dpi.Level === level);
-    return dpi ? dpi.DPI : level;
-  };
 
   return (
     <div className="slider-wrapper">

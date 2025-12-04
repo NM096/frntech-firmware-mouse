@@ -16,11 +16,7 @@ const Home: React.FC = () => {
     setDeviceList(deviceList);
     setCurrentDevice(currentDevice);
     const profileList: SmurfsProfileSet[] = await Smurfs.getProfiles(currentDevice.DeviceID);
-    const profile: SmurfsProfileSet[] = await Smurfs.getProfile(currentDevice.DeviceID, 'Profile1');
-    console.log(profileList);
-    console.log(profile);
     // 首次进入没有Profile，补全Profile
-
     if (profileList.length < 4) {
       let _num = profileList.length;
       while (_num < 4) {
