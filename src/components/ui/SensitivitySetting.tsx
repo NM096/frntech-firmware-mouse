@@ -1,15 +1,17 @@
+import { useEffect, useState } from 'react';
 import CustomRadio from '../common/CustomRadio';
-import { useModal } from '../common/ModalContext';
 import Slider from '../common/Slider';
 import Slider2 from '../common/Slider2';
-import { useEffect } from 'react';
-
+import { useBaseInfoStore } from '@/store/useBaseInfoStore';
 export default function SensitivitySetting() {
+  // const [dpiList, setDpiList] = useState([]);
+  const { smurfs, currentDevice } = useBaseInfoStore();
+
   const dpiList = [1, 2, 3, 4, 5, 6];
-  const { openMacroManager } = useModal();
+
   useEffect(() => {
-    openMacroManager({});
-  }, []);
+    smurfs?.getProfiles(currentDevice!.DeviceID);
+  }, [smurfs]);
   return (
     <div className="sensitivity-setting-container">
       <div className="dpi-setting">

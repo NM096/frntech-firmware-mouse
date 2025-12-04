@@ -226,7 +226,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
             }
             if (m.type === 'macroManager') {
               return (
-                <div className="global-loading-container">
+                <div className="global-loading-container" key={m.id}>
                   <MacroManager id={m.id} onClose={close} onOk={m.options.onOk} onCancel={m.options.onCancel} />
                 </div>
               );

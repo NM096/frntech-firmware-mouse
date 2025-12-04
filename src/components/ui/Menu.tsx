@@ -1,19 +1,18 @@
-import { useState } from 'react';
+interface MenuProp {
+  onChange: (value) => void;
+  value: string;
+}
 
-export default function Menu() {
+const Menu: React.FC<MenuProp> = ({ onChange, value }) => {
   const menuList = ['SENSITIVITYSETTING', 'SYSTEMSETTING', 'BUTTONSETTING'];
-  const [activeIndex, setActiveIndex] = useState<(typeof menuList)[number]>(menuList[4]);
-
   return (
     <div className="menu-container">
       <div className="menu-item unactive"></div>
       {menuList.map((item, index) => (
-        <div
-          key={index}
-          className={`menu-item ${activeIndex === item ? 'active' : ''}`}
-          onClick={() => setActiveIndex(item)}
-        ></div>
+        <div key={index} className={`menu-item ${value === item ? 'active' : ''}`} onClick={() => onChange(item)}></div>
       ))}
     </div>
   );
-}
+};
+
+export default Menu;

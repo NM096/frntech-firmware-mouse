@@ -44,7 +44,7 @@ export default function SystemSetting() {
         <div className="rate-list">
           {rateList.map((item) => {
             return (
-              <div className="list-item">
+              <div className="list-item" key={item}>
                 <CustomRadio customSize="small" />
                 {item}
               </div>

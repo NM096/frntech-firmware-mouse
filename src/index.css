@@ -139,6 +139,31 @@ textarea {
   -ms-user-select: text;
   user-select: text;
 }
+
+/* No Device */
+.no-device-container {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 1.25rem; /* 相当于 gap-5 */
+}
+
+.no-device-text {
+  font-size: 16px; /* text-lg */
+  font-weight: bold; /* font-bold */
+}
+
+.no-device-text .highlight {
+  color: var(--secondary); /* Tailwind 的 text-orange-400 */
+}
+
+.no-device-img {
+  width: 50px; /* w-20 */
+}
 /* Custom Slider2 Start */
 .slider2-wrapper {
   position: relative;
@@ -412,7 +437,8 @@ textarea {
   display: flex;
   flex-direction: column;
   width: var(--home-page-width);
-  aspect-ratio: 3 / 2;
+  /* aspect-ratio: 3 / 2; */
+  height: 640px;
   position: relative;
   overflow: hidden;
 }
@@ -444,8 +470,7 @@ textarea {
 }
 .header-btn-list .header-btn-item {
   width: 16px;
-  aspect-ratio: 1/1;
-  background-color: #e74c3c;
+  height: 16px;
   opacity: 0.5;
 }
 
@@ -638,7 +663,7 @@ textarea {
   background-size: 100% 100%;
   position: relative;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .action-container .action-item {
   width: 94px;
