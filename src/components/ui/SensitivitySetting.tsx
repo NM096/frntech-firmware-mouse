@@ -9,14 +9,14 @@ export default function SensitivitySetting() {
   const { profile, setProfile } = useMouse();
   const { DPIs } = profile?.Profile || {};
   const handleChangeDpi = (idx: number, dpiItem: SmurfsDPI) => {
-    setProfile({  }),
+    // setProfile({  }),
   };
 
   return (
     <div className="sensitivity-setting-container">
       <div className="dpi-setting">
         <div className="setting-title">DPI Setting</div>
-        {DPIs?.map((item, index) => {
+        {[1, 2, 3, 4, 5, 6, 7]?.map((item, index) => {
           return (
             <div className="dpi-item" key={index}>
               <div className="dpi-title">

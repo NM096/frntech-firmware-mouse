@@ -9,6 +9,7 @@ const Home: React.FC = () => {
 
   const { setCurrentDevice, setSmurfs } = useBaseInfoStore();
   const Smurfs = smurfs.create({ softwareVersion: '1.0.0', adapter: 'go' });
+
   const initDeviceList = async () => {
     Smurfs.run();
     const deviceList = await Smurfs.getDeviceList();
